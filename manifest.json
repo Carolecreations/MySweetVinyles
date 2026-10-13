@@ -2,7 +2,7 @@
   "name": "Vinyl Archive – Jacques Edition",
   "short_name": "Vinyl Archive",
   "description": "Catalogue personnel de vinyles",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0D0D0D",
