@@ -3907,6 +3907,91 @@ if("serviceWorker" in navigator){
   });
 }
 </script>
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   CORRECTIF IPAD — Sortie de la page d'accueil garantie
+   Ce script ne REMPLACE rien : il AJOUTE un comportement iPad-safe
+   par-dessus le code existant. Il n'affecte AUCUNE autre fonction.
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  function patchWelcome(){
+    const page     = document.getElementById("welcomePage");
+    const btnEnter = document.getElementById("welcomeEnter");
+    const btnSkip  = document.getElementById("welcomeSkip");
+    if(!page) return;
 
+    /* ─── Bypass d'urgence via URL : ?skip=1 ─── */
+    try {
+      if(location.search.includes("skip=1")){
+        page.classList.add("hide");
+        page.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        return;
+      }
+    } catch(e){}
+
+    let done = false;
+
+    function closeIt(){
+      if(done) return;
+      done = true;
+      try { page.classList.add("hide"); } catch(e){}
+      try { page.setAttribute("aria-hidden", "true"); } catch(e){}
+      try { document.body.style.overflow = ""; } catch(e){}
+      try { if("speechSynthesis" in window) window.speechSynthesis.cancel(); } catch(e){}
+      setTimeout(() => {
+        try {
+          const s = document.getElementById("globalSearch");
+          if(s && s.focus) s.focus();
+        } catch(e){}
+      }, 300);
+    }
+
+    function enterHandler(e){
+      if(e && e.preventDefault) e.preventDefault();
+      closeIt();
+    }
+
+    /* On CLONE les boutons pour supprimer les anciens handlers bloquants,
+       puis on installe les nôtres qui ferment immédiatement. */
+    if(btnEnter){
+      const clone = btnEnter.cloneNode(true);
+      btnEnter.parentNode.replaceChild(clone, btnEnter);
+      clone.addEventListener("click", enterHandler);
+      clone.addEventListener("touchend", enterHandler, { passive:false });
+    }
+    if(btnSkip){
+      const clone = btnSkip.cloneNode(true);
+      btnSkip.parentNode.replaceChild(clone, btnSkip);
+      clone.addEventListener("click", (e) => { if(e && e.preventDefault) e.preventDefault(); closeIt(); });
+      clone.addEventListener("touchend", (e) => { if(e && e.preventDefault) e.preventDefault(); closeIt(); }, { passive:false });
+    }
+
+    /* ─── Tap n'importe où sur la page → ferme aussi ─── */
+    try {
+      page.addEventListener("click", e => {
+        if(e.target === page || (e.target.classList && e.target.classList.contains("welcome-inner"))) closeIt();
+      });
+    } catch(e){}
+
+    /* ─── Clavier (desktop) ─── */
+    document.addEventListener("keydown", e => {
+      if(done) return;
+      if(e.key === "Enter" || e.key === "Escape"){ e.preventDefault(); closeIt(); }
+    });
+
+    /* ─── Filet de sécurité : fermeture auto après 15 s ─── */
+    setTimeout(() => { if(!done) closeIt(); }, 15000);
+
+    console.log("%c♪ Correctif iPad actif sur la page d'accueil", "color:#C9A86A;font-weight:bold");
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", () => setTimeout(patchWelcome, 100));
+  } else {
+    setTimeout(patchWelcome, 100);
+  }
+})();
+</script>
 </body>
 </html>
