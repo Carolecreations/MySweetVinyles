@@ -1090,6 +1090,7 @@ function renderFilterOptions(){
   fill("#f_pressage", PRESSAGE.filter(p => State.vinyles.some(v => v.pressage === p)), "Tous");
   fill("#f_pressage_audio", PRESSAGE_AUDIO.filter(p => State.vinyles.some(v => v.pressage_audio === p)), "Tous");
   fill("#f_enregistrement", ENREGISTREMENT.filter(e => State.vinyles.some(v => v.enregistrement === e)), "Tous");
+    fill("#f_acquisition", ACQUISITION.filter(a => State.vinyles.some(v => v.acquisition === a)), "Toutes");
   fill("#f_rarete", RARETES, "Toutes");
 }
 function updateFilterBadge(){
@@ -1590,11 +1591,11 @@ const App = {
   setView(v){ State.view = v; $("#viewGrid").classList.toggle("on", v === "grid"); $("#viewList").classList.toggle("on", v === "list"); renderLibrary(); },
   refresh(full = true){ applyFilters(); if(full) renderFilterOptions(); renderStats(); renderDashboard(); renderLibrary(); updateFilterBadge(); },
   resetFilters(){
-    State.filters = { q:"", artiste:"", genre:"", format:"", double:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", vmin:"", vmax:"", rarete:"" };
+        State.filters = { q:"", artiste:"", genre:"", format:"", double:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", vmin:"", vmax:"", rarete:"" };
     $("#globalSearch").value = "";
     ["#f_artiste","#f_genre","#f_format","#f_label","#f_pays","#f_annee",
      "#f_etat_disque","#f_etat_pochette","#f_pressage","#f_pressage_audio",
-     "#f_enregistrement",
+          "#f_enregistrement", "#f_acquisition",
      "#f_vmin","#f_vmax","#f_rarete"].forEach(sel => { const el = $(sel); if(el) el.value = ""; });
     ["#f_double","#f_gatefold"].forEach(sel => { const el = $(sel); if(el) el.checked = false; });
     this.refresh(false);
