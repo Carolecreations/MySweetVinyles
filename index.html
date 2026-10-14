@@ -1620,12 +1620,12 @@ function collectionPrintBody(items){
     <table><thead><tr><th>Artiste</th><th>Titre</th><th>Format</th><th>Année</th><th>Label</th><th>État</th><th class="num">Valeur</th></tr></thead>
     <tbody>${rows}</tbody></table>`;
 }
-function cataloguePrintBody(items){
+function cataloguePrintBody(items, modeTri){
   /* ═══════════════════════════════════════════════════════════════
-     CATALOGUE V3 — Livre d'art
-     Couverture illustrée · Avant-propos · Sommaire · Chapitres
-     · Fiches · Pièces maîtresses · Statistiques · Index
+     CATALOGUE V4 — Multi-tri
+     modeTri : "decennie" | "artiste" | "annee" | "genre"
      ═══════════════════════════════════════════════════════════════ */
+  modeTri = modeTri || "decennie";
   const dateGen = new Date().toLocaleDateString("fr-FR", {day:"numeric",month:"long",year:"numeric"});
   const total = items.reduce((s,v) => s + valeurEffective(v), 0);
   const annees = items.map(v => num(v.annee_impression)).filter(a => a && a > 1800);
@@ -1638,6 +1638,14 @@ function cataloguePrintBody(items){
   const parArtisteGlobal = {};
   items.forEach(v => { const a = (v.artiste || "").trim(); if(a) parArtisteGlobal[a] = (parArtisteGlobal[a] || 0) + 1; });
   const topArtiste = Object.entries(parArtisteGlobal).sort((a,b) => b[1] - a[1])[0]?.[0] || null;
+
+  /* ─── Titres des modes ─── */
+  const modeLabel = {
+    decennie: "Catalogue par décennie",
+    artiste:  "Catalogue par artiste",
+    annee:    "Catalogue par année",
+    genre:    "Catalogue par genre"
+  }[modeTri];
 
   /* ─── L'illustration du disquaire (adaptée pour le print) ─── */
   const illustrationSVG = `
@@ -1659,57 +1667,41 @@ function cataloguePrintBody(items){
           <line x1="4.5" y1="18" x2="4.5" y2="23" stroke="#B4934F" stroke-width="0.6" opacity="0.55"/>
         </pattern>
       </defs>
-
-      <!-- Trois suspensions -->
       <g stroke="#B4934F" fill="none" stroke-width="1" stroke-linecap="round">
         <line x1="180" y1="0" x2="180" y2="52"/>
         <path d="M 165 52 L 195 52 L 190 72 L 170 72 Z"/>
         <line x1="180" y1="72" x2="180" y2="82"/>
         <circle cx="180" cy="88" r="14" fill="url(#lampGlowP)" stroke="none"/>
         <circle cx="180" cy="84" r="3" fill="#B4934F" stroke="none"/>
-
         <line x1="360" y1="0" x2="360" y2="44"/>
         <path d="M 342 44 L 378 44 L 371 68 L 349 68 Z"/>
         <line x1="360" y1="68" x2="360" y2="78"/>
         <circle cx="360" cy="86" r="16" fill="url(#lampGlowP)" stroke="none"/>
         <circle cx="360" cy="82" r="3.2" fill="#B4934F" stroke="none"/>
-
         <line x1="540" y1="0" x2="540" y2="52"/>
         <path d="M 525 52 L 555 52 L 550 72 L 530 72 Z"/>
         <line x1="540" y1="72" x2="540" y2="82"/>
         <circle cx="540" cy="88" r="14" fill="url(#lampGlowP)" stroke="none"/>
         <circle cx="540" cy="84" r="3" fill="#B4934F" stroke="none"/>
       </g>
-
-      <!-- Bac de gauche -->
       <g stroke="#B4934F" fill="none" stroke-width="0.9">
-        <line x1="30" y1="92" x2="30" y2="330"/>
-        <line x1="140" y1="92" x2="140" y2="330"/>
-        <line x1="30" y1="92" x2="140" y2="92"/>
-        <line x1="30" y1="152" x2="140" y2="152"/>
-        <line x1="30" y1="212" x2="140" y2="212"/>
-        <line x1="30" y1="272" x2="140" y2="272"/>
+        <line x1="30" y1="92" x2="30" y2="330"/><line x1="140" y1="92" x2="140" y2="330"/>
+        <line x1="30" y1="92" x2="140" y2="92"/><line x1="30" y1="152" x2="140" y2="152"/>
+        <line x1="30" y1="212" x2="140" y2="212"/><line x1="30" y1="272" x2="140" y2="272"/>
       </g>
       <rect x="32" y="94" width="106" height="56" fill="url(#spinesA_P)"/>
       <rect x="32" y="154" width="106" height="56" fill="url(#spinesB_P)"/>
       <rect x="32" y="214" width="106" height="56" fill="url(#spinesA_P)"/>
       <rect x="32" y="274" width="106" height="56" fill="url(#spinesB_P)"/>
-
-      <!-- Bac de droite -->
       <g stroke="#B4934F" fill="none" stroke-width="0.9">
-        <line x1="580" y1="92" x2="580" y2="330"/>
-        <line x1="690" y1="92" x2="690" y2="330"/>
-        <line x1="580" y1="92" x2="690" y2="92"/>
-        <line x1="580" y1="152" x2="690" y2="152"/>
-        <line x1="580" y1="212" x2="690" y2="212"/>
-        <line x1="580" y1="272" x2="690" y2="272"/>
+        <line x1="580" y1="92" x2="580" y2="330"/><line x1="690" y1="92" x2="690" y2="330"/>
+        <line x1="580" y1="92" x2="690" y2="92"/><line x1="580" y1="152" x2="690" y2="152"/>
+        <line x1="580" y1="212" x2="690" y2="212"/><line x1="580" y1="272" x2="690" y2="272"/>
       </g>
       <rect x="582" y="94" width="106" height="56" fill="url(#spinesB_P)"/>
       <rect x="582" y="154" width="106" height="56" fill="url(#spinesA_P)"/>
       <rect x="582" y="214" width="106" height="56" fill="url(#spinesB_P)"/>
       <rect x="582" y="274" width="106" height="56" fill="url(#spinesA_P)"/>
-
-      <!-- Vinyle central qui tourne -->
       <g stroke="#B4934F" fill="none" stroke-width="1.1">
         <circle cx="360" cy="200" r="88"/>
         <circle cx="360" cy="200" r="66" opacity="0.65"/>
@@ -1718,39 +1710,27 @@ function cataloguePrintBody(items){
         <circle cx="360" cy="200" r="5" fill="#B4934F"/>
         <path d="M 330 172 Q 344 166 358 176" opacity="0.5"/>
       </g>
-
-      <!-- Pochlette gatefold à gauche du vinyle -->
       <g stroke="#B4934F" fill="none" stroke-width="0.9" opacity="0.85">
         <rect x="190" y="120" width="80" height="80"/>
         <circle cx="230" cy="160" r="28" opacity="0.7"/>
         <circle cx="230" cy="160" r="16" opacity="0.5"/>
         <circle cx="230" cy="160" r="3" fill="#B4934F"/>
       </g>
-
-      <!-- Pochlette 45T à droite du vinyle -->
       <g stroke="#B4934F" fill="none" stroke-width="0.9" opacity="0.85">
         <rect x="450" y="140" width="60" height="60"/>
         <circle cx="480" cy="170" r="20" opacity="0.7"/>
         <circle cx="480" cy="170" r="3" fill="#B4934F"/>
       </g>
-
-      <!-- Livret -->
       <g stroke="#B4934F" fill="none" stroke-width="0.8" opacity="0.7">
         <rect x="190" y="230" width="90" height="38"/>
-        <line x1="200" y1="242" x2="270" y2="242"/>
-        <line x1="200" y1="250" x2="252" y2="250"/>
+        <line x1="200" y1="242" x2="270" y2="242"/><line x1="200" y1="250" x2="252" y2="250"/>
         <line x1="200" y1="258" x2="260" y2="258"/>
       </g>
       <g stroke="#B4934F" fill="none" stroke-width="0.8" opacity="0.7">
         <rect x="446" y="222" width="80" height="28"/>
-        <line x1="456" y1="234" x2="518" y2="234"/>
-        <line x1="456" y1="242" x2="500" y2="242"/>
+        <line x1="456" y1="234" x2="518" y2="234"/><line x1="456" y1="242" x2="500" y2="242"/>
       </g>
-
-      <!-- Sol -->
       <line x1="0" y1="330" x2="720" y2="330" stroke="#B4934F" stroke-width="0.6" opacity="0.5"/>
-
-      <!-- Rangées de disques au sol -->
       <g stroke="#B4934F" fill="none" stroke-width="0.9" opacity="0.8">
         <line x1="60" y1="318" x2="60" y2="352"/><line x1="68" y1="312" x2="68" y2="352"/>
         <line x1="76" y1="316" x2="76" y2="352"/><line x1="84" y1="308" x2="84" y2="352"/>
@@ -1811,6 +1791,12 @@ function cataloguePrintBody(items){
     .cv-cover .date{
       margin-top:10px; font-family:'Playfair Display',serif; font-style:italic;
       font-size:12px; color:#999;
+    }
+    .cv-cover .mode{
+      margin-top:18px; font-family:'Inter',sans-serif; font-size:10px;
+      letter-spacing:.24em; text-transform:uppercase; color:#8a6f3d;
+      padding:8px 18px; border:1px solid #C9A86A; border-radius:2px;
+      display:inline-block;
     }
 
     .cv-foreword{
@@ -1879,6 +1865,7 @@ function cataloguePrintBody(items){
       font-family:'Playfair Display',Georgia,serif; font-size:78px; font-weight:500;
       color:#8a6f3d; line-height:1; margin-bottom:14px;
     }
+    .cv-sep h2.small{ font-size:52px; }
     .cv-sep .count{
       font-family:'Playfair Display',Georgia,serif; font-style:italic;
       font-size:16px; color:#777;
@@ -1951,6 +1938,7 @@ function cataloguePrintBody(items){
     }
     .cv-badge.gold{ background:rgba(201,168,106,.15); color:#8a6f3d; border:1px solid rgba(201,168,106,.4); }
     .cv-badge.brick{ background:rgba(166,58,58,.12); color:#8a3030; border:1px solid rgba(166,58,58,.4); }
+
     .cv-masterpieces{ padding:24mm 0; page-break-after:always; }
     .cv-masterpieces h2{
       font-family:'Playfair Display',Georgia,serif; font-size:32px; color:#8a6f3d;
@@ -2050,37 +2038,103 @@ function cataloguePrintBody(items){
     }
   </style>`;
 
-  /* ─── Calcul des numéros de page (avec avant-propos) ─── */
-  const parDecennie = {};
-  const sansDecennie = [];
-  items.forEach(v => {
-    const d = getDecade(v.annee_impression);
-    if(d === null){ sansDecennie.push(v); return; }
-    if(!parDecennie[d]) parDecennie[d] = [];
-    parDecennie[d].push(v);
-  });
-  const decennies = Object.keys(parDecennie).map(Number).sort((a,b) => a - b);
+  /* ═══════════════════════════════════════════════════════════════
+     GROUPEMENT SELON LE MODE
+     Retourne un tableau : [{ key, titre, kicker, subItems: [...] }]
+     ═══════════════════════════════════════════════════════════════ */
+  function grouperPar(liste, mode){
+    const groupes = {};
 
+    liste.forEach(v => {
+      let cle, ordre;
+      if(mode === "artiste"){
+        const a = (v.artiste || "?").trim() || "?";
+        cle = a;
+        ordre = a.localeCompare("", "fr");
+      } else if(mode === "annee"){
+        const y = num(v.annee_impression);
+        cle = y !== null ? String(y) : "Sans année";
+        ordre = y !== null ? y : 999999;
+      } else if(mode === "genre"){
+        const g = (v.genre || "Non précisé").trim() || "Non précisé";
+        cle = g;
+        ordre = g;
+      } else { /* decennie */
+        const d = getDecade(v.annee_impression);
+        cle = d !== null ? String(d) : "Sans année";
+        ordre = d !== null ? d : 999999;
+      }
+      if(!groupes[cle]) groupes[cle] = { key: cle, items: [], ordre };
+      groupes[cle].items.push(v);
+    });
+
+    /* Tri des groupes */
+    const cles = Object.keys(groupes);
+    if(mode === "artiste"){
+      cles.sort((a,b) => {
+        const la = premiereLettreTri(a), lb = premiereLettreTri(b);
+        return la.localeCompare(lb, "fr") || a.localeCompare(b, "fr");
+      });
+    } else if(mode === "annee" || mode === "decennie"){
+      cles.sort((a,b) => groupes[a].ordre - groupes[b].ordre);
+    } else if(mode === "genre"){
+      cles.sort((a,b) => a.localeCompare(b, "fr"));
+    }
+
+    /* Construction des groupes avec titre adapté */
+    return cles.map(cle => {
+      const g = groupes[cle];
+      /* Tri interne */
+      if(mode === "artiste"){
+        g.items.sort((a,b) => (num(a.annee_impression) ?? 9999) - (num(b.annee_impression) ?? 9999)
+                              || (a.titre || "").localeCompare(b.titre || "", "fr"));
+      } else if(mode === "annee"){
+        g.items.sort((a,b) => (a.artiste || "").localeCompare(b.artiste || "", "fr")
+                              || (a.titre || "").localeCompare(b.titre || "", "fr"));
+      } else if(mode === "genre"){
+        g.items.sort((a,b) => (a.artiste || "").localeCompare(b.artiste || "", "fr")
+                              || (a.titre || "").localeCompare(b.titre || "", "fr"));
+      } else {
+        g.items.sort((a,b) => (a.artiste || "").localeCompare(b.artiste || "", "fr")
+                              || (a.titre || "").localeCompare(b.titre || "", "fr"));
+      }
+
+      let titre = cle, kicker = "Chapitre", taille = "";
+      if(mode === "decennie" && cle !== "Sans année"){
+        titre = formatDecade(parseInt(cle, 10));
+      } else if(mode === "annee" && cle !== "Sans année"){
+        titre = cle;
+        taille = "small";
+      } else if(mode === "artiste"){
+        titre = cle;
+        taille = "small";
+      } else if(mode === "genre"){
+        titre = cle;
+        taille = "small";
+      } else if(cle === "Sans année"){
+        titre = "Sans année précisée";
+      }
+      return { titre, kicker, taille, items: g.items };
+    });
+  }
+
+  const groupes = grouperPar(items, modeTri);
+  const decennies = modeTri === "decennie" ? groupes.filter(g => g.titre.startsWith("Années")).length : 0;
+
+  /* ─── Calcul des numéros de page ─── */
   let pg = 1;
   const toc = [];
-  const pgCover = pg; pg++;                       /* 1 · couverture */
-  const pgForeword = pg; pg++;                    /* 2 · avant-propos */
-  const pgToc = pg; pg++;                         /* 3 · sommaire */
-  const pgDecennies = {};
-  decennies.forEach(d => {
+  const pgCover = pg; pg++;
+  const pgForeword = pg; pg++;
+  const pgToc = pg; pg++;
+  const pgGroupes = [];
+  groupes.forEach(g => {
     const pgSep = pg; pg++;
     const pgFirst = pg;
-    pg += parDecennie[d].length;
-    pgDecennies[d] = { sep: pgSep, first: pgFirst, count: parDecennie[d].length };
-    toc.push({ label: formatDecade(d), pg: pgSep, sub: parDecennie[d].length + " vinyle" + (parDecennie[d].length > 1 ? "s" : ""), dec: d });
+    pg += g.items.length;
+    pgGroupes.push({ sep: pgSep, first: pgFirst, count: g.items.length, groupe: g });
+    toc.push({ label: g.titre, pg: pgSep, sub: g.items.length + " vinyle" + (g.items.length > 1 ? "s" : "") });
   });
-  if(sansDecennie.length){
-    const pgSep = pg; pg++;
-    const pgFirst = pg;
-    pg += sansDecennie.length;
-    pgDecennies["-1"] = { sep: pgSep, first: pgFirst, count: sansDecennie.length };
-    toc.push({ label: "Sans année précisée", pg: pgSep, sub: sansDecennie.length + " vinyle" + (sansDecennie.length > 1 ? "s" : ""), dec: -1 });
-  }
   const pgMaster = pg; pg++;
   const pgStats = pg; pg++;
   const pgIndex = pg;
@@ -2097,21 +2151,35 @@ function cataloguePrintBody(items){
         Une archive privée, un moteur de recherche, des fiches de musée —<br>
         et la valeur de chaque pièce, mise à jour.
       </p>
+      <div class="mode">${esc(modeLabel)}</div>
       <div class="meta">${items.length} vinyle${items.length>1?"s":""} · ${fmtEuro(Math.round(total))}</div>
       <div class="date">${dateGen}</div>
     </div>`;
 
   /* ─── Avant-propos ─── */
-  const introP1 = `Ce catalogue rassemble <strong>${items.length} vinyle${items.length>1?"s":""}</strong>${anneeMin && anneeMax ? `, du pressage de <strong>${anneeMin}</strong> au plus récent de <strong>${anneeMax}</strong>` : ""}. ` +
-    `${artistes.size > 1 ? `Ils représentent <strong>${artistes.size} artistes</strong> ou groupes` : `Il s'agit d'un artiste unique`}${topArtiste ? `, avec <strong>${esc(topArtiste)}</strong> en tête du classement` : ""}${topGenre ? ` et le <strong>${esc(topGenre)}</strong> comme genre dominant` : ""}. ` +
-    `L'ensemble est aujourd'hui estimé à <strong>${fmtEuro(Math.round(total))}</strong>.`;
-  const introP2 = `Chaque page qui suit présente une pièce : sa pochette, son verso, son édition, son état, son emplacement, parfois son histoire. ` +
-    `Les chapitres suivent les décennies, comme une traversée du siècle dernier à nos jours.`;
+  let introP1 = `Ce catalogue rassemble <strong>${items.length} vinyle${items.length>1?"s":""}</strong>`;
+  if(anneeMin && anneeMax) introP1 += `, du pressage de <strong>${anneeMin}</strong> au plus récent de <strong>${anneeMax}</strong>`;
+  introP1 += `. `;
+  if(artistes.size > 1) introP1 += `Ils représentent <strong>${artistes.size} artistes</strong> ou groupes`;
+  else introP1 += `Il s'agit d'un artiste unique`;
+  if(topArtiste) introP1 += `, avec <strong>${esc(topArtiste)}</strong> en tête du classement`;
+  if(topGenre) introP1 += ` et le <strong>${esc(topGenre)}</strong> comme genre dominant`;
+  introP1 += `. L'ensemble est aujourd'hui estimé à <strong>${fmtEuro(Math.round(total))}</strong>.`;
+
+  const introP2 = modeTri === "artiste"
+    ? `Les chapitres qui suivent regroupent les vinyles par artiste, dans l'ordre alphabétique.`
+    : modeTri === "annee"
+    ? `Les chapitres qui suivent suivent les années d'impression, millésime après millésime.`
+    : modeTri === "genre"
+    ? `Les chapitres qui suivent regroupent les vinyles par genre musical.`
+    : `Les chapitres qui suivent suivent les décennies, comme une traversée du siècle dernier à nos jours.`;
+
   const introP3 = `Ce livre est à la fois un inventaire, un souvenir, et un point de repère — pour vous, et pour ceux qui, un jour, prendront soin de ces sillons.`;
+
   const foreword = `
     <div class="cv-foreword">
       <h2>Avant-propos</h2>
-      <div class="lead">Une collection, une mémoire</div>
+      <div class="lead">${esc(modeLabel)}</div>
       <div class="rule"></div>
       <p>${introP1}</p>
       <p>${introP2}</p>
@@ -2120,7 +2188,7 @@ function cataloguePrintBody(items){
       <div class="stats-mini">
         <div class="stat-mini"><div class="n">${items.length}</div><div class="l">Vinyles</div></div>
         <div class="stat-mini"><div class="n">${artistes.size}</div><div class="l">Artistes</div></div>
-        <div class="stat-mini"><div class="n">${decennies.length}</div><div class="l">Décennies</div></div>
+        <div class="stat-mini"><div class="n">${groupes.length}</div><div class="l">Chapitres</div></div>
         <div class="stat-mini"><div class="n">${fmtEuro(Math.round(total)).replace(/\s/g,"")}</div><div class="l">Valeur totale</div></div>
       </div>
       <div class="cv-footer">
@@ -2170,12 +2238,12 @@ function cataloguePrintBody(items){
       </div>
     </div>`;
 
-  /* ─── Séparateurs de décennie ─── */
-  function sepPage(num, itemsCount, titre, kicker, pgNum){
+  /* ─── Séparateurs ─── */
+  function sepPage(titre, taille, itemsCount, pgNum){
     return `
       <div class="cv-sep" style="page-break-after:always">
-        <div class="kicker">${esc(kicker)}</div>
-        <h2>${esc(titre)}</h2>
+        <div class="kicker">Chapitre</div>
+        <h2 class="${taille || ""}">${esc(titre)}</h2>
         <div class="count">${itemsCount} vinyle${itemsCount>1?"s":""}</div>
         <div class="rule"></div>
         <div class="cv-footer" style="position:absolute;bottom:14mm;left:8mm;right:8mm">
@@ -2186,7 +2254,7 @@ function cataloguePrintBody(items){
   }
 
   /* ─── Page d'un vinyle ─── */
-  function vinylePage(v, numero, pgNum){
+  function vinylePage(v, pgNum){
     const valAff = valeurAffichee(v);
     const items1 = [];
     const addItem = (k, val) => { if(val !== null && val !== undefined && val !== "") items1.push(`<div class="item"><div class="k">${esc(k)}</div><div class="v">${esc(val)}</div></div>`); };
@@ -2217,14 +2285,14 @@ function cataloguePrintBody(items){
     if(estPrete(v)) badges.push(`<span class="cv-badge gold">➜ Prêté</span>`);
     if(v.format_double) badges.push(`<span class="cv-badge gold">Double album</span>`);
     if(v.format_triple) badges.push(`<span class="cv-badge gold">Triple album</span>`);
-    if(v.format_gatefold) badges.push(`<span class="cv-badge gold">Gatefold</span>`);
+    if(v.format_gatefold) badges.push(`<span class="cv-badge gold">Pochette gatefold</span>`);
     const notes = [];
     if(v.particularites) notes.push(`<div class="cv-page-notes"><div class="k">Particularités</div>${esc(v.particularites)}</div>`);
     if(v.notes) notes.push(`<div class="cv-page-notes"><div class="k">Notes</div>${esc(v.notes)}</div>`);
     return `
       <div class="cv-page" style="page-break-after:always">
         <div class="cv-page-head">
-          <div class="num">N° ${String(numero).padStart(3,"0")}</div>
+          <div class="num">N° ${String(pgNum).padStart(3,"0")}</div>
           <div class="brand">VINYL ARCHIVE</div>
         </div>
         <div class="cv-page-body">
@@ -2247,26 +2315,16 @@ function cataloguePrintBody(items){
       </div>`;
   }
 
-  /* ─── Construction des pages par décennie ─── */
-  const pagesByDecennie = [];
-  decennies.forEach(d => {
-    pagesByDecennie.push(sepPage(d, parDecennie[d].length, formatDecade(d), "Chapitre", pgDecennies[d].sep));
-    let n = 1;
-    let pgn = pgDecennies[d].first;
-    parDecennie[d].forEach(v => {
-      pagesByDecennie.push(vinylePage(v, n, pgn));
-      n++; pgn++;
+  /* ─── Construction ─── */
+  const pagesByGroupe = [];
+  pgGroupes.forEach(({ sep, first, count, groupe }) => {
+    pagesByGroupe.push(sepPage(groupe.titre, groupe.taille, count, sep));
+    let pgn = first;
+    groupe.items.forEach(v => {
+      pagesByGroupe.push(vinylePage(v, pgn));
+      pgn++;
     });
   });
-  if(sansDecennie.length){
-    pagesByDecennie.push(sepPage(-1, sansDecennie.length, "Sans année précisée", "Chapitre", pgDecennies["-1"].sep));
-    let n = 1;
-    let pgn = pgDecennies["-1"].first;
-    sansDecennie.forEach(v => {
-      pagesByDecennie.push(vinylePage(v, n, pgn));
-      n++; pgn++;
-    });
-  }
 
   /* ─── Pièces maîtresses ─── */
   const top10 = [...items]
@@ -2304,12 +2362,10 @@ function cataloguePrintBody(items){
   items.forEach(v => { const g = (v.genre || "Non précisé").trim() || "Non précisé"; parGenre[g] = (parGenre[g] || 0) + 1; });
   const topGenres = Object.entries(parGenre).sort((a,b) => b[1] - a[1]).slice(0, 6);
   const maxGenre = topGenres.length ? topGenres[0][1] : 1;
-
   const parArtiste = {};
   items.forEach(v => { const a = (v.artiste || "").trim(); if(a) parArtiste[a] = (parArtiste[a] || 0) + 1; });
   const topArtistes = Object.entries(parArtiste).sort((a,b) => b[1] - a[1]).slice(0, 6);
   const maxArtiste = topArtistes.length ? topArtistes[0][1] : 1;
-
   const moy = items.length ? Math.round(total / items.length) : 0;
   const rareCount = items.filter(v => ["Rare","Très rare","Collector"].includes(v.rarete)).length;
   const preteCount = items.filter(v => estPrete(v)).length;
@@ -2323,9 +2379,8 @@ function cataloguePrintBody(items){
         <div class="cv-stat"><div class="k">Valeur moyenne</div><div class="v">${fmtEuro(moy)}</div></div>
         <div class="cv-stat"><div class="k">Pièces rares</div><div class="v">${rareCount}</div></div>
         <div class="cv-stat"><div class="k">Prêtées</div><div class="v">${preteCount}</div></div>
-        <div class="cv-stat"><div class="k">Décennies</div><div class="v">${decennies.length}</div></div>
+        <div class="cv-stat"><div class="k">Chapitres</div><div class="v">${groupes.length}</div></div>
       </div>
-
       ${topGenres.length ? `
         <div class="cv-stats-section">
           <h3>Top genres</h3>
@@ -2338,7 +2393,6 @@ function cataloguePrintBody(items){
           `).join("")}
         </div>
       ` : ""}
-
       ${topArtistes.length ? `
         <div class="cv-stats-section">
           <h3>Top artistes</h3>
@@ -2351,7 +2405,6 @@ function cataloguePrintBody(items){
           `).join("")}
         </div>
       ` : ""}
-
       <div class="cv-footer">
         <span>Vinyl Archive · Jacques Edition</span>
         <span>Page ${pgStats}</span>
@@ -2387,7 +2440,7 @@ function cataloguePrintBody(items){
       </div>
     </div>`;
 
-  return css + cover + foreword + tocPage + pagesByDecennie.join("") + masterPage + statsPage + indexPage;
+  return css + cover + foreword + tocPage + pagesByGroupe.join("") + masterPage + statsPage + indexPage;
 }
 const App = {
   async init(){
@@ -2593,11 +2646,15 @@ const App = {
     const rect = e.currentTarget.getBoundingClientRect();
     menu.style.top = (rect.bottom + 8) + "px";
     menu.style.left = Math.max(10, rect.right - 210) + "px";
-       const items = [
+         const items = [
       ["Export JSON (collection)", () => this.exportJSON()],
       ["Export CSV (collection)", () => this.exportCSV()],
       ["Export PDF (liste compacte)", () => this.exportPDFCollection()],
-      ["Export PDF (catalogue livre)", () => this.exportPDFCatalogue()],
+      ["—", null],
+      ["Catalogue PDF · par décennie", () => this.exportPDFCatalogue("decennie")],
+      ["Catalogue PDF · par artiste", () => this.exportPDFCatalogue("artiste")],
+      ["Catalogue PDF · par année", () => this.exportPDFCatalogue("annee")],
+      ["Catalogue PDF · par genre", () => this.exportPDFCatalogue("genre")],
       ["—", null],
       ["Importer un fichier JSON", () => this.importJSON()]
     ];
@@ -2647,11 +2704,13 @@ const App = {
     openPrintWindow(`Collection (${items.length})`, collectionPrintBody(items));
     toast("Collection PDF", `${items.length} vinyle(s)`);
   },
-    exportPDFCatalogue(){
+     exportPDFCatalogue(modeTri){
+    modeTri = modeTri || "decennie";
     const items = State.filtered.length ? State.filtered : State.vinyles;
     if(!items.length){ toast("Catalogue PDF", "Aucun vinyle à exporter", true); return; }
-    openPrintWindow(`Catalogue — ${items.length} vinyles`, cataloguePrintBody(items));
-    toast("Catalogue PDF", `${items.length} vinyle(s) · livre prêt`);
+    const label = { decennie: "par décennie", artiste: "par artiste", annee: "par année", genre: "par genre" }[modeTri] || modeTri;
+    openPrintWindow(`Catalogue ${label} — ${items.length} vinyles`, cataloguePrintBody(items, modeTri));
+    toast("Catalogue PDF", `${items.length} vinyle(s) · tri ${label}`);
   },
   importJSON(){
     const input = document.createElement("input");
