@@ -171,6 +171,13 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
   max-width:calc(100% - 18px);
   overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
 }
+  .badge.pret{
+  top:auto; bottom:9px; right:9px; left:auto;
+  border-color:rgba(201,168,106,.6);
+  color:#141008;
+  background:linear-gradient(135deg,#E2C893,#C9A86A);
+  font-weight:700;
+}
 .library.list-view .badge.loc{display:inline-flex}
   .card-body{padding:13px 15px 11px}
 .card-title{font-family:'Playfair Display',serif;font-size:15px;line-height:1.28;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.56em}
@@ -603,6 +610,7 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
       <div class="field"><label>Enregistrement</label><select id="f_enregistrement"><option value="">Tous</option></select></div>
             <div class="field"><label>Acquisition</label><select id="f_acquisition"><option value="">Toutes</option></select></div>
             <div class="field"><label>Étagère</label><select id="f_emp_etagere"><option value="">Toutes</option></select></div>
+            <div class="field"><label>Prêt</label><select id="f_pret"><option value="">Tous</option><option value="pretes">Prêtés uniquement</option><option value="dispo">Disponibles uniquement</option></select></div>
       <div class="field"><label>Valeur min. (€)</label><input id="f_vmin" type="number" placeholder="0"></div>
       <div class="field"><label>Valeur max. (€)</label><input id="f_vmax" type="number" placeholder="∞"></div>
       <div class="field"><label>Rareté</label><select id="f_rarete"><option value="">Toutes</option></select></div>
@@ -676,6 +684,11 @@ const GROUPS = [
   { id:"etat", title:"État & Conservation", icon:"◈", fields:[
     { key:"etat_disque", label:"État du disque", type:"select", options:ETATS },
     { key:"etat_pochette", label:"État de la pochette", type:"select", options:ETATS }
+  ]},
+    { id:"pret", title:"Prêt", icon:"➜", fields:[
+    { key:"prete_a", label:"Prêté à", type:"text", ph:"ex. Bernard, Papa, Marc…" },
+    { key:"date_pret", label:"Date du prêt", type:"date" },
+    { key:"retour_prevu", label:"Retour prévu", type:"date" }
   ]},
     { id:"rangement", title:"Rangement physique", icon:"⌂", fields:[
     { key:"emp_etagere", label:"Étagère / Meuble", type:"text", ph:"ex. Étagère A, Meuble salon" },
@@ -758,6 +771,15 @@ function formatTags(v){
   if(v.format_gatefold) tags.push("Pochette gatefold");
   return tags;
 }
+  function estPrete(v){
+  return !!(v && v.prete_a && String(v.prete_a).trim() !== "");
+}
+function joursDepuisPret(v){
+  if(!estPrete(v) || !v.date_pret) return null;
+  const d = new Date(v.date_pret);
+  if(isNaN(d)) return null;
+  return Math.floor((Date.now() - d.getTime()) / (24 * 60 * 60 * 1000));
+}
   function emplacementCourt(v){
   /* Retourne un code compact type "A / Bac 3 / 12" pour l'affichage */
   const parts = [v.emp_etagere, v.emp_bac, v.emp_position].filter(Boolean);
@@ -830,7 +852,7 @@ const Store = (() => {
 
 const State = {
   vinyles: [], filtered: [], view: "grid",
-  filters: { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", emp_etagere:"", vmin:"", vmax:"", rarete:"" },
+   filters: { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", emp_etagere:"", pret:"", vmin:"", vmax:"", rarete:"" },
   sort: "date_ajout_desc", detailId: null, editingId: null,
   formImages: { image_pochette:null, image_pochette_verso:null, image_vinyle:null }, formPriceSources: null
 };
@@ -997,7 +1019,8 @@ function applyFilters(){
       const hay = normStr([
         v.titre, v.artiste, v.label, v.catalogue, v.codebarres, v.genre, v.pays,
                v.notes, v.particularites, v.annee_impression, v.annee_enregistrement,
-        v.emp_etagere, v.emp_bac, v.emp_position, v.emp_note,
+             v.emp_etagere, v.emp_bac, v.emp_position, v.emp_note,
+        v.prete_a, v.date_pret, v.retour_prevu,
                v.format, v.pressage, v.pressage_audio, v.enregistrement, v.couleur_vinyle, v.acquisition,
         v.format_double ? "double album" : "",
         v.format_triple ? "triple album" : "",
@@ -1019,6 +1042,8 @@ function applyFilters(){
     if(!eq(v.enregistrement, f.enregistrement)) return false;
     if(!eq(v.acquisition, f.acquisition)) return false;
         if(!eq(v.emp_etagere, f.emp_etagere)) return false;
+        if(f.pret === "pretes" && !estPrete(v)) return false;
+    if(f.pret === "dispo" && estPrete(v)) return false;
     if(!eq(v.rarete, f.rarete)) return false;
        if(f.double   && v.format_double   !== true) return false;
     if(f.triple   && v.format_triple   !== true) return false;
@@ -1099,6 +1124,7 @@ function renderLibrary(){
              ${badgeTxt ? `<span class="badge">${esc(badgeTxt)}</span>` : ""}
         ${["Très rare","Collector"].includes(v.rarete) ? `<span class="badge rar">${esc(v.rarete)}</span>` : ""}
         ${emplacementCourt(v) ? `<span class="badge loc" title="Emplacement : ${esc(emplacementCourt(v))}">⌂ ${esc(emplacementCourt(v))}</span>` : ""}
+                ${estPrete(v) ? `<span class="badge pret" title="Prêté à ${esc(v.prete_a)}${v.date_pret ? " depuis le " + esc(v.date_pret) : ""}">➜ Prêté</span>` : ""}
       </div>
       <div class="card-body">
         <h3 class="card-title">${esc(v.titre || "Sans titre")}</h3>
@@ -1229,6 +1255,14 @@ function renderDetail(v){
             <div class="label-mini" style="margin-bottom:6px">⌂ Emplacement</div>
             <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--or-clair);line-height:1.3">${esc(emplacementCourt(v))}</div>
             ${v.emp_note ? `<div class="hint" style="margin-top:8px;font-style:italic">${esc(v.emp_note)}</div>` : ""}
+          </div>
+        ` : ""}
+                ${estPrete(v) ? `
+          <div style="margin-top:12px;padding:14px 16px;border:1px solid rgba(201,168,106,.55);border-radius:3px;background:linear-gradient(160deg,rgba(201,168,106,.15),rgba(201,168,106,.04));text-align:center">
+            <div class="label-mini" style="margin-bottom:6px">➜ Prêté à</div>
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--or-clair);line-height:1.3">${esc(v.prete_a)}</div>
+            ${v.date_pret ? `<div class="hint" style="margin-top:6px">Depuis le ${esc(v.date_pret)}${joursDepuisPret(v) !== null ? " · " + joursDepuisPret(v) + " jour(s)" : ""}</div>` : ""}
+            ${v.retour_prevu ? `<div class="hint" style="margin-top:4px">Retour prévu : ${esc(v.retour_prevu)}</div>` : ""}
           </div>
         ` : ""}
       </div>
@@ -1475,7 +1509,10 @@ const CSV_COLUMNS = [
     ["etat_disque","État disque"],["etat_pochette","État pochette"],["pressage","Pressage"],
   ["pressage_audio","Pressage audio"],
   ["couleur_vinyle","Couleur vinyle"],["rarete","Rareté"],["particularites","Particularités"],
-  ["notes","Notes"],["date_achat","Date achat"],["acquisition","Acquisition"],["prix_achat","Prix achat"],
+  ["notes","Notes"],
+  ["emp_etagere","Étagère"],["emp_bac","Bac"],["emp_position","Position"],["emp_note","Note rangement"],
+  ["prete_a","Prêté à"],["date_pret","Date prêt"],["retour_prevu","Retour prévu"],
+  ["date_achat","Date achat"],["acquisition","Acquisition"],["prix_achat","Prix achat"],
   ["valeur_auto","Valeur auto"],["valeur_manuelle","Valeur manuelle"]
 ];
 function csvEscape(val){ const s = String(val ?? ""); if(/[";\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"'; return s; }
@@ -1611,7 +1648,7 @@ const App = {
       "#f_etat_disque":"etat_disque", "#f_etat_pochette":"etat_pochette",
       "#f_pressage":"pressage", "#f_pressage_audio":"pressage_audio",
                      "#f_enregistrement":"enregistrement",       "#f_acquisition":"acquisition",
-      "#f_emp_etagere":"emp_etagere",
+            "#f_emp_etagere":"emp_etagere", "#f_pret":"pret",
       "#f_vmin":"vmin", "#f_vmax":"vmax", "#f_rarete":"rarete"
     };
     Object.entries(mapFiltres).forEach(([sel, key]) => {
@@ -1666,10 +1703,10 @@ const App = {
   setView(v){ State.view = v; $("#viewGrid").classList.toggle("on", v === "grid"); $("#viewList").classList.toggle("on", v === "list"); renderLibrary(); },
   refresh(full = true){ applyFilters(); if(full) renderFilterOptions(); renderStats(); renderDashboard(); renderLibrary(); updateFilterBadge(); },
   resetFilters(){
-         State.filters = { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", emp_etagere:"", vmin:"", vmax:"", rarete:"" };
+                 State.filters = { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", emp_etagere:"", pret:"", vmin:"", vmax:"", rarete:"" };
     ["#f_artiste","#f_genre","#f_format","#f_label","#f_pays","#f_annee",
      "#f_etat_disque","#f_etat_pochette","#f_pressage","#f_pressage_audio",
-          "#f_enregistrement", "#f_acquisition", "#f_emp_etagere",
+                  "#f_enregistrement", "#f_acquisition", "#f_emp_etagere", "#f_pret",
      "#f_vmin","#f_vmax","#f_rarete"].forEach(sel => { const el = $(sel); if(el) el.value = ""; });
       ["#f_double","#f_triple","#f_gatefold"].forEach(sel => { const el = $(sel); if(el) el.checked = false; });
     this.refresh(false);
