@@ -1620,7 +1620,569 @@ function collectionPrintBody(items){
     <table><thead><tr><th>Artiste</th><th>Titre</th><th>Format</th><th>Année</th><th>Label</th><th>État</th><th class="num">Valeur</th></tr></thead>
     <tbody>${rows}</tbody></table>`;
 }
+function cataloguePrintBody(items){
+  /* ═══════════════════════════════════════════════════════════════
+     CATALOGUE V2 — Livre imprimable
+     Structure : couverture · sommaire · séparateurs de décennie ·
+     une page par vinyle · pièces maîtresses · statistiques · index
+     ═══════════════════════════════════════════════════════════════ */
+  const dateGen = new Date().toLocaleDateString("fr-FR", {day:"numeric",month:"long",year:"numeric"});
+  const total = items.reduce((s,v) => s + valeurEffective(v), 0);
 
+  /* ─── Styles spécifiques au livre ─── */
+  const css = `<style>
+    @page { margin: 16mm; }
+    .cv-cover{
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-height:240mm; text-align:center; position:relative;
+    }
+    .cv-cover .disc{
+      width:220px; height:220px; margin-bottom:44px;
+      animation: none;
+    }
+    @keyframes cvspin{to{transform:rotate(360deg)}}
+    .cv-cover h1{
+      font-family:'Playfair Display',Georgia,serif; font-size:64px; font-weight:500;
+      color:#8a6f3d; letter-spacing:.04em; line-height:1.05; margin-bottom:14px;
+    }
+    .cv-cover .sub{
+      font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.5em;
+      text-transform:uppercase; color:#C9A86A; padding-left:.5em; margin-bottom:60px;
+    }
+    .cv-cover .sep{
+      width:120px; height:1px; background:#C9A86A; margin:0 auto 44px;
+    }
+    .cv-cover .desc{
+      font-family:'Playfair Display',Georgia,serif; font-style:italic;
+      font-size:16px; color:#555; line-height:1.7; max-width:420px;
+    }
+    .cv-cover .meta{
+      position:absolute; bottom:20mm; left:0; right:0;
+      font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.2em;
+      text-transform:uppercase; color:#999;
+    }
+
+    .cv-toc{ padding:30mm 10mm; }
+    .cv-toc h2{
+      font-family:'Playfair Display',Georgia,serif; font-size:28px; color:#8a6f3d;
+      border-bottom:1.5px solid #C9A86A; padding-bottom:12px; margin-bottom:30px;
+      letter-spacing:.02em;
+    }
+    .cv-toc-row{
+      display:flex; justify-content:space-between; align-items:baseline;
+      padding:10px 0; border-bottom:1px dotted #d8cfb8; font-size:13px;
+    }
+    .cv-toc-row .lbl{ color:#333; }
+    .cv-toc-row .dots{ flex:1; border-bottom:1px dotted #d8cfb8; margin:0 8px; transform:translateY(-3px); }
+    .cv-toc-row .pg{ font-family:'Playfair Display',serif; color:#8a6f3d; font-weight:500; }
+    .cv-toc-sub{ padding-left:24px; font-size:12px; color:#777; }
+
+    .cv-sep{
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      min-height:240mm; text-align:center;
+    }
+    .cv-sep .kicker{
+      font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.4em;
+      text-transform:uppercase; color:#C9A86A; margin-bottom:20px;
+    }
+    .cv-sep h2{
+      font-family:'Playfair Display',Georgia,serif; font-size:76px; font-weight:500;
+      color:#8a6f3d; line-height:1; margin-bottom:14px;
+    }
+    .cv-sep .count{
+      font-family:'Playfair Display',Georgia,serif; font-style:italic;
+      font-size:16px; color:#777;
+    }
+    .cv-sep .rule{
+      width:80px; height:1px; background:#C9A86A; margin:40px auto 0;
+    }
+
+    .cv-page{
+      padding:22mm 0 26mm; page-break-after:always; position:relative;
+      min-height:240mm;
+    }
+    .cv-page-head{
+      display:flex; justify-content:space-between; align-items:flex-end;
+      border-bottom:1.5px solid #C9A86A; padding-bottom:10px; margin-bottom:22px;
+    }
+    .cv-page-head .num{
+      font-family:'Playfair Display',serif; font-size:13px; color:#8a6f3d;
+      letter-spacing:.24em;
+    }
+    .cv-page-head .brand{
+      font-family:'Playfair Display',serif; font-size:10px; color:#8a6f3d;
+      letter-spacing:.3em;
+    }
+    .cv-page-body{ display:flex; gap:30px; }
+    .cv-page-cover{ width:230px; flex-shrink:0; }
+    .cv-page-cover img{ width:100%; display:block; border:1px solid #c8c0aa; }
+    .cv-page-cover .ph{
+      width:100%; aspect-ratio:1; background:#e8e3d6;
+      display:flex; align-items:center; justify-content:center;
+      font-family:'Playfair Display',serif; font-size:56px; color:#b9ae93;
+      border:1px solid #c8c0aa;
+    }
+    .cv-page-cover .verso{
+      margin-top:10px; width:100%; display:block; border:1px solid #c8c0aa;
+    }
+    .cv-page-info{ flex:1; min-width:0; }
+    .cv-page-info h1{
+      font-family:'Playfair Display',Georgia,serif; font-size:30px; font-weight:500;
+      color:#1a1a1a; line-height:1.12; margin-bottom:6px;
+    }
+    .cv-page-info .artiste{
+      font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.22em;
+      text-transform:uppercase; color:#8a6f3d; margin-bottom:20px;
+    }
+    .cv-page-grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:9px 22px;
+    }
+    .cv-page-grid .item{
+      border-bottom:1px solid #e2dccb; padding-bottom:6px;
+    }
+    .cv-page-grid .item .k{
+      font-size:8px; letter-spacing:.14em; text-transform:uppercase;
+      color:#999; margin-bottom:2px;
+    }
+    .cv-page-grid .item .v{ font-size:12px; color:#1a1a1a; }
+    .cv-page-notes{
+      margin-top:18px; background:#efeade; border-left:2px solid #C9A86A;
+      padding:12px 15px; font-size:11.5px; color:#444; line-height:1.65;
+      white-space:pre-wrap;
+    }
+    .cv-page-notes .k{
+      font-size:8px; letter-spacing:.14em; text-transform:uppercase;
+      color:#8a6f3d; margin-bottom:4px; font-style:normal;
+    }
+    .cv-badge{
+      display:inline-block; font-family:'Inter',sans-serif; font-size:9px;
+      letter-spacing:.12em; text-transform:uppercase; padding:3px 8px;
+      border-radius:2px; margin-right:6px; margin-bottom:6px;
+    }
+    .cv-badge.gold{ background:rgba(201,168,106,.15); color:#8a6f3d; border:1px solid rgba(201,168,106,.4); }
+    .cv-badge.brick{ background:rgba(166,58,58,.12); color:#8a3030; border:1px solid rgba(166,58,58,.4); }
+    .cv-filigrane{
+      position:absolute; top:60mm; right:20mm; font-family:'Playfair Display',serif;
+      font-size:120px; font-weight:500; color:#f0e9d5; letter-spacing:-.02em;
+      line-height:1; z-index:0; pointer-events:none;
+    }
+
+    .cv-masterpieces{ padding:24mm 0; }
+    .cv-masterpieces h2{
+      font-family:'Playfair Display',Georgia,serif; font-size:32px; color:#8a6f3d;
+      border-bottom:1.5px solid #C9A86A; padding-bottom:10px; margin-bottom:28px;
+    }
+    .cv-masterpieces .grid{
+      display:grid; grid-template-columns:1fr 1fr; gap:22px 30px;
+    }
+    .cv-mp-item{ display:flex; gap:14px; align-items:flex-start; }
+    .cv-mp-item .cover{
+      width:80px; height:80px; flex-shrink:0; border:1px solid #c8c0aa;
+      background:#e8e3d6; display:flex; align-items:center; justify-content:center;
+      font-family:'Playfair Display',serif; font-size:26px; color:#b9ae93; overflow:hidden;
+    }
+    .cv-mp-item .cover img{ width:100%; height:100%; object-fit:cover; }
+    .cv-mp-item .info{ flex:1; min-width:0; }
+    .cv-mp-item .titre{
+      font-family:'Playfair Display',serif; font-size:14px; color:#1a1a1a;
+      line-height:1.2; margin-bottom:3px;
+    }
+    .cv-mp-item .artiste{
+      font-family:'Inter',sans-serif; font-size:9.5px; letter-spacing:.14em;
+      text-transform:uppercase; color:#8a6f3d; margin-bottom:6px;
+    }
+    .cv-mp-item .valeur{
+      font-family:'Playfair Display',serif; font-size:16px; color:#8a6f3d;
+    }
+
+    .cv-stats{ padding:24mm 0; }
+    .cv-stats h2{
+      font-family:'Playfair Display',Georgia,serif; font-size:32px; color:#8a6f3d;
+      border-bottom:1.5px solid #C9A86A; padding-bottom:10px; margin-bottom:28px;
+    }
+    .cv-stats .grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-bottom:32px;
+    }
+    .cv-stat{
+      border:1px solid #C9A86A; background:#faf7ee; padding:16px 14px; text-align:center;
+    }
+    .cv-stat .k{
+      font-family:'Inter',sans-serif; font-size:8.5px; letter-spacing:.2em;
+      text-transform:uppercase; color:#8a6f3d; margin-bottom:8px;
+    }
+    .cv-stat .v{
+      font-family:'Playfair Display',serif; font-size:24px; color:#8a6f3d;
+      line-height:1;
+    }
+    .cv-stats-section{ margin-top:26px; }
+    .cv-stats-section h3{
+      font-family:'Playfair Display',serif; font-size:16px; color:#8a6f3d;
+      margin-bottom:14px; padding-bottom:6px; border-bottom:1px solid #d8cfb8;
+      letter-spacing:.03em;
+    }
+    .cv-stat-bar{
+      display:grid; grid-template-columns:120px 1fr 50px; gap:12px; align-items:center;
+      margin-bottom:8px; font-size:11.5px;
+    }
+    .cv-stat-bar .lbl{ color:#333; text-transform:uppercase; letter-spacing:.08em; font-size:10px; }
+    .cv-stat-bar .track{
+      background:#efeade; height:10px; border-radius:5px; overflow:hidden;
+    }
+    .cv-stat-bar .fill{
+      height:100%; background:linear-gradient(90deg,#C9A86A,#E2C893);
+    }
+    .cv-stat-bar .val{
+      text-align:right; font-family:'Playfair Display',serif;
+      color:#8a6f3d; font-size:12px;
+    }
+
+    .cv-index{ padding:24mm 0; page-break-before:always; }
+    .cv-index h2{
+      font-family:'Playfair Display',Georgia,serif; font-size:32px; color:#8a6f3d;
+      border-bottom:1.5px solid #C9A86A; padding-bottom:10px; margin-bottom:22px;
+    }
+    .cv-index-row{
+      display:grid; grid-template-columns:56px 1fr; gap:14px; font-size:12px;
+      padding:7px 0; border-bottom:1px solid #f0e9d5;
+    }
+    .cv-index-row .ltr{
+      font-family:'Playfair Display',serif; font-size:22px; color:#C9A86A;
+      text-align:center; line-height:1;
+    }
+    .cv-index-row .list{ color:#333; line-height:1.5; }
+    .cv-index-row .list strong{ color:#1a1a1a; font-weight:600; }
+
+    .cv-footer{
+      position:absolute; bottom:14mm; left:0; right:0;
+      display:flex; justify-content:space-between;
+      font-family:'Inter',sans-serif; font-size:8.5px; letter-spacing:.2em;
+      text-transform:uppercase; color:#b9ae93;
+      border-top:1px solid #e2dccb; padding-top:6px;
+    }
+
+    @media print{
+      .cv-cover, .cv-sep{ min-height:auto; }
+      .cv-page{ min-height:auto; }
+    }
+  </style>`;
+
+  /* ─── Calcul des numéros de page ─── */
+  /* On regroupe les vinyles par décennie pour les séparateurs */
+  const parDecennie = {};
+  const sansDecennie = [];
+  items.forEach(v => {
+    const d = getDecade(v.annee_impression);
+    if(d === null){ sansDecennie.push(v); return; }
+    if(!parDecennie[d]) parDecennie[d] = [];
+    parDecennie[d].push(v);
+  });
+  const decennies = Object.keys(parDecennie).map(Number).sort((a,b) => a - b);
+
+  /* Numérotation prévisionnelle */
+  let pg = 1;
+  const toc = [];
+  const pgCover = pg; pg++;                    /* couverture */
+  const pgToc = pg; pg++;                      /* sommaire */
+  const pgDecennies = {};
+  decennies.forEach(d => {
+    const pgSep = pg; pg++;
+    const pgFirst = pg;
+    pg += parDecennie[d].length;
+    pgDecennies[d] = { sep: pgSep, first: pgFirst, count: parDecennie[d].length };
+    toc.push({ label: formatDecade(d), pg: pgSep, sub: parDecennie[d].length + " vinyle" + (parDecennie[d].length > 1 ? "s" : ""), dec: d });
+  });
+  if(sansDecennie.length){
+    const pgSep = pg; pg++;
+    const pgFirst = pg;
+    pg += sansDecennie.length;
+    pgDecennies["-1"] = { sep: pgSep, first: pgFirst, count: sansDecennie.length };
+    toc.push({ label: "Sans année précisée", pg: pgSep, sub: sansDecennie.length + " vinyle" + (sansDecennie.length > 1 ? "s" : ""), dec: -1 });
+  }
+  const pgMaster = pg; pg++;
+  const pgStats = pg; pg++;
+  const pgIndex = pg;
+
+  /* ─── Couverture ─── */
+  const cover = `
+    <div class="cv-cover" style="page-break-after:always">
+      <svg class="disc" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="vinyl-center" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#1c1c1c"/>
+            <stop offset="100%" stop-color="#0a0a0a"/>
+          </radialGradient>
+          <radialGradient id="label-gold" cx="40%" cy="35%" r="60%">
+            <stop offset="0%" stop-color="#E2C893"/>
+            <stop offset="55%" stop-color="#C9A86A"/>
+            <stop offset="100%" stop-color="#8a6f3d"/>
+          </radialGradient>
+        </defs>
+        <circle cx="110" cy="110" r="108" fill="url(#vinyl-center)" stroke="#C9A86A" stroke-width="1" opacity="0.9"/>
+        <g fill="none" stroke="#2a2a2a" stroke-width="0.6">
+          <circle cx="110" cy="110" r="100"/><circle cx="110" cy="110" r="94"/>
+          <circle cx="110" cy="110" r="88"/><circle cx="110" cy="110" r="82"/>
+          <circle cx="110" cy="110" r="76"/><circle cx="110" cy="110" r="70"/>
+          <circle cx="110" cy="110" r="64"/><circle cx="110" cy="110" r="58"/>
+        </g>
+        <circle cx="110" cy="110" r="38" fill="url(#label-gold)"/>
+        <circle cx="110" cy="110" r="3" fill="#0d0d0d"/>
+        <circle cx="110" cy="110" r="32" fill="none" stroke="#8a6f3d" stroke-width="0.5" opacity="0.5"/>
+      </svg>
+      <h1>Vinyl Archive</h1>
+      <div class="sub">Jacques Edition</div>
+      <div class="sep"></div>
+      <div class="desc">Catalogue de la collection</div>
+      <div class="meta">${items.length} vinyle${items.length>1?"s":""} · ${fmtEuro(Math.round(total))} · ${dateGen}</div>
+    </div>`;
+
+  /* ─── Sommaire ─── */
+  const tocRows = toc.map(t => `
+    <div class="cv-toc-row">
+      <span class="lbl">${esc(t.label)}</span>
+      <span class="dots"></span>
+      <span class="pg">${t.pg}</span>
+    </div>
+    <div class="cv-toc-row cv-toc-sub" style="border-bottom:none;padding-top:0">
+      <span class="lbl">${esc(t.sub)}</span>
+    </div>
+  `).join("");
+  const tocPage = `
+    <div class="cv-toc" style="page-break-after:always">
+      <h2>Sommaire</h2>
+      ${tocRows}
+      <div class="cv-toc-row" style="margin-top:24px">
+        <span class="lbl">Pièces maîtresses</span>
+        <span class="dots"></span>
+        <span class="pg">${pgMaster}</span>
+      </div>
+      <div class="cv-toc-row">
+        <span class="lbl">Statistiques de la collection</span>
+        <span class="dots"></span>
+        <span class="pg">${pgStats}</span>
+      </div>
+      <div class="cv-toc-row">
+        <span class="lbl">Index alphabétique</span>
+        <span class="dots"></span>
+        <span class="pg">${pgIndex}</span>
+      </div>
+    </div>`;
+
+  /* ─── Séparateurs de décennie ─── */
+  function sepPage(num, itemsCount, titre, kicker){
+    return `
+      <div class="cv-sep" style="page-break-after:always">
+        <div class="kicker">${esc(kicker)}</div>
+        <h2>${esc(titre)}</h2>
+        <div class="count">${itemsCount} vinyle${itemsCount>1?"s":""}</div>
+        <div class="rule"></div>
+      </div>`;
+  }
+
+  /* ─── Page d'un vinyle ─── */
+  function vinylePage(v, numero){
+    const valAff = valeurAffichee(v);
+    const items1 = [];
+    const addItem = (k, val) => { if(val !== null && val !== undefined && val !== "") items1.push(`<div class="item"><div class="k">${esc(k)}</div><div class="v">${esc(val)}</div></div>`); };
+    addItem("Artiste", v.artiste);
+    addItem("Format", formatBadge(v));
+    if(v.enregistrement) addItem("Enregistrement", v.enregistrement);
+    if(v.genre) addItem("Genre", v.genre);
+    if(v.annee_impression) addItem("Année d'impression", v.annee_impression);
+    if(v.annee_enregistrement) addItem("Année d'enregistrement", v.annee_enregistrement);
+    if(v.label) addItem("Label", v.label);
+    if(v.catalogue) addItem("N° catalogue", v.catalogue);
+    if(v.pays) addItem("Pays", v.pays);
+    if(v.pressage) addItem("Pressage", v.pressage);
+    if(v.pressage_audio) addItem("Pressage audio", v.pressage_audio);
+    if(v.couleur_vinyle) addItem("Couleur", v.couleur_vinyle);
+    if(v.rarete) addItem("Rareté", v.rarete);
+    if(v.etat_disque) addItem("État disque", v.etat_disque);
+    if(v.etat_pochette) addItem("État pochette", v.etat_pochette);
+    if(v.acquisition) addItem("Acquisition", v.acquisition);
+    if(v.date_achat) addItem("Date d'achat", v.date_achat);
+    if(v.prix_achat) addItem("Prix d'achat", fmtEuro(num(v.prix_achat)));
+    if(valAff !== null) addItem("Valeur estimée", fmtEuro(valAff));
+    const emp = emplacementCourt(v);
+    if(emp) addItem("⌂ Emplacement", emp);
+    if(estPrete(v)) addItem("➜ Prêté à", v.prete_a);
+    const badges = [];
+    if(v.statut === "Recherché") badges.push(`<span class="cv-badge brick">★ Recherché</span>`);
+    if(estPrete(v)) badges.push(`<span class="cv-badge gold">➜ Prêté</span>`);
+    if(v.format_double) badges.push(`<span class="cv-badge gold">Double album</span>`);
+    if(v.format_triple) badges.push(`<span class="cv-badge gold">Triple album</span>`);
+    if(v.format_gatefold) badges.push(`<span class="cv-badge gold">Gatefold</span>`);
+    const notes = [];
+    if(v.particularites) notes.push(`<div class="cv-page-notes"><div class="k">Particularités</div>${esc(v.particularites)}</div>`);
+    if(v.notes) notes.push(`<div class="cv-page-notes"><div class="k">Notes</div>${esc(v.notes)}</div>`);
+    return `
+      <div class="cv-page" style="page-break-after:always">
+        <div class="cv-filigrane">${String(numero).padStart(2,"0")}</div>
+        <div class="cv-page-head">
+          <div class="num">N° ${String(numero).padStart(3,"0")}</div>
+          <div class="brand">VINYL ARCHIVE</div>
+        </div>
+        <div class="cv-page-body">
+          <div class="cv-page-cover">
+            ${v.image_pochette ? `<img src="${esc(v.image_pochette)}" alt="">` : `<div class="ph">${esc(initiales(v.titre))}</div>`}
+            ${v.image_pochette_verso ? `<img class="verso" src="${esc(v.image_pochette_verso)}" alt="Verso">` : ""}
+          </div>
+          <div class="cv-page-info">
+            <h1>${esc(v.titre || "Sans titre")}</h1>
+            <div class="artiste">${esc(v.artiste || "")}</div>
+            ${badges.length ? `<div style="margin-bottom:16px">${badges.join("")}</div>` : ""}
+            <div class="cv-page-grid">${items1.join("")}</div>
+            ${notes.join("")}
+          </div>
+        </div>
+        <div class="cv-footer">
+          <span>Vinyl Archive · Jacques Edition</span>
+          <span>Page ${numero + pgDecennies[Object.keys(pgDecennies).find(k => pgDecennies[k].first <= numero)||""].sep || 0}</span>
+        </div>
+      </div>`;
+  }
+
+  /* ─── Construction des pages par décennie ─── */
+  const pagesByDecennie = [];
+  decennies.forEach(d => {
+    pagesByDecennie.push(sepPage(d, parDecennie[d].length, formatDecade(d), "Chapitre"));
+    /* On mémorise le numéro de page réel pour le pied de page */
+    let n = pgDecennies[d].first;
+    parDecennie[d].forEach(v => {
+      pagesByDecennie.push(vinylePage(v, n));
+      n++;
+    });
+  });
+  if(sansDecennie.length){
+    pagesByDecennie.push(sepPage(-1, sansDecennie.length, "Sans année précisée", "Chapitre"));
+    let n = pgDecennies["-1"].first;
+    sansDecennie.forEach(v => {
+      pagesByDecennie.push(vinylePage(v, n));
+      n++;
+    });
+  }
+
+  /* ─── Pièces maîtresses (top 10 par valeur) ─── */
+  const top10 = [...items]
+    .map(v => ({ v, val: valeurEffective(v) }))
+    .filter(x => x.val > 0)
+    .sort((a,b) => b.val - a.val)
+    .slice(0, 10);
+  const masterPage = `
+    <div class="cv-masterpieces" style="page-break-after:always">
+      <h2>Pièces maîtresses</h2>
+      ${top10.length ? `
+        <div class="grid">
+          ${top10.map(({v, val}) => `
+            <div class="cv-mp-item">
+              <div class="cover">
+                ${v.image_pochette ? `<img src="${esc(v.image_pochette)}" alt="">` : esc(initiales(v.titre))}
+              </div>
+              <div class="info">
+                <div class="titre">${esc(v.titre || "Sans titre")}</div>
+                <div class="artiste">${esc(v.artiste || "")}${v.annee_impression ? " · " + esc(v.annee_impression) : ""}</div>
+                <div class="valeur">${fmtEuro(val)}</div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      ` : `<p style="color:#777;font-style:italic">Aucune valeur renseignée pour le moment.</p>`}
+      <div class="cv-footer">
+        <span>Vinyl Archive · Jacques Edition</span>
+        <span>Page ${pgMaster}</span>
+      </div>
+    </div>`;
+
+  /* ─── Statistiques ─── */
+  const parGenre = {};
+  items.forEach(v => { const g = (v.genre || "Non précisé").trim() || "Non précisé"; parGenre[g] = (parGenre[g] || 0) + 1; });
+  const topGenres = Object.entries(parGenre).sort((a,b) => b[1] - a[1]).slice(0, 6);
+  const maxGenre = topGenres.length ? topGenres[0][1] : 1;
+
+  const parArtiste = {};
+  items.forEach(v => { const a = (v.artiste || "").trim(); if(a) parArtiste[a] = (parArtiste[a] || 0) + 1; });
+  const topArtistes = Object.entries(parArtiste).sort((a,b) => b[1] - a[1]).slice(0, 6);
+  const maxArtiste = topArtistes.length ? topArtistes[0][1] : 1;
+
+  const moy = items.length ? Math.round(total / items.length) : 0;
+  const rareCount = items.filter(v => ["Rare","Très rare","Collector"].includes(v.rarete)).length;
+  const preteCount = items.filter(v => estPrete(v)).length;
+
+  const statsPage = `
+    <div class="cv-stats" style="page-break-after:always">
+      <h2>Statistiques de la collection</h2>
+      <div class="grid">
+        <div class="cv-stat"><div class="k">Vinyles</div><div class="v">${items.length}</div></div>
+        <div class="cv-stat"><div class="k">Valeur totale</div><div class="v">${fmtEuro(Math.round(total))}</div></div>
+        <div class="cv-stat"><div class="k">Valeur moyenne</div><div class="v">${fmtEuro(moy)}</div></div>
+        <div class="cv-stat"><div class="k">Pièces rares</div><div class="v">${rareCount}</div></div>
+        <div class="cv-stat"><div class="k">Prêtées</div><div class="v">${preteCount}</div></div>
+        <div class="cv-stat"><div class="k">Décennies</div><div class="v">${decennies.length}</div></div>
+      </div>
+
+      ${topGenres.length ? `
+        <div class="cv-stats-section">
+          <h3>Top genres</h3>
+          ${topGenres.map(([g, n]) => `
+            <div class="cv-stat-bar">
+              <div class="lbl">${esc(g)}</div>
+              <div class="track"><div class="fill" style="width:${(n/maxGenre)*100}%"></div></div>
+              <div class="val">${n}</div>
+            </div>
+          `).join("")}
+        </div>
+      ` : ""}
+
+      ${topArtistes.length ? `
+        <div class="cv-stats-section">
+          <h3>Top artistes</h3>
+          ${topArtistes.map(([a, n]) => `
+            <div class="cv-stat-bar">
+              <div class="lbl">${esc(a)}</div>
+              <div class="track"><div class="fill" style="width:${(n/maxArtiste)*100}%"></div></div>
+              <div class="val">${n}</div>
+            </div>
+          `).join("")}
+        </div>
+      ` : ""}
+
+      <div class="cv-footer">
+        <span>Vinyl Archive · Jacques Edition</span>
+        <span>Page ${pgStats}</span>
+      </div>
+    </div>`;
+
+  /* ─── Index alphabétique ─── */
+  const parLettre = {};
+  items.forEach(v => {
+    const art = (v.artiste || "?").trim();
+    /* On utilise la même logique d'article que la barre A→Z */
+    const lettre = (typeof premiereLettreTri === "function" ? premiereLettreTri(art) : art[0].toUpperCase());
+    if(!parLettre[lettre]) parLettre[lettre] = {};
+    if(!parLettre[lettre][art]) parLettre[lettre][art] = [];
+    parLettre[lettre][art].push(v.titre || "");
+  });
+  const lettres = Object.keys(parLettre).sort((a,b) => a.localeCompare(b, "fr"));
+  const indexRows = lettres.map(lettre => {
+    const artistes = Object.keys(parLettre[lettre]).sort((a,b) => a.localeCompare(b, "fr"));
+    const contenu = artistes.map(a => {
+      const titres = parLettre[lettre][a].sort((x,y) => (x||"").localeCompare(y||"", "fr"));
+      return `<strong>${esc(a)}</strong> — ${titres.map(esc).join(" · ")}`;
+    }).join("<br>");
+    return `<div class="cv-index-row"><div class="ltr">${esc(lettre)}</div><div class="list">${contenu}</div></div>`;
+  }).join("");
+
+  const indexPage = `
+    <div class="cv-index">
+      <h2>Index alphabétique</h2>
+      ${indexRows || `<p style="color:#777;font-style:italic">Aucun vinyle à indexer.</p>`}
+      <div class="cv-footer">
+        <span>Vinyl Archive · Jacques Edition</span>
+        <span>Page ${pgIndex}</span>
+      </div>
+    </div>`;
+
+  return css + cover + tocPage + pagesByDecennie.join("") + masterPage + statsPage + indexPage;
+}
 const App = {
   async init(){
     Settings.load();
@@ -1825,10 +2387,11 @@ const App = {
     const rect = e.currentTarget.getBoundingClientRect();
     menu.style.top = (rect.bottom + 8) + "px";
     menu.style.left = Math.max(10, rect.right - 210) + "px";
-    const items = [
+       const items = [
       ["Export JSON (collection)", () => this.exportJSON()],
       ["Export CSV (collection)", () => this.exportCSV()],
-      ["Export PDF (collection)", () => this.exportPDFCollection()],
+      ["Export PDF (liste compacte)", () => this.exportPDFCollection()],
+      ["Export PDF (catalogue livre)", () => this.exportPDFCatalogue()],
       ["—", null],
       ["Importer un fichier JSON", () => this.importJSON()]
     ];
@@ -1877,6 +2440,12 @@ const App = {
     const items = State.filtered;
     openPrintWindow(`Collection (${items.length})`, collectionPrintBody(items));
     toast("Collection PDF", `${items.length} vinyle(s)`);
+  },
+    exportPDFCatalogue(){
+    const items = State.filtered.length ? State.filtered : State.vinyles;
+    if(!items.length){ toast("Catalogue PDF", "Aucun vinyle à exporter", true); return; }
+    openPrintWindow(`Catalogue — ${items.length} vinyles`, cataloguePrintBody(items));
+    toast("Catalogue PDF", `${items.length} vinyle(s) · livre prêt`);
   },
   importJSON(){
     const input = document.createElement("input");
