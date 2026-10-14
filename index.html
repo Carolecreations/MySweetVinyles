@@ -2076,7 +2076,26 @@ window.App = App;
 /* ═══════════════════════════════════════════════════════════════════
    FILTRE ALPHABÉTIQUE A → Z
    ═══════════════════════════════════════════════════════════════════ */
-(function(){
+/* Retourne la première lettre alphabétique en ignorant les articles
+   courants (The, A, An, Le, La, Les, L', El, Los, Las, Der, Die, Das, Il, Gli).
+   Ex. : "The Beatles" → "B", "Les Rita Mitsouko" → "R". */
+function premiereLettreTri(name){
+  const s = String(name || "").trim();
+  if(!s) return "";
+  const ARTICLES = ["the","a","an","le","la","les","l","el","los","las","der","die","das","il","gli","un","une"];
+  const words = s.split(/\s+/);
+  /* On cherche le premier mot qui n'est pas un article */
+  let cible = words[0];
+  for(const w of words){
+    const nettoye = w.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]/g, "");
+    if(!ARTICLES.includes(nettoye)){ cible = w; break; }
+    cible = w; /* si tous les mots sont des articles, on prend le premier */
+  }
+  const first = cible[0].toUpperCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  return /[A-Z]/.test(first) ? first : "#";
+}
+  (function(){
   function initAlphaBar(){
     if(typeof App === "undefined" || typeof State === "undefined"){
       setTimeout(initAlphaBar, 200);
@@ -2174,11 +2193,9 @@ window.App = App;
       bar.style.display = "flex";
 
       const used = {};
-      State.vinyles.forEach(v => {
-        const name = (v.artiste || v.titre || "").trim();
-        if(!name) return;
-        const first = name[0].toUpperCase()
-          .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            State.vinyles.forEach(v => {
+        const first = premiereLettreTri(v.artiste || v.titre || "");
+        if(!first) return;
         if(/[A-Z]/.test(first)) used[first] = true;
         else used["#"] = true;
       });
@@ -2208,10 +2225,8 @@ window.App = App;
       const f = State.filters;
       if(f.alpha){
         State.filtered = State.filtered.filter(v => {
-          const name = (v.artiste || v.titre || "").trim();
-          if(!name) return false;
-          const first = name[0].toUpperCase()
-            .normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                   const first = premiereLettreTri(v.artiste || v.titre || "");
+          if(!first) return false;
           if(f.alpha === "#") return !/[A-Z]/.test(first);
           return first === f.alpha;
         });
