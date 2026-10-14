@@ -588,6 +588,7 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
       <div class="field"><label>Pressage</label><select id="f_pressage"><option value="">Tous</option></select></div>
             <div class="field"><label>Pressage audio</label><select id="f_pressage_audio"><option value="">Tous</option></select></div>
       <div class="field"><label>Enregistrement</label><select id="f_enregistrement"><option value="">Tous</option></select></div>
+            <div class="field"><label>Acquisition</label><select id="f_acquisition"><option value="">Toutes</option></select></div>
       <div class="field"><label>Valeur min. (€)</label><input id="f_vmin" type="number" placeholder="0"></div>
       <div class="field"><label>Valeur max. (€)</label><input id="f_vmax" type="number" placeholder="∞"></div>
       <div class="field"><label>Rareté</label><select id="f_rarete"><option value="">Toutes</option></select></div>
@@ -631,6 +632,7 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
 
 const FORMATS   = ["33T","45T","78T","Maxi","Picture Disc","Coffret","10\"","Autre"];
 const ENREGISTREMENT = ["Studio","Live","Démo"];
+const ACQUISITION = ["Neuf","Occasion"];
 const ETATS     = ["Mint","Near Mint","VG+","VG","G","Poor"];
 const PRESSAGE  = ["1st Press","Repress","Remastered","Limited Edition","Promo","Test Pressing","Autre"];
 const PRESSAGE_AUDIO = ["Mono","Stéréo","Mono / Stéréo","Inconnu"];
@@ -668,8 +670,9 @@ const GROUPS = [
     { key:"particularites", label:"Particularités", type:"text", span:2, ph:"insert, poster, sticker, édition promo…" },
     { key:"notes", label:"Notes personnelles", type:"textarea", span:2, ph:"Souvenirs, contexte d'achat, impressions d'écoute…" }
   ]},
-  { id:"valeur", title:"Acquisition & Valeur", icon:"◆", fields:[
+    { id:"valeur", title:"Acquisition & Valeur", icon:"◆", fields:[
     { key:"date_achat", label:"Date d'achat", type:"date" },
+    { key:"acquisition", label:"Acquisition", type:"select", options:ACQUISITION },
     { key:"prix_achat", label:"Prix d'achat (€)", type:"number", step:"0.01" },
     { key:"valeur_manuelle", label:"Valeur manuelle (€)", type:"number", step:"0.01" },
     { key:"valeur_auto", label:"Valeur estimée auto (€)", type:"number", step:"0.01", readonly:true }
@@ -786,7 +789,7 @@ const Store = (() => {
 
 const State = {
   vinyles: [], filtered: [], view: "grid",
-  filters: { q:"", artiste:"", genre:"", format:"", double:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", vmin:"", vmax:"", rarete:"" },
+    filters: { q:"", artiste:"", genre:"", format:"", double:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", vmin:"", vmax:"", rarete:"" },
   sort: "date_ajout_desc", detailId: null, editingId: null,
   formImages: { image_pochette:null, image_pochette_verso:null, image_vinyle:null }, formPriceSources: null
 };
@@ -952,7 +955,7 @@ function applyFilters(){
       const hay = normStr([
         v.titre, v.artiste, v.label, v.catalogue, v.codebarres, v.genre, v.pays,
         v.notes, v.particularites, v.annee_impression, v.annee_enregistrement,
-        v.format, v.pressage, v.pressage_audio, v.enregistrement, v.couleur_vinyle,
+               v.format, v.pressage, v.pressage_audio, v.enregistrement, v.couleur_vinyle, v.acquisition,
         v.format_double ? "double album" : "",
         v.format_gatefold ? "gatefold pochette" : ""
       ].filter(Boolean).join(" "));
@@ -970,6 +973,7 @@ function applyFilters(){
     if(!eq(v.pressage, f.pressage)) return false;
     if(!eq(v.pressage_audio, f.pressage_audio)) return false;
     if(!eq(v.enregistrement, f.enregistrement)) return false;
+    if(!eq(v.acquisition, f.acquisition)) return false;
     if(!eq(v.rarete, f.rarete)) return false;
     if(f.double   && v.format_double   !== true) return false;
     if(f.gatefold && v.format_gatefold !== true) return false;
@@ -1403,7 +1407,7 @@ const CSV_COLUMNS = [
     ["etat_disque","État disque"],["etat_pochette","État pochette"],["pressage","Pressage"],
   ["pressage_audio","Pressage audio"],
   ["couleur_vinyle","Couleur vinyle"],["rarete","Rareté"],["particularites","Particularités"],
-  ["notes","Notes"],["date_achat","Date achat"],["prix_achat","Prix achat"],
+  ["notes","Notes"],["date_achat","Date achat"],["acquisition","Acquisition"],["prix_achat","Prix achat"],
   ["valeur_auto","Valeur auto"],["valeur_manuelle","Valeur manuelle"]
 ];
 function csvEscape(val){ const s = String(val ?? ""); if(/[";\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"'; return s; }
@@ -1537,7 +1541,7 @@ const App = {
       "#f_label":"label", "#f_pays":"pays", "#f_annee":"annee",
       "#f_etat_disque":"etat_disque", "#f_etat_pochette":"etat_pochette",
       "#f_pressage":"pressage", "#f_pressage_audio":"pressage_audio",
-      "#f_enregistrement":"enregistrement",
+           "#f_enregistrement":"enregistrement",       "#f_acquisition":"acquisition",
       "#f_vmin":"vmin", "#f_vmax":"vmax", "#f_rarete":"rarete"
     };
     Object.entries(mapFiltres).forEach(([sel, key]) => {
@@ -1948,7 +1952,79 @@ function dashboardFormats(items){
       <div class="dash-legend">${legend}</div>
     </div></div>`;
 }
+function dashboardPressages(items){
+  const counts = {};
+  items.forEach(v => {
+    const p = v.pressage || "Non précisé";
+    counts[p] = (counts[p] || 0) + 1;
+  });
+  const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+  if(!entries.length){
+    return `<div class="dash-card"><div class="dash-title">Pressages (originaux / repressages)</div><div class="dash-empty">Aucun pressage renseigné</div></div>`;
+  }
+  const max = entries[0][1];
+  const rows = entries.map(([label, n]) => {
+    const pct = max > 0 ? (n / max) * 100 : 0;
+    return `<div class="dash-bar-row">
+      <div class="dash-bar-label" title="${esc(label)}">${esc(label)}</div>
+      <div class="dash-bar-track"><div class="dash-bar-fill" style="width:${pct}%"></div></div>
+      <div class="dash-bar-value">${n}</div>
+    </div>`;
+  }).join("");
+  return `<div class="dash-card"><div class="dash-title">Pressages (originaux / repressages)</div><div class="dash-bars">${rows}</div></div>`;
+}
 
+function dashboardAcquisition(items){
+  const counts = {};
+  items.forEach(v => {
+    const a = v.acquisition || "Non précisé";
+    counts[a] = (counts[a] || 0) + 1;
+  });
+  const entries = Object.entries(counts).sort((a,b) => b[1] - a[1]);
+  if(!entries.length){
+    return `<div class="dash-card"><div class="dash-title">Acquisitions (neuf / occasion)</div><div class="dash-empty">Aucune acquisition renseignée</div></div>`;
+  }
+  const total = items.length;
+  const r = 50, cx = 60, cy = 60;
+  const circ = 2 * Math.PI * r;
+  const COLORS = { "Neuf":"#E2C893", "Occasion":"#C9A86A", "Non précisé":"#4a4a4a" };
+  let offset = 0;
+  const slices = [];
+  entries.forEach(([label, n]) => {
+    const frac = n / total;
+    const len = frac * circ;
+    const gap = circ - len;
+    const color = COLORS[label] || "#8a6f3d";
+    slices.push({
+      label, n, color,
+      svg: `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none"
+              stroke="${color}" stroke-width="20"
+              stroke-dasharray="${len.toFixed(3)} ${gap.toFixed(3)}"
+              stroke-dashoffset="${(-offset).toFixed(3)}"
+              transform="rotate(-90 ${cx} ${cy})"/>`
+    });
+    offset += len;
+  });
+  const svgSlices = slices.map(s => s.svg).join("");
+  const legend = slices.map(s => `
+    <div class="dash-legend-item">
+      <span class="dash-legend-dot" style="background:${s.color}"></span>
+      <span class="dash-legend-label">${esc(s.label)}</span>
+      <span class="dash-legend-count">${s.n}</span>
+    </div>`).join("");
+  return `<div class="dash-card"><div class="dash-title">Acquisitions (neuf / occasion)</div>
+    <div class="dash-donut-wrap">
+      <svg viewBox="0 0 120 120" class="dash-donut">
+        ${svgSlices}
+        <circle cx="${cx}" cy="${cy}" r="30" fill="#0f0f0f"/>
+        <text x="${cx}" y="${cy - 1}" text-anchor="middle" fill="#C9A86A"
+              font-size="15" font-family="'Playfair Display',serif">${total}</text>
+        <text x="${cx}" y="${cy + 12}" text-anchor="middle" fill="rgba(245,242,233,.35)"
+              font-size="6" letter-spacing="1.5">VINYLES</text>
+      </svg>
+      <div class="dash-legend">${legend}</div>
+    </div></div>`;
+}
 function dashboardValueByDecade(items){
   const values = {};
   items.forEach(v => {
@@ -1984,11 +2060,13 @@ function renderDashboard(){
     grid.innerHTML = `<div class="dash-empty">Ajoutez des vinyles pour voir vos statistiques.</div>`;
     return;
   }
-  grid.innerHTML = [
+   grid.innerHTML = [
     dashboardDecades(all),
     dashboardTopArtists(all),
     dashboardTopGenres(all),
     dashboardFormats(all),
+    dashboardPressages(all),
+    dashboardAcquisition(all),
     dashboardValueByDecade(all)
   ].join("");
 }
