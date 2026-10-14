@@ -731,7 +731,16 @@ function formatTags(v){
   if(v.format_gatefold) tags.push("Pochette gatefold");
   return tags;
 }
-
+function streamingLinks(v){
+  const requete = encodeURIComponent([v.artiste, v.titre].filter(Boolean).join(" "));
+  if(!requete) return null;
+  return {
+    spotify: "https://open.spotify.com/search/" + requete,
+    apple:   "https://music.apple.com/fr/search?term=" + requete,
+    deezer:  "https://www.deezer.com/search/" + requete,
+    youtube: "https://music.youtube.com/search?q=" + requete
+  };
+}
 const Store = (() => {
   const DB_NAME = "VinylArchiveJacques", DB_VER = 1, STORE = "vinyles";
   const LS_KEY = "vinylArchiveJacques.vinyles";
@@ -1159,11 +1168,23 @@ function renderDetail(v){
         ${v.image_pochette_verso ? `<div class="fiche-vinyl-mini"><img src="${esc(v.image_pochette_verso)}" alt="Verso de la pochette"></div>` : ""}
         ${v.image_vinyle ? `<div class="fiche-vinyl-mini"><img src="${esc(v.image_vinyle)}" alt="Vinyle"></div>` : ""}
         ${valueBlock}
-        <div class="price-engine" id="priceEngine" style="display:none"></div>
+               <div class="price-engine" id="priceEngine" style="display:none"></div>
         <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
           <button class="btn sm" style="flex:1" onclick="App.estimateCurrent()">↻ Estimer la valeur</button>
           <button class="btn sm" style="flex:1" onclick="App.exportPDFFiche('${esc(v.id)}')">⎙ Fiche PDF</button>
         </div>
+        ${(() => {
+          const links = streamingLinks(v);
+          if(!links) return "";
+          return `
+            <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;justify-content:center">
+              <a class="btn sm" href="${links.spotify}" target="_blank" rel="noopener" title="Chercher sur Spotify" style="flex:1;justify-content:center;text-decoration:none">Spotify</a>
+              <a class="btn sm" href="${links.apple}" target="_blank" rel="noopener" title="Chercher sur Apple Music" style="flex:1;justify-content:center;text-decoration:none">Apple</a>
+              <a class="btn sm" href="${links.deezer}" target="_blank" rel="noopener" title="Chercher sur Deezer" style="flex:1;justify-content:center;text-decoration:none">Deezer</a>
+              <a class="btn sm" href="${links.youtube}" target="_blank" rel="noopener" title="Chercher sur YouTube Music" style="flex:1;justify-content:center;text-decoration:none">YouTube</a>
+            </div>
+          `;
+        })()}
       </div>
       <div>${sectionHTML}
         <div class="divider"></div>
