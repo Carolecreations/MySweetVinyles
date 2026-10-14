@@ -163,7 +163,16 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .cover-empty span{font-family:'Playfair Display',serif;font-size:44px;color:rgba(201,168,106,.32);font-style:italic}
 .badge{position:absolute;top:9px;left:9px;background:rgba(13,13,13,.85);border:1px solid var(--or-dim);color:var(--or);font-size:9px;font-weight:600;letter-spacing:.14em;padding:4px 8px;border-radius:2px;text-transform:uppercase;backdrop-filter:blur(4px)}
 .badge.rar{left:auto;right:9px;border-color:rgba(166,58,58,.55);color:#d98c8c;background:rgba(30,10,10,.85)}
-.card-body{padding:13px 15px 11px}
+.badge.loc{
+  top:auto; bottom:9px; left:9px;
+  border-color:rgba(201,168,106,.4);
+  color:var(--or-clair);
+  background:rgba(10,10,10,.9);
+  max-width:calc(100% - 18px);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.library.list-view .badge.loc{display:inline-flex}
+  .card-body{padding:13px 15px 11px}
 .card-title{font-family:'Playfair Display',serif;font-size:15px;line-height:1.28;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.56em}
 .card-artist{font-size:10.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--or);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-meta{margin-top:9px;font-size:10.5px;color:var(--creme-faint);display:flex;gap:8px;align-items:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -593,6 +602,7 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
             <div class="field"><label>Pressage audio</label><select id="f_pressage_audio"><option value="">Tous</option></select></div>
       <div class="field"><label>Enregistrement</label><select id="f_enregistrement"><option value="">Tous</option></select></div>
             <div class="field"><label>Acquisition</label><select id="f_acquisition"><option value="">Toutes</option></select></div>
+            <div class="field"><label>Étagère</label><select id="f_emp_etagere"><option value="">Toutes</option></select></div>
       <div class="field"><label>Valeur min. (€)</label><input id="f_vmin" type="number" placeholder="0"></div>
       <div class="field"><label>Valeur max. (€)</label><input id="f_vmax" type="number" placeholder="∞"></div>
       <div class="field"><label>Rareté</label><select id="f_rarete"><option value="">Toutes</option></select></div>
@@ -666,6 +676,12 @@ const GROUPS = [
   { id:"etat", title:"État & Conservation", icon:"◈", fields:[
     { key:"etat_disque", label:"État du disque", type:"select", options:ETATS },
     { key:"etat_pochette", label:"État de la pochette", type:"select", options:ETATS }
+  ]},
+    { id:"rangement", title:"Rangement physique", icon:"⌂", fields:[
+    { key:"emp_etagere", label:"Étagère / Meuble", type:"text", ph:"ex. Étagère A, Meuble salon" },
+    { key:"emp_bac", label:"Bac / Section", type:"text", ph:"ex. Bac 3, Section Jazz" },
+    { key:"emp_position", label:"Position", type:"text", ph:"ex. 12, milieu, 3e rangée" },
+    { key:"emp_note", label:"Note de rangement", type:"text", span:2, ph:"ex. En haut à droite, derrière les Beatles…" }
   ]},
   { id:"advanced", title:"Informations avancées", icon:"◇", fields:[
     { key:"pressage", label:"Pressage", type:"select", options:PRESSAGE },
@@ -742,6 +758,11 @@ function formatTags(v){
   if(v.format_gatefold) tags.push("Pochette gatefold");
   return tags;
 }
+  function emplacementCourt(v){
+  /* Retourne un code compact type "A / Bac 3 / 12" pour l'affichage */
+  const parts = [v.emp_etagere, v.emp_bac, v.emp_position].filter(Boolean);
+  return parts.length ? parts.join(" · ") : "";
+}
 function streamingLinks(v){
   const requete = encodeURIComponent([v.artiste, v.titre].filter(Boolean).join(" "));
   if(!requete) return null;
@@ -809,7 +830,7 @@ const Store = (() => {
 
 const State = {
   vinyles: [], filtered: [], view: "grid",
-     filters: { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", vmin:"", vmax:"", rarete:"" },
+  filters: { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", emp_etagere:"", vmin:"", vmax:"", rarete:"" },
   sort: "date_ajout_desc", detailId: null, editingId: null,
   formImages: { image_pochette:null, image_pochette_verso:null, image_vinyle:null }, formPriceSources: null
 };
@@ -975,7 +996,8 @@ function applyFilters(){
     if(q){
       const hay = normStr([
         v.titre, v.artiste, v.label, v.catalogue, v.codebarres, v.genre, v.pays,
-        v.notes, v.particularites, v.annee_impression, v.annee_enregistrement,
+               v.notes, v.particularites, v.annee_impression, v.annee_enregistrement,
+        v.emp_etagere, v.emp_bac, v.emp_position, v.emp_note,
                v.format, v.pressage, v.pressage_audio, v.enregistrement, v.couleur_vinyle, v.acquisition,
         v.format_double ? "double album" : "",
         v.format_triple ? "triple album" : "",
@@ -996,6 +1018,7 @@ function applyFilters(){
     if(!eq(v.pressage_audio, f.pressage_audio)) return false;
     if(!eq(v.enregistrement, f.enregistrement)) return false;
     if(!eq(v.acquisition, f.acquisition)) return false;
+        if(!eq(v.emp_etagere, f.emp_etagere)) return false;
     if(!eq(v.rarete, f.rarete)) return false;
        if(f.double   && v.format_double   !== true) return false;
     if(f.triple   && v.format_triple   !== true) return false;
@@ -1073,8 +1096,9 @@ function renderLibrary(){
     const badgeTxt = formatBadge(v);
     return `<article class="card" data-id="${esc(v.id)}" style="animation-delay:${Math.min(i*22,420)}ms">
       <div class="cover">${coverHTML(v)}
-        ${badgeTxt ? `<span class="badge">${esc(badgeTxt)}</span>` : ""}
+             ${badgeTxt ? `<span class="badge">${esc(badgeTxt)}</span>` : ""}
         ${["Très rare","Collector"].includes(v.rarete) ? `<span class="badge rar">${esc(v.rarete)}</span>` : ""}
+        ${emplacementCourt(v) ? `<span class="badge loc" title="Emplacement : ${esc(emplacementCourt(v))}">⌂ ${esc(emplacementCourt(v))}</span>` : ""}
       </div>
       <div class="card-body">
         <h3 class="card-title">${esc(v.titre || "Sans titre")}</h3>
@@ -1114,6 +1138,7 @@ function renderFilterOptions(){
   fill("#f_pressage_audio", PRESSAGE_AUDIO.filter(p => State.vinyles.some(v => v.pressage_audio === p)), "Tous");
   fill("#f_enregistrement", ENREGISTREMENT.filter(e => State.vinyles.some(v => v.enregistrement === e)), "Tous");
     fill("#f_acquisition", ACQUISITION.filter(a => State.vinyles.some(v => v.acquisition === a)), "Toutes");
+    fill("#f_emp_etagere", uniq("emp_etagere"), "Toutes");
   fill("#f_rarete", RARETES, "Toutes");
 }
 function updateFilterBadge(){
@@ -1198,7 +1223,14 @@ function renderDetail(v){
               <a class="btn sm" href="${links.youtube}" target="_blank" rel="noopener" title="Chercher sur YouTube Music" style="flex:1;justify-content:center;text-decoration:none">YouTube</a>
             </div>
           `;
-        })()}
+               })()}
+        ${emplacementCourt(v) ? `
+          <div style="margin-top:16px;padding:14px 16px;border:1px solid rgba(201,168,106,.3);border-radius:3px;background:linear-gradient(160deg,rgba(201,168,106,.06),rgba(201,168,106,.01));text-align:center">
+            <div class="label-mini" style="margin-bottom:6px">⌂ Emplacement</div>
+            <div style="font-family:'Playfair Display',serif;font-size:18px;color:var(--or-clair);line-height:1.3">${esc(emplacementCourt(v))}</div>
+            ${v.emp_note ? `<div class="hint" style="margin-top:8px;font-style:italic">${esc(v.emp_note)}</div>` : ""}
+          </div>
+        ` : ""}
       </div>
       <div>${sectionHTML}
         <div class="divider"></div>
@@ -1578,7 +1610,8 @@ const App = {
       "#f_label":"label", "#f_pays":"pays", "#f_annee":"annee",
       "#f_etat_disque":"etat_disque", "#f_etat_pochette":"etat_pochette",
       "#f_pressage":"pressage", "#f_pressage_audio":"pressage_audio",
-           "#f_enregistrement":"enregistrement",       "#f_acquisition":"acquisition",
+                     "#f_enregistrement":"enregistrement",       "#f_acquisition":"acquisition",
+      "#f_emp_etagere":"emp_etagere",
       "#f_vmin":"vmin", "#f_vmax":"vmax", "#f_rarete":"rarete"
     };
     Object.entries(mapFiltres).forEach(([sel, key]) => {
@@ -1633,11 +1666,10 @@ const App = {
   setView(v){ State.view = v; $("#viewGrid").classList.toggle("on", v === "grid"); $("#viewList").classList.toggle("on", v === "list"); renderLibrary(); },
   refresh(full = true){ applyFilters(); if(full) renderFilterOptions(); renderStats(); renderDashboard(); renderLibrary(); updateFilterBadge(); },
   resetFilters(){
-         State.filters = { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", vmin:"", vmax:"", rarete:"" };
-    $("#globalSearch").value = "";
+         State.filters = { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", emp_etagere:"", vmin:"", vmax:"", rarete:"" };
     ["#f_artiste","#f_genre","#f_format","#f_label","#f_pays","#f_annee",
      "#f_etat_disque","#f_etat_pochette","#f_pressage","#f_pressage_audio",
-          "#f_enregistrement", "#f_acquisition",
+          "#f_enregistrement", "#f_acquisition", "#f_emp_etagere",
      "#f_vmin","#f_vmax","#f_rarete"].forEach(sel => { const el = $(sel); if(el) el.value = ""; });
       ["#f_double","#f_triple","#f_gatefold"].forEach(sel => { const el = $(sel); if(el) el.checked = false; });
     this.refresh(false);
