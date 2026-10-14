@@ -4246,7 +4246,7 @@ function premiereLettreTri(name){
   function initHelp(){
     if(document.getElementById("helpOverlay")) return;
 
-        const SECTIONS = [
+           const SECTIONS = [
       {
         id: "demarrage",
         title: "Démarrage rapide",
@@ -4274,7 +4274,7 @@ function premiereLettreTri(name){
         title: "Ajouter un vinyle",
         icon: "▣",
         content: `
-          <p>Le formulaire est organisé en <strong>6 sections</strong> :</p>
+          <p>Le formulaire est organisé en <strong>7 sections</strong> :</p>
           <h3>1. Identification</h3>
           <ul>
             <li><strong>Statut</strong> — Possédé ou Recherché (wishlist)</li>
@@ -4282,7 +4282,7 @@ function premiereLettreTri(name){
             <li><strong>Format</strong> — 33T, 45T, 78T, Maxi, Picture Disc…</li>
             <li><strong>Double album</strong>, <strong>Triple album</strong>, <strong>Pochette gatefold</strong> — cases à cocher indépendantes, cumulables</li>
             <li><strong>Enregistrement</strong> — Studio / Live / Démo</li>
-            <li><strong>Genre</strong>, <strong>Année d'enregistrement</strong>, <strong>Année d'impression</strong></li>
+            <li><strong>Genre</strong>, <strong>Années d'enregistrement et d'impression</strong></li>
             <li><strong>Pays</strong>, <strong>Label</strong>, <strong>N° catalogue</strong>, <strong>Code-barres</strong></li>
           </ul>
           <h3>2. État & Conservation</h3>
@@ -4294,14 +4294,13 @@ function premiereLettreTri(name){
             <li><strong>Position</strong> — ex. « 12 », « milieu »</li>
             <li><strong>Note de rangement</strong> — texte libre</li>
           </ul>
-          <p class="tip">💡 L'emplacement apparaît en badge sur la vignette et dans la fiche. Vous le retrouvez par la recherche et le filtre Étagère.</p>
+          <p class="tip">💡 L'emplacement apparaît en badge doré sur la vignette et dans la fiche. Filtre dédié dans le panneau.</p>
           <h3>4. Prêt ➜</h3>
           <ul>
             <li><strong>Prêté à</strong> — nom de la personne</li>
-            <li><strong>Date du prêt</strong></li>
-            <li><strong>Retour prévu</strong></li>
+            <li><strong>Date du prêt</strong>, <strong>Retour prévu</strong></li>
           </ul>
-          <p class="tip">💡 Un badge doré <strong>« ➜ Prêté »</strong> apparaît sur la vignette. Le tableau de bord affiche la liste des prêts en cours.</p>
+          <p class="tip">💡 Un badge doré <strong>« ➜ Prêté »</strong> apparaît sur la vignette. Le tableau de bord liste les prêts en cours.</p>
           <h3>5. Informations avancées</h3>
           <ul>
             <li><strong>Pressage</strong> — 1st Press, Repress, Remastered…</li>
@@ -4312,7 +4311,7 @@ function premiereLettreTri(name){
           </ul>
           <h3>6. Acquisition & Valeur</h3>
           <ul>
-            <li><strong>Date d'achat</strong> — année seule acceptée</li>
+            <li><strong>Date d'achat</strong> — année seule acceptée (voir Date flexible)</li>
             <li><strong>Acquisition</strong> — Neuf ou Occasion</li>
             <li><strong>Prix d'achat</strong>, <strong>Valeur manuelle</strong>, <strong>Valeur auto</strong></li>
             <li><strong>Prix cible</strong> — pour les wishlists</li>
@@ -4323,7 +4322,7 @@ function premiereLettreTri(name){
             <li><strong>Pochette verso</strong> — affichée sous le recto dans la fiche</li>
             <li><strong>Vinyle</strong> — image optionnelle du disque</li>
           </ul>
-          <p>Chaque image peut être ajoutée par <strong>fichier local</strong>, <strong>URL</strong>, ou <strong>récupération Discogs</strong> (recto uniquement).</p>
+          <p>Chaque image : <strong>fichier local</strong>, <strong>URL</strong>, ou <strong>récupération Discogs</strong> (recto uniquement).</p>
         `
       },
       {
@@ -4333,7 +4332,8 @@ function premiereLettreTri(name){
         content: `
           <h3>Barre de recherche</h3>
           <p>Recherche instantanée sur titre, artiste, label, catalogue, notes, emplacement, personne qui a emprunté…</p>
-          <p>Les termes <strong>« double »</strong>, <strong>« triple »</strong>, <strong>« gatefold »</strong> et <strong>« live »</strong> sont reconnus.</p>
+          <p>La recherche accepte <strong>plusieurs mots</strong> : taper <code>The Beatles</code> trouve les vinyles contenant les deux termes. Taper <code>Beatles</code> seul suffit aussi.</p>
+          <p>Les termes <strong>« double »</strong>, <strong>« triple »</strong>, <strong>« gatefold »</strong> et <strong>« live »</strong> sont reconnus comme filtres implicites.</p>
           <h3>Panneau de filtres</h3>
           <ul>
             <li>Artiste, Genre, Format, Label, Pays</li>
@@ -4348,7 +4348,13 @@ function premiereLettreTri(name){
             <li>Valeur min. / max., Rareté</li>
           </ul>
           <h3>Filtre alphabétique A → Z</h3>
-          <p>La barre ignore les articles : <code>The Beatles</code> se trouve sous <strong>B</strong>, <code>Les Rita Mitsouko</code> sous <strong>R</strong>.</p>
+          <p>La barre <strong>ignore les articles</strong> :</p>
+          <ul>
+            <li><code>The Beatles</code> se trouve sous <strong>B</strong></li>
+            <li><code>Les Rita Mitsouko</code> se trouve sous <strong>R</strong></li>
+            <li><code>A Perfect Circle</code> se trouve sous <strong>P</strong></li>
+          </ul>
+          <p>Articles ignorés : The, A, An, Le, La, Les, L', El, Los, Las, Der, Die, Das, Il, Gli, Un, Une.</p>
           <h3>Tri</h3>
           <p>Menu déroulant en haut à droite : ajout récent, valeur, rareté, année, artiste, titre, format.</p>
         `
@@ -4378,7 +4384,7 @@ function premiereLettreTri(name){
             <li><strong>Streaming</strong> — Spotify, Apple Music, Deezer, YouTube Music</li>
             <li><strong>Modifier la fiche</strong> / <strong>Supprimer</strong></li>
           </ul>
-          <h3>Écouter le disque</h3>
+          <h3>Écouter le disque 🎵</h3>
           <p>Les boutons de streaming ouvrent une <strong>recherche</strong> sur le service choisi avec l'artiste et le titre. Pratique pour écouter un vinyle qu'on manipule.</p>
         `
       },
@@ -4458,8 +4464,8 @@ function premiereLettreTri(name){
         content: `
           <p>Cliquez sur <strong>« 📊 Statistiques »</strong> pour ouvrir le tableau de bord. Il contient <strong>8 cartes</strong> :</p>
           <ul>
-            <li><strong>Prêts en cours</strong> — liste des disques prêtés, avec alerte si > 6 mois</li>
             <li><strong>Évolution de la collection</strong> — courbe de valeur dans le temps</li>
+            <li><strong>Prêts en cours</strong> — liste des disques prêtés, alerte si > 6 mois</li>
             <li><strong>Répartition par décennie</strong></li>
             <li><strong>Top 5 artistes</strong></li>
             <li><strong>Top 5 genres</strong></li>
@@ -4468,7 +4474,7 @@ function premiereLettreTri(name){
             <li><strong>Acquisitions</strong> — Neuf vs Occasion</li>
             <li><strong>Valeur par décennie</strong></li>
           </ul>
-          <p class="tip">💡 Le tableau de bord se met à jour automatiquement.</p>
+          <p class="tip">💡 Le tableau de bord se met à jour automatiquement à chaque modification.</p>
         `
       },
       {
@@ -4483,19 +4489,27 @@ function premiereLettreTri(name){
           <ul>
             <li><strong>Export JSON</strong> — sauvegarde complète, réimportable</li>
             <li><strong>Export CSV</strong> — ouvrable dans Excel / Numbers</li>
-            <li><strong>Export PDF (liste)</strong> — liste imprimable compacte</li>
-            <li><strong>Export PDF (catalogue livre)</strong> — voir ci-dessous</li>
+            <li><strong>Export PDF (liste compacte)</strong> — liste imprimable d'une ligne par vinyle</li>
+            <li><strong>Catalogue PDF · par décennie</strong> — livre avec chapitres « Années 60, 70… »</li>
+            <li><strong>Catalogue PDF · par artiste</strong> — livre avec chapitres alphabétiques (The Beatles sous B)</li>
+            <li><strong>Catalogue PDF · par année</strong> — livre avec chapitres 1969, 1970, 1971…</li>
+            <li><strong>Catalogue PDF · par genre</strong> — livre avec chapitres Jazz, Rock, Classique…</li>
             <li><strong>Importer un fichier JSON</strong> — restaurer une sauvegarde</li>
           </ul>
-          <h3>Le catalogue PDF « livre »</h3>
-          <p>Génère un <strong>vrai catalogue imprimable</strong> :</p>
+          <h3>Le catalogue PDF « livre » 📖</h3>
+          <p>Les <strong>4 modes de tri</strong> génèrent chacun un <strong>vrai catalogue imprimable</strong> :</p>
           <ul>
-            <li><strong>Page de couverture</strong> dorée avec titre et date</li>
-            <li><strong>Une page par vinyle</strong> : pochette + verso + tous les champs clés</li>
-            <li><strong>Index alphabétique</strong> par artiste en fin de document</li>
+            <li><strong>Couverture illustrée</strong> — illustration du disquaire dorée sur fond crème (comme la page d'accueil de l'appli)</li>
+            <li><strong>Avant-propos</strong> personnalisé selon vos statistiques (année min/max, artiste phare, genre dominant, valeur totale)</li>
+            <li><strong>Sommaire</strong> avec numéros de page</li>
+            <li><strong>Séparateurs</strong> avant chaque chapitre</li>
+            <li><strong>Une page par vinyle</strong> : pochette + verso + badges + tous les champs + notes</li>
+            <li><strong>Pièces maîtresses</strong> — top 10 par valeur</li>
+            <li><strong>Statistiques</strong> — valeur totale, moyennes, top genres, top artistes</li>
+            <li><strong>Index alphabétique</strong> final (groupé par lettre, The Beatles sous B)</li>
           </ul>
-          <p class="tip">💡 Idéal pour l'assurance en cas de sinistre, ou pour feuilleter votre collection sur papier.</p>
-          <p class="hint"><em>Astuce impression : dans la fenêtre d'impression, destination = « Enregistrer au format PDF ».</em></p>
+          <p class="tip">💡 Idéal pour l'assurance. Sur Chrome/Edge, cochez <strong>« Graphiques d'arrière-plan »</strong> dans la fenêtre d'impression pour garder les fonds dorés.</p>
+          <p class="hint"><em>Astuce impression : destination = « Enregistrer au format PDF ».</em></p>
         `
       },
       {
@@ -4510,10 +4524,10 @@ function premiereLettreTri(name){
           <p>Pour activer eBay et Vinted — optionnel. Discogs suffit largement.</p>
           <h3>Stockage</h3>
           <ul>
-            <li><strong>IndexedDB</strong> (par défaut) — local au navigateur</li>
+            <li><strong>IndexedDB</strong> (par défaut) — local au navigateur, très large</li>
             <li><strong>localStorage</strong> (repli) — si IndexedDB indisponible</li>
           </ul>
-          <p class="tip">⚠️ Vos données sont stockées <strong>dans le navigateur de chaque appareil</strong>. Pour les synchroniser entre Mac, iPad et iPhone, utilisez l'export/import JSON — ou attendez l'intégration Supabase.</p>
+          <p class="tip">⚠️ Vos données sont stockées <strong>dans le navigateur de chaque appareil</strong>. Pour les synchroniser entre Mac, iPad et iPhone, utilisez l'export/import JSON.</p>
           <h3>Vider la collection</h3>
           <p>Bouton rouge en bas des Paramètres. Deux confirmations demandées.</p>
         `
@@ -4523,11 +4537,13 @@ function premiereLettreTri(name){
         title: "Raccourcis clavier",
         icon: "⌨",
         content: `
+          <h3>Navigation globale</h3>
           <table class="shortcuts">
             <tr><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td><td>Focus sur la recherche</td></tr>
             <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd></td><td>Nouveau vinyle</td></tr>
             <tr><td><kbd>H</kbd></td><td>Ouvrir ce mode d'emploi</td></tr>
             <tr><td><kbd>Échap</kbd></td><td>Fermer la fenêtre active</td></tr>
+            <tr><td><kbd>Entrée</kbd></td><td>Valider (page d'accueil)</td></tr>
           </table>
           <p class="hint"><em>Sur Mac, remplacez Ctrl par Cmd ⌘.</em></p>
         `
@@ -4538,29 +4554,39 @@ function premiereLettreTri(name){
         icon: "?",
         content: `
           <h3>Ma collection a disparu !</h3>
-          <p>Vos données sont dans le <strong>navigateur</strong>. Réimportez votre dernière sauvegarde JSON.</p>
+          <p>Vos données sont stockées dans le <strong>navigateur</strong>, pas dans le fichier HTML. Si vous avez changé de navigateur, d'appareil, ou vidé le cache, elles sont inaccessibles.</p>
+          <p><strong>Solution</strong> : réimportez votre dernière sauvegarde JSON.</p>
           <h3>J'ai deux collections différentes sur deux appareils</h3>
           <p>Chaque navigateur a ses propres données. Utilisez <strong>Export JSON → transfert → Import JSON</strong> entre appareils. Une synchro cloud est prévue ultérieurement.</p>
+          <h3>Comment revenir à un formulaire que j'étais en train de remplir ?</h3>
+          <p>L'appli ne garde <strong>pas</strong> de brouillon automatique. Si vous fermez le formulaire sans enregistrer, les saisies sont perdues. Pensez à enregistrer régulièrement.</p>
           <h3>L'estimation de valeur ne marche pas</h3>
           <ul>
-            <li>Token Discogs renseigné ? (⚙︎)</li>
-            <li>Connexion internet ?</li>
+            <li>Vérifiez que le <strong>token Discogs</strong> est bien renseigné (⚙︎ Paramètres)</li>
+            <li>Vérifiez votre connexion internet</li>
             <li>L'estimation interne fonctionne toujours, même hors ligne</li>
           </ul>
           <h3>La pochette ne s'affiche pas</h3>
           <ul>
-            <li>URL externe bloquée ? Préférez l'<strong>upload local</strong> ou <strong>Discogs</strong></li>
+            <li>Si l'image est une URL externe, elle peut être bloquée</li>
+            <li>Préférez l'<strong>upload local</strong> ou la <strong>récupération Discogs</strong></li>
           </ul>
           <h3>Pourquoi le verso n'est-il pas récupérable depuis Discogs ?</h3>
-          <p>L'API publique ne fournit que le recto. Pour le verso : upload photo ou URL externe.</p>
-          <h3>Comment ne pas perdre mes saisies en cours ?</h3>
-          <p>L'appli ne sauvegarde pas de brouillon automatique. Enregistrez régulièrement, ou attendez l'ajout d'un brouillon persistant.</p>
+          <p>L'API publique ne fournit que la <strong>pochette recto</strong>. Pour le verso : upload photo ou URL externe.</p>
           <h3>Le catalogue PDF met du temps à s'ouvrir</h3>
-          <p>Normal : une page par vinyle. Pour 100 vinyles, comptez quelques secondes.</p>
+          <p>Normal : une page par vinyle. Pour 100 vinyles, comptez 3-5 secondes. Une fois ouvert, l'impression est rapide.</p>
+          <h3>Comment garder les fonds dorés à l'impression ?</h3>
+          <ul>
+            <li><strong>Chrome / Edge</strong> : cocher « Graphiques d'arrière-plan »</li>
+            <li><strong>Firefox</strong> : cocher « Imprimer les fonds »</li>
+            <li><strong>Safari</strong> : automatique</li>
+          </ul>
+          <h3>Le bouton « Entrer dans la collection » ne marche pas</h3>
+          <p>Sur iPad/iPhone, si la page d'accueil reste figée, ajoutez <code>?skip=1</code> à la fin de l'URL. L'appli sautera directement la page d'accueil.</p>
           <h3>L'appli est lente</h3>
           <ul>
-            <li>Limitez le nombre d'images base64 (ça alourdit)</li>
-            <li>Videz le cache régulièrement après sauvegarde</li>
+            <li>Limitez le nombre d'images stockées (le base64 alourdit)</li>
+            <li>Videz le cache régulièrement après avoir sauvegardé</li>
           </ul>
         `
       }
