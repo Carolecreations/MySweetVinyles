@@ -1622,50 +1622,240 @@ function collectionPrintBody(items){
 }
 function cataloguePrintBody(items){
   /* ═══════════════════════════════════════════════════════════════
-     CATALOGUE V2 — Livre imprimable
-     Structure : couverture · sommaire · séparateurs de décennie ·
-     une page par vinyle · pièces maîtresses · statistiques · index
+     CATALOGUE V3 — Livre d'art
+     Couverture illustrée · Avant-propos · Sommaire · Chapitres
+     · Fiches · Pièces maîtresses · Statistiques · Index
      ═══════════════════════════════════════════════════════════════ */
   const dateGen = new Date().toLocaleDateString("fr-FR", {day:"numeric",month:"long",year:"numeric"});
   const total = items.reduce((s,v) => s + valeurEffective(v), 0);
+  const annees = items.map(v => num(v.annee_impression)).filter(a => a && a > 1800);
+  const anneeMin = annees.length ? Math.min(...annees) : null;
+  const anneeMax = annees.length ? Math.max(...annees) : null;
+  const artistes = new Set(items.map(v => (v.artiste || "").trim()).filter(Boolean));
+  const parGenreGlobal = {};
+  items.forEach(v => { const g = (v.genre || "").trim(); if(g) parGenreGlobal[g] = (parGenreGlobal[g] || 0) + 1; });
+  const topGenre = Object.entries(parGenreGlobal).sort((a,b) => b[1] - a[1])[0]?.[0] || null;
+  const parArtisteGlobal = {};
+  items.forEach(v => { const a = (v.artiste || "").trim(); if(a) parArtisteGlobal[a] = (parArtisteGlobal[a] || 0) + 1; });
+  const topArtiste = Object.entries(parArtisteGlobal).sort((a,b) => b[1] - a[1])[0]?.[0] || null;
+
+  /* ─── L'illustration du disquaire (adaptée pour le print) ─── */
+  const illustrationSVG = `
+    <svg viewBox="0 0 720 400" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;display:block">
+      <defs>
+        <radialGradient id="lampGlowP" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#E2C893" stop-opacity="0.55"/>
+          <stop offset="60%" stop-color="#C9A86A" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#C9A86A" stop-opacity="0"/>
+        </radialGradient>
+        <pattern id="spinesA_P" x="0" y="0" width="12" height="56" patternUnits="userSpaceOnUse">
+          <line x1="2.5" y1="2" x2="2.5" y2="56" stroke="#B4934F" stroke-width="0.8" opacity="0.75"/>
+          <line x1="8" y1="5" x2="8" y2="56" stroke="#B4934F" stroke-width="0.8" opacity="0.75"/>
+          <line x1="5.2" y1="12" x2="5.2" y2="18" stroke="#B4934F" stroke-width="0.6" opacity="0.55"/>
+        </pattern>
+        <pattern id="spinesB_P" x="0" y="0" width="10" height="56" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="3" x2="2" y2="56" stroke="#B4934F" stroke-width="0.8" opacity="0.75"/>
+          <line x1="7" y1="2" x2="7" y2="56" stroke="#B4934F" stroke-width="0.8" opacity="0.75"/>
+          <line x1="4.5" y1="18" x2="4.5" y2="23" stroke="#B4934F" stroke-width="0.6" opacity="0.55"/>
+        </pattern>
+      </defs>
+
+      <!-- Trois suspensions -->
+      <g stroke="#B4934F" fill="none" stroke-width="1" stroke-linecap="round">
+        <line x1="180" y1="0" x2="180" y2="52"/>
+        <path d="M 165 52 L 195 52 L 190 72 L 170 72 Z"/>
+        <line x1="180" y1="72" x2="180" y2="82"/>
+        <circle cx="180" cy="88" r="14" fill="url(#lampGlowP)" stroke="none"/>
+        <circle cx="180" cy="84" r="3" fill="#B4934F" stroke="none"/>
+
+        <line x1="360" y1="0" x2="360" y2="44"/>
+        <path d="M 342 44 L 378 44 L 371 68 L 349 68 Z"/>
+        <line x1="360" y1="68" x2="360" y2="78"/>
+        <circle cx="360" cy="86" r="16" fill="url(#lampGlowP)" stroke="none"/>
+        <circle cx="360" cy="82" r="3.2" fill="#B4934F" stroke="none"/>
+
+        <line x1="540" y1="0" x2="540" y2="52"/>
+        <path d="M 525 52 L 555 52 L 550 72 L 530 72 Z"/>
+        <line x1="540" y1="72" x2="540" y2="82"/>
+        <circle cx="540" cy="88" r="14" fill="url(#lampGlowP)" stroke="none"/>
+        <circle cx="540" cy="84" r="3" fill="#B4934F" stroke="none"/>
+      </g>
+
+      <!-- Bac de gauche -->
+      <g stroke="#B4934F" fill="none" stroke-width="0.9">
+        <line x1="30" y1="92" x2="30" y2="330"/>
+        <line x1="140" y1="92" x2="140" y2="330"/>
+        <line x1="30" y1="92" x2="140" y2="92"/>
+        <line x1="30" y1="152" x2="140" y2="152"/>
+        <line x1="30" y1="212" x2="140" y2="212"/>
+        <line x1="30" y1="272" x2="140" y2="272"/>
+      </g>
+      <rect x="32" y="94" width="106" height="56" fill="url(#spinesA_P)"/>
+      <rect x="32" y="154" width="106" height="56" fill="url(#spinesB_P)"/>
+      <rect x="32" y="214" width="106" height="56" fill="url(#spinesA_P)"/>
+      <rect x="32" y="274" width="106" height="56" fill="url(#spinesB_P)"/>
+
+      <!-- Bac de droite -->
+      <g stroke="#B4934F" fill="none" stroke-width="0.9">
+        <line x1="580" y1="92" x2="580" y2="330"/>
+        <line x1="690" y1="92" x2="690" y2="330"/>
+        <line x1="580" y1="92" x2="690" y2="92"/>
+        <line x1="580" y1="152" x2="690" y2="152"/>
+        <line x1="580" y1="212" x2="690" y2="212"/>
+        <line x1="580" y1="272" x2="690" y2="272"/>
+      </g>
+      <rect x="582" y="94" width="106" height="56" fill="url(#spinesB_P)"/>
+      <rect x="582" y="154" width="106" height="56" fill="url(#spinesA_P)"/>
+      <rect x="582" y="214" width="106" height="56" fill="url(#spinesB_P)"/>
+      <rect x="582" y="274" width="106" height="56" fill="url(#spinesA_P)"/>
+
+      <!-- Vinyle central qui tourne -->
+      <g stroke="#B4934F" fill="none" stroke-width="1.1">
+        <circle cx="360" cy="200" r="88"/>
+        <circle cx="360" cy="200" r="66" opacity="0.65"/>
+        <circle cx="360" cy="200" r="44" opacity="0.5"/>
+        <circle cx="360" cy="200" r="22" opacity="0.4"/>
+        <circle cx="360" cy="200" r="5" fill="#B4934F"/>
+        <path d="M 330 172 Q 344 166 358 176" opacity="0.5"/>
+      </g>
+
+      <!-- Pochlette gatefold à gauche du vinyle -->
+      <g stroke="#B4934F" fill="none" stroke-width="0.9" opacity="0.85">
+        <rect x="190" y="120" width="80" height="80"/>
+        <circle cx="230" cy="160" r="28" opacity="0.7"/>
+        <circle cx="230" cy="160" r="16" opacity="0.5"/>
+        <circle cx="230" cy="160" r="3" fill="#B4934F"/>
+      </g>
+
+      <!-- Pochlette 45T à droite du vinyle -->
+      <g stroke="#B4934F" fill="none" stroke-width="0.9" opacity="0.85">
+        <rect x="450" y="140" width="60" height="60"/>
+        <circle cx="480" cy="170" r="20" opacity="0.7"/>
+        <circle cx="480" cy="170" r="3" fill="#B4934F"/>
+      </g>
+
+      <!-- Livret -->
+      <g stroke="#B4934F" fill="none" stroke-width="0.8" opacity="0.7">
+        <rect x="190" y="230" width="90" height="38"/>
+        <line x1="200" y1="242" x2="270" y2="242"/>
+        <line x1="200" y1="250" x2="252" y2="250"/>
+        <line x1="200" y1="258" x2="260" y2="258"/>
+      </g>
+      <g stroke="#B4934F" fill="none" stroke-width="0.8" opacity="0.7">
+        <rect x="446" y="222" width="80" height="28"/>
+        <line x1="456" y1="234" x2="518" y2="234"/>
+        <line x1="456" y1="242" x2="500" y2="242"/>
+      </g>
+
+      <!-- Sol -->
+      <line x1="0" y1="330" x2="720" y2="330" stroke="#B4934F" stroke-width="0.6" opacity="0.5"/>
+
+      <!-- Rangées de disques au sol -->
+      <g stroke="#B4934F" fill="none" stroke-width="0.9" opacity="0.8">
+        <line x1="60" y1="318" x2="60" y2="352"/><line x1="68" y1="312" x2="68" y2="352"/>
+        <line x1="76" y1="316" x2="76" y2="352"/><line x1="84" y1="308" x2="84" y2="352"/>
+        <line x1="92" y1="314" x2="92" y2="352"/><line x1="100" y1="310" x2="100" y2="352"/>
+        <line x1="108" y1="318" x2="108" y2="352"/><line x1="116" y1="312" x2="116" y2="352"/>
+        <line x1="124" y1="316" x2="124" y2="352"/>
+      </g>
+      <g stroke="#B4934F" fill="none" stroke-width="0.9" opacity="0.8">
+        <line x1="560" y1="316" x2="560" y2="352"/><line x1="568" y1="310" x2="568" y2="352"/>
+        <line x1="576" y1="318" x2="576" y2="352"/><line x1="584" y1="308" x2="584" y2="352"/>
+        <line x1="592" y1="314" x2="592" y2="352"/><line x1="600" y1="312" x2="600" y2="352"/>
+        <line x1="608" y1="316" x2="608" y2="352"/><line x1="616" y1="310" x2="616" y2="352"/>
+        <line x1="624" y1="314" x2="624" y2="352"/>
+      </g>
+      <g stroke="#B4934F" fill="none" stroke-width="0.9" opacity="0.8">
+        <line x1="270" y1="320" x2="270" y2="352"/><line x1="278" y1="314" x2="278" y2="352"/>
+        <line x1="286" y1="318" x2="286" y2="352"/><line x1="294" y1="312" x2="294" y2="352"/>
+        <line x1="302" y1="316" x2="302" y2="352"/><line x1="310" y1="314" x2="310" y2="352"/>
+        <line x1="318" y1="320" x2="318" y2="352"/><line x1="326" y1="314" x2="326" y2="352"/>
+        <line x1="334" y1="318" x2="334" y2="352"/><line x1="342" y1="312" x2="342" y2="352"/>
+        <line x1="350" y1="316" x2="350" y2="352"/><line x1="358" y1="314" x2="358" y2="352"/>
+      </g>
+      <line x1="30" y1="356" x2="690" y2="356" stroke="#B4934F" stroke-width="0.5" opacity="0.4"/>
+    </svg>`;
 
   /* ─── Styles spécifiques au livre ─── */
   const css = `<style>
     @page { margin: 16mm; }
     .cv-cover{
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      min-height:240mm; text-align:center; position:relative;
+      min-height:250mm; text-align:center; position:relative;
+      page-break-after:always;
     }
-    .cv-cover .disc{
-      width:220px; height:220px; margin-bottom:44px;
-      animation: none;
+    .cv-cover .il{
+      width:min(660px, 88%); margin:0 auto 34px;
+      padding:10px 0;
     }
-    @keyframes cvspin{to{transform:rotate(360deg)}}
     .cv-cover h1{
-      font-family:'Playfair Display',Georgia,serif; font-size:64px; font-weight:500;
-      color:#8a6f3d; letter-spacing:.04em; line-height:1.05; margin-bottom:14px;
+      font-family:'Playfair Display',Georgia,serif; font-size:62px; font-weight:500;
+      color:#8a6f3d; letter-spacing:.03em; line-height:1.02; margin-bottom:14px;
     }
     .cv-cover .sub{
       font-family:'Inter',sans-serif; font-size:11px; letter-spacing:.5em;
-      text-transform:uppercase; color:#C9A86A; padding-left:.5em; margin-bottom:60px;
+      text-transform:uppercase; color:#C9A86A; padding-left:.5em; margin-bottom:26px;
     }
-    .cv-cover .sep{
-      width:120px; height:1px; background:#C9A86A; margin:0 auto 44px;
+    .cv-cover .rule{
+      width:100px; height:1px; background:#C9A86A; margin:0 auto 24px;
     }
-    .cv-cover .desc{
+    .cv-cover .tagline{
       font-family:'Playfair Display',Georgia,serif; font-style:italic;
-      font-size:16px; color:#555; line-height:1.7; max-width:420px;
+      font-size:15px; color:#5a5a5a; line-height:1.85; max-width:520px;
+      margin:0 auto;
     }
     .cv-cover .meta{
-      position:absolute; bottom:20mm; left:0; right:0;
-      font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.2em;
-      text-transform:uppercase; color:#999;
+      margin-top:30px; font-family:'Inter',sans-serif; font-size:10px;
+      letter-spacing:.28em; text-transform:uppercase; color:#B4934F;
+    }
+    .cv-cover .date{
+      margin-top:10px; font-family:'Playfair Display',serif; font-style:italic;
+      font-size:12px; color:#999;
     }
 
-    .cv-toc{ padding:30mm 10mm; }
+    .cv-foreword{
+      padding:24mm 8mm 20mm; page-break-after:always;
+      min-height:230mm; position:relative;
+    }
+    .cv-foreword h2{
+      font-family:'Playfair Display',Georgia,serif; font-size:38px; color:#8a6f3d;
+      line-height:1.1; margin-bottom:12px; letter-spacing:.01em;
+    }
+    .cv-foreword .lead{
+      font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.4em;
+      text-transform:uppercase; color:#C9A86A; margin-bottom:32px;
+    }
+    .cv-foreword .rule{
+      width:60px; height:1.5px; background:#C9A86A; margin-bottom:34px;
+    }
+    .cv-foreword p{
+      font-family:'Playfair Display',Georgia,serif; font-size:15px;
+      color:#333; line-height:1.85; margin-bottom:16px; text-align:justify;
+      max-width:170mm;
+    }
+    .cv-foreword p.italic{ font-style:italic; color:#666; }
+    .cv-foreword .sig{
+      margin-top:44px; font-family:'Playfair Display',serif; font-style:italic;
+      font-size:15px; color:#8a6f3d; text-align:right;
+    }
+    .cv-foreword .stats-mini{
+      margin-top:44px; padding-top:22px; border-top:1px solid #d8cfb8;
+      display:grid; grid-template-columns:repeat(4, 1fr); gap:18px;
+    }
+    .cv-foreword .stat-mini{ text-align:center; }
+    .cv-foreword .stat-mini .n{
+      font-family:'Playfair Display',serif; font-size:26px; color:#8a6f3d;
+      line-height:1;
+    }
+    .cv-foreword .stat-mini .l{
+      font-family:'Inter',sans-serif; font-size:8.5px; letter-spacing:.18em;
+      text-transform:uppercase; color:#999; margin-top:8px;
+    }
+
+    .cv-toc{ padding:24mm 6mm; page-break-after:always; }
     .cv-toc h2{
-      font-family:'Playfair Display',Georgia,serif; font-size:28px; color:#8a6f3d;
-      border-bottom:1.5px solid #C9A86A; padding-bottom:12px; margin-bottom:30px;
+      font-family:'Playfair Display',Georgia,serif; font-size:32px; color:#8a6f3d;
+      border-bottom:1.5px solid #C9A86A; padding-bottom:12px; margin-bottom:28px;
       letter-spacing:.02em;
     }
     .cv-toc-row{
@@ -1679,14 +1869,14 @@ function cataloguePrintBody(items){
 
     .cv-sep{
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      min-height:240mm; text-align:center;
+      min-height:230mm; text-align:center;
     }
     .cv-sep .kicker{
       font-family:'Inter',sans-serif; font-size:10px; letter-spacing:.4em;
       text-transform:uppercase; color:#C9A86A; margin-bottom:20px;
     }
     .cv-sep h2{
-      font-family:'Playfair Display',Georgia,serif; font-size:76px; font-weight:500;
+      font-family:'Playfair Display',Georgia,serif; font-size:78px; font-weight:500;
       color:#8a6f3d; line-height:1; margin-bottom:14px;
     }
     .cv-sep .count{
@@ -1699,7 +1889,7 @@ function cataloguePrintBody(items){
 
     .cv-page{
       padding:22mm 0 26mm; page-break-after:always; position:relative;
-      min-height:240mm;
+      min-height:230mm;
     }
     .cv-page-head{
       display:flex; justify-content:space-between; align-items:flex-end;
@@ -1767,7 +1957,7 @@ function cataloguePrintBody(items){
       line-height:1; z-index:0; pointer-events:none;
     }
 
-    .cv-masterpieces{ padding:24mm 0; }
+    .cv-masterpieces{ padding:24mm 0; page-break-after:always; }
     .cv-masterpieces h2{
       font-family:'Playfair Display',Georgia,serif; font-size:32px; color:#8a6f3d;
       border-bottom:1.5px solid #C9A86A; padding-bottom:10px; margin-bottom:28px;
@@ -1795,7 +1985,7 @@ function cataloguePrintBody(items){
       font-family:'Playfair Display',serif; font-size:16px; color:#8a6f3d;
     }
 
-    .cv-stats{ padding:24mm 0; }
+    .cv-stats{ padding:24mm 0; page-break-after:always; }
     .cv-stats h2{
       font-family:'Playfair Display',Georgia,serif; font-size:32px; color:#8a6f3d;
       border-bottom:1.5px solid #C9A86A; padding-bottom:10px; margin-bottom:28px;
@@ -1862,12 +2052,11 @@ function cataloguePrintBody(items){
 
     @media print{
       .cv-cover, .cv-sep{ min-height:auto; }
-      .cv-page{ min-height:auto; }
+      .cv-page, .cv-foreword{ min-height:auto; }
     }
   </style>`;
 
-  /* ─── Calcul des numéros de page ─── */
-  /* On regroupe les vinyles par décennie pour les séparateurs */
+  /* ─── Calcul des numéros de page (avec avant-propos) ─── */
   const parDecennie = {};
   const sansDecennie = [];
   items.forEach(v => {
@@ -1878,11 +2067,11 @@ function cataloguePrintBody(items){
   });
   const decennies = Object.keys(parDecennie).map(Number).sort((a,b) => a - b);
 
-  /* Numérotation prévisionnelle */
   let pg = 1;
   const toc = [];
-  const pgCover = pg; pg++;                    /* couverture */
-  const pgToc = pg; pg++;                      /* sommaire */
+  const pgCover = pg; pg++;                       /* 1 · couverture */
+  const pgForeword = pg; pg++;                    /* 2 · avant-propos */
+  const pgToc = pg; pg++;                         /* 3 · sommaire */
   const pgDecennies = {};
   decennies.forEach(d => {
     const pgSep = pg; pg++;
@@ -1904,35 +2093,46 @@ function cataloguePrintBody(items){
 
   /* ─── Couverture ─── */
   const cover = `
-    <div class="cv-cover" style="page-break-after:always">
-      <svg class="disc" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="vinyl-center" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#1c1c1c"/>
-            <stop offset="100%" stop-color="#0a0a0a"/>
-          </radialGradient>
-          <radialGradient id="label-gold" cx="40%" cy="35%" r="60%">
-            <stop offset="0%" stop-color="#E2C893"/>
-            <stop offset="55%" stop-color="#C9A86A"/>
-            <stop offset="100%" stop-color="#8a6f3d"/>
-          </radialGradient>
-        </defs>
-        <circle cx="110" cy="110" r="108" fill="url(#vinyl-center)" stroke="#C9A86A" stroke-width="1" opacity="0.9"/>
-        <g fill="none" stroke="#2a2a2a" stroke-width="0.6">
-          <circle cx="110" cy="110" r="100"/><circle cx="110" cy="110" r="94"/>
-          <circle cx="110" cy="110" r="88"/><circle cx="110" cy="110" r="82"/>
-          <circle cx="110" cy="110" r="76"/><circle cx="110" cy="110" r="70"/>
-          <circle cx="110" cy="110" r="64"/><circle cx="110" cy="110" r="58"/>
-        </g>
-        <circle cx="110" cy="110" r="38" fill="url(#label-gold)"/>
-        <circle cx="110" cy="110" r="3" fill="#0d0d0d"/>
-        <circle cx="110" cy="110" r="32" fill="none" stroke="#8a6f3d" stroke-width="0.5" opacity="0.5"/>
-      </svg>
+    <div class="cv-cover">
+      <div class="il">${illustrationSVG}</div>
       <h1>Vinyl Archive</h1>
       <div class="sub">Jacques Edition</div>
-      <div class="sep"></div>
-      <div class="desc">Catalogue de la collection</div>
-      <div class="meta">${items.length} vinyle${items.length>1?"s":""} · ${fmtEuro(Math.round(total))} · ${dateGen}</div>
+      <div class="rule"></div>
+      <p class="tagline">
+        Votre collection, comme dans un vrai disquaire.<br>
+        Une archive privée, un moteur de recherche, des fiches de musée —<br>
+        et la valeur de chaque pièce, mise à jour.
+      </p>
+      <div class="meta">${items.length} vinyle${items.length>1?"s":""} · ${fmtEuro(Math.round(total))}</div>
+      <div class="date">${dateGen}</div>
+    </div>`;
+
+  /* ─── Avant-propos ─── */
+  const introP1 = `Ce catalogue rassemble <strong>${items.length} vinyle${items.length>1?"s":""}</strong>${anneeMin && anneeMax ? `, du pressage de <strong>${anneeMin}</strong> au plus récent de <strong>${anneeMax}</strong>` : ""}. ` +
+    `${artistes.size > 1 ? `Ils représentent <strong>${artistes.size} artistes</strong> ou groupes` : `Il s'agit d'un artiste unique`}${topArtiste ? `, avec <strong>${esc(topArtiste)}</strong> en tête du classement` : ""}${topGenre ? ` et le <strong>${esc(topGenre)}</strong> comme genre dominant` : ""}. ` +
+    `L'ensemble est aujourd'hui estimé à <strong>${fmtEuro(Math.round(total))}</strong>.`;
+  const introP2 = `Chaque page qui suit présente une pièce : sa pochette, son verso, son édition, son état, son emplacement, parfois son histoire. ` +
+    `Les chapitres suivent les décennies, comme une traversée du siècle dernier à nos jours.`;
+  const introP3 = `Ce livre est à la fois un inventaire, un souvenir, et un point de repère — pour vous, et pour ceux qui, un jour, prendront soin de ces sillons.`;
+  const foreword = `
+    <div class="cv-foreword">
+      <h2>Avant-propos</h2>
+      <div class="lead">Une collection, une mémoire</div>
+      <div class="rule"></div>
+      <p>${introP1}</p>
+      <p>${introP2}</p>
+      <p class="italic">${introP3}</p>
+      <div class="sig">Jacques Edition</div>
+      <div class="stats-mini">
+        <div class="stat-mini"><div class="n">${items.length}</div><div class="l">Vinyles</div></div>
+        <div class="stat-mini"><div class="n">${artistes.size}</div><div class="l">Artistes</div></div>
+        <div class="stat-mini"><div class="n">${decennies.length}</div><div class="l">Décennies</div></div>
+        <div class="stat-mini"><div class="n">${fmtEuro(Math.round(total)).replace(/\s/g,"")}</div><div class="l">Valeur totale</div></div>
+      </div>
+      <div class="cv-footer">
+        <span>Vinyl Archive · Jacques Edition</span>
+        <span>Page ${pgForeword}</span>
+      </div>
     </div>`;
 
   /* ─── Sommaire ─── */
@@ -1947,8 +2147,13 @@ function cataloguePrintBody(items){
     </div>
   `).join("");
   const tocPage = `
-    <div class="cv-toc" style="page-break-after:always">
+    <div class="cv-toc">
       <h2>Sommaire</h2>
+      <div class="cv-toc-row">
+        <span class="lbl">Avant-propos</span>
+        <span class="dots"></span>
+        <span class="pg">${pgForeword}</span>
+      </div>
       ${tocRows}
       <div class="cv-toc-row" style="margin-top:24px">
         <span class="lbl">Pièces maîtresses</span>
@@ -1965,21 +2170,29 @@ function cataloguePrintBody(items){
         <span class="dots"></span>
         <span class="pg">${pgIndex}</span>
       </div>
+      <div class="cv-footer">
+        <span>Vinyl Archive · Jacques Edition</span>
+        <span>Page ${pgToc}</span>
+      </div>
     </div>`;
 
   /* ─── Séparateurs de décennie ─── */
-  function sepPage(num, itemsCount, titre, kicker){
+  function sepPage(num, itemsCount, titre, kicker, pgNum){
     return `
       <div class="cv-sep" style="page-break-after:always">
         <div class="kicker">${esc(kicker)}</div>
         <h2>${esc(titre)}</h2>
         <div class="count">${itemsCount} vinyle${itemsCount>1?"s":""}</div>
         <div class="rule"></div>
+        <div class="cv-footer" style="position:absolute;bottom:14mm;left:8mm;right:8mm">
+          <span>Vinyl Archive · Jacques Edition</span>
+          <span>Page ${pgNum}</span>
+        </div>
       </div>`;
   }
 
   /* ─── Page d'un vinyle ─── */
-  function vinylePage(v, numero){
+  function vinylePage(v, numero, pgNum){
     const valAff = valeurAffichee(v);
     const items1 = [];
     const addItem = (k, val) => { if(val !== null && val !== undefined && val !== "") items1.push(`<div class="item"><div class="k">${esc(k)}</div><div class="v">${esc(val)}</div></div>`); };
@@ -2036,7 +2249,7 @@ function cataloguePrintBody(items){
         </div>
         <div class="cv-footer">
           <span>Vinyl Archive · Jacques Edition</span>
-          <span>Page ${numero + pgDecennies[Object.keys(pgDecennies).find(k => pgDecennies[k].first <= numero)||""].sep || 0}</span>
+          <span>Page ${pgNum}</span>
         </div>
       </div>`;
   }
@@ -2044,31 +2257,32 @@ function cataloguePrintBody(items){
   /* ─── Construction des pages par décennie ─── */
   const pagesByDecennie = [];
   decennies.forEach(d => {
-    pagesByDecennie.push(sepPage(d, parDecennie[d].length, formatDecade(d), "Chapitre"));
-    /* On mémorise le numéro de page réel pour le pied de page */
-    let n = pgDecennies[d].first;
+    pagesByDecennie.push(sepPage(d, parDecennie[d].length, formatDecade(d), "Chapitre", pgDecennies[d].sep));
+    let n = 1;
+    let pgn = pgDecennies[d].first;
     parDecennie[d].forEach(v => {
-      pagesByDecennie.push(vinylePage(v, n));
-      n++;
+      pagesByDecennie.push(vinylePage(v, n, pgn));
+      n++; pgn++;
     });
   });
   if(sansDecennie.length){
-    pagesByDecennie.push(sepPage(-1, sansDecennie.length, "Sans année précisée", "Chapitre"));
-    let n = pgDecennies["-1"].first;
+    pagesByDecennie.push(sepPage(-1, sansDecennie.length, "Sans année précisée", "Chapitre", pgDecennies["-1"].sep));
+    let n = 1;
+    let pgn = pgDecennies["-1"].first;
     sansDecennie.forEach(v => {
-      pagesByDecennie.push(vinylePage(v, n));
-      n++;
+      pagesByDecennie.push(vinylePage(v, n, pgn));
+      n++; pgn++;
     });
   }
 
-  /* ─── Pièces maîtresses (top 10 par valeur) ─── */
+  /* ─── Pièces maîtresses ─── */
   const top10 = [...items]
     .map(v => ({ v, val: valeurEffective(v) }))
     .filter(x => x.val > 0)
     .sort((a,b) => b.val - a.val)
     .slice(0, 10);
   const masterPage = `
-    <div class="cv-masterpieces" style="page-break-after:always">
+    <div class="cv-masterpieces">
       <h2>Pièces maîtresses</h2>
       ${top10.length ? `
         <div class="grid">
@@ -2108,7 +2322,7 @@ function cataloguePrintBody(items){
   const preteCount = items.filter(v => estPrete(v)).length;
 
   const statsPage = `
-    <div class="cv-stats" style="page-break-after:always">
+    <div class="cv-stats">
       <h2>Statistiques de la collection</h2>
       <div class="grid">
         <div class="cv-stat"><div class="k">Vinyles</div><div class="v">${items.length}</div></div>
@@ -2155,7 +2369,6 @@ function cataloguePrintBody(items){
   const parLettre = {};
   items.forEach(v => {
     const art = (v.artiste || "?").trim();
-    /* On utilise la même logique d'article que la barre A→Z */
     const lettre = (typeof premiereLettreTri === "function" ? premiereLettreTri(art) : art[0].toUpperCase());
     if(!parLettre[lettre]) parLettre[lettre] = {};
     if(!parLettre[lettre][art]) parLettre[lettre][art] = [];
@@ -2163,8 +2376,8 @@ function cataloguePrintBody(items){
   });
   const lettres = Object.keys(parLettre).sort((a,b) => a.localeCompare(b, "fr"));
   const indexRows = lettres.map(lettre => {
-    const artistes = Object.keys(parLettre[lettre]).sort((a,b) => a.localeCompare(b, "fr"));
-    const contenu = artistes.map(a => {
+    const artistesList = Object.keys(parLettre[lettre]).sort((a,b) => a.localeCompare(b, "fr"));
+    const contenu = artistesList.map(a => {
       const titres = parLettre[lettre][a].sort((x,y) => (x||"").localeCompare(y||"", "fr"));
       return `<strong>${esc(a)}</strong> — ${titres.map(esc).join(" · ")}`;
     }).join("<br>");
@@ -2181,7 +2394,7 @@ function cataloguePrintBody(items){
       </div>
     </div>`;
 
-  return css + cover + tocPage + pagesByDecennie.join("") + masterPage + statsPage + indexPage;
+  return css + cover + foreword + tocPage + pagesByDecennie.join("") + masterPage + statsPage + indexPage;
 }
 const App = {
   async init(){
