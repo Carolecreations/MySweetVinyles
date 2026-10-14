@@ -3412,7 +3412,7 @@ function premiereLettreTri(name){
   function initHelp(){
     if(document.getElementById("helpOverlay")) return;
 
-    const SECTIONS = [
+        const SECTIONS = [
       {
         id: "demarrage",
         title: "Démarrage rapide",
@@ -3426,7 +3426,6 @@ function premiereLettreTri(name){
             <li>Enregistrez : la fiche apparaît dans la bibliothèque.</li>
           </ol>
           <h3>Configurer Discogs (recommandé)</h3>
-          <p>Pour récupérer les pochettes automatiquement :</p>
           <ol>
             <li>Créez un compte sur <a href="https://www.discogs.com" target="_blank" rel="noopener">discogs.com</a>.</li>
             <li>Allez sur <a href="https://www.discogs.com/settings/developers" target="_blank" rel="noopener">discogs.com/settings/developers</a>.</li>
@@ -3441,48 +3440,56 @@ function premiereLettreTri(name){
         title: "Ajouter un vinyle",
         icon: "▣",
         content: `
-          <p>Le formulaire est organisé en <strong>5 sections</strong> :</p>
+          <p>Le formulaire est organisé en <strong>6 sections</strong> :</p>
           <h3>1. Identification</h3>
           <ul>
-            <li><strong>Statut</strong> — Possédé ou Recherché (voir section Wishlist)</li>
+            <li><strong>Statut</strong> — Possédé ou Recherché (wishlist)</li>
             <li><strong>Titre</strong> et <strong>Artiste</strong> — obligatoires</li>
-            <li><strong>Format</strong> — 33T, 45T, 78T, 10" 33T, 10" 45T, Maxi, Picture Disc…</li>
-            <li><strong>Double album</strong> et <strong>Pochette gatefold</strong> — deux cases à cocher indépendantes, cumulables avec n'importe quel format. Un 45T peut très bien être un gatefold, un 33T peut être un double album.</li>
-            <li><strong>Enregistrement</strong> — Studio, Live ou Démo</li>
+            <li><strong>Format</strong> — 33T, 45T, 78T, Maxi, Picture Disc…</li>
+            <li><strong>Double album</strong>, <strong>Triple album</strong>, <strong>Pochette gatefold</strong> — cases à cocher indépendantes, cumulables</li>
+            <li><strong>Enregistrement</strong> — Studio / Live / Démo</li>
             <li><strong>Genre</strong>, <strong>Année d'enregistrement</strong>, <strong>Année d'impression</strong></li>
             <li><strong>Pays</strong>, <strong>Label</strong>, <strong>N° catalogue</strong>, <strong>Code-barres</strong></li>
-            <li><strong>Note personnelle</strong> — notation par étoiles (voir section dédiée)</li>
           </ul>
           <h3>2. État & Conservation</h3>
           <p>État du disque et de la pochette : Mint, Near Mint, VG+, VG, G, Poor.</p>
-          <h3>3. Informations avancées</h3>
+          <h3>3. Rangement physique ⌂</h3>
           <ul>
-            <li><strong>Pressage</strong> — 1st Press, Repress, Remastered, Limited…</li>
-            <li><strong>Pressage audio</strong> — Mono, Stéréo, Mono / Stéréo, Inconnu</li>
-            <li><strong>Couleur du vinyle</strong> — Noir, Rouge translucide, etc.</li>
-            <li><strong>Rareté</strong> — Courant, Peu courant, Rare, Très rare, Collector</li>
-            <li><strong>Particularités</strong> — insert, poster, sticker, édition promo…</li>
-            <li><strong>Notes personnelles</strong> — pavé texte libre</li>
+            <li><strong>Étagère / Meuble</strong> — ex. « Étagère A »</li>
+            <li><strong>Bac / Section</strong> — ex. « Bac 3 », « Section Jazz »</li>
+            <li><strong>Position</strong> — ex. « 12 », « milieu »</li>
+            <li><strong>Note de rangement</strong> — texte libre</li>
           </ul>
-          <h3>4. Acquisition & Valeur</h3>
+          <p class="tip">💡 L'emplacement apparaît en badge sur la vignette et dans la fiche. Vous le retrouvez par la recherche et le filtre Étagère.</p>
+          <h3>4. Prêt ➜</h3>
           <ul>
-            <li><strong>Date d'achat</strong> — année seule acceptée (voir section Date flexible)</li>
+            <li><strong>Prêté à</strong> — nom de la personne</li>
+            <li><strong>Date du prêt</strong></li>
+            <li><strong>Retour prévu</strong></li>
+          </ul>
+          <p class="tip">💡 Un badge doré <strong>« ➜ Prêté »</strong> apparaît sur la vignette. Le tableau de bord affiche la liste des prêts en cours.</p>
+          <h3>5. Informations avancées</h3>
+          <ul>
+            <li><strong>Pressage</strong> — 1st Press, Repress, Remastered…</li>
+            <li><strong>Pressage audio</strong> — Mono, Stéréo</li>
+            <li><strong>Couleur du vinyle</strong>, <strong>Rareté</strong></li>
+            <li><strong>Particularités</strong> — insert, poster, sticker…</li>
+            <li><strong>Notes personnelles</strong></li>
+          </ul>
+          <h3>6. Acquisition & Valeur</h3>
+          <ul>
+            <li><strong>Date d'achat</strong> — année seule acceptée</li>
+            <li><strong>Acquisition</strong> — Neuf ou Occasion</li>
             <li><strong>Prix d'achat</strong>, <strong>Valeur manuelle</strong>, <strong>Valeur auto</strong></li>
-            <li><strong>Prix cible</strong> — pour les vinyles de la wishlist</li>
+            <li><strong>Prix cible</strong> — pour les wishlists</li>
           </ul>
-          <h3>5. Média</h3>
+          <h3>7. Média</h3>
           <ul>
-            <li><strong>Pochette recto</strong> — image principale, affichée sur la vignette et la fiche</li>
-            <li><strong>Pochette verso</strong> — affichée sous le recto dans la fiche détail et la fiche PDF</li>
-            <li><strong>Vinyle</strong> — image optionnelle du disque lui-même</li>
+            <li><strong>Pochette recto</strong> — image principale</li>
+            <li><strong>Pochette verso</strong> — affichée sous le recto dans la fiche</li>
+            <li><strong>Vinyle</strong> — image optionnelle du disque</li>
           </ul>
-          <p>Chaque image peut être ajoutée de <strong>trois façons</strong> :</p>
-          <ul>
-            <li>Upload d'un <strong>fichier local</strong> (compressé automatiquement en JPEG)</li>
-            <li>Collage d'une <strong>URL d'image</strong> distante</li>
-            <li><strong>Récupération automatique depuis Discogs</strong> (bouton ⤓ — uniquement pour le recto, Discogs ne fournit pas les versos)</li>
-          </ul>
-          <p class="tip">💡 Le verso est particulièrement utile pour les pochettes gatefold, les tracklists imprimées, ou les éditions avec texte au dos (notes de pochette, crédits…).</p>
+          <p>Chaque image peut être ajoutée par <strong>fichier local</strong>, <strong>URL</strong>, ou <strong>récupération Discogs</strong> (recto uniquement).</p>
         `
       },
       {
@@ -3491,26 +3498,25 @@ function premiereLettreTri(name){
         icon: "🔍",
         content: `
           <h3>Barre de recherche</h3>
-          <p>En haut, tapez n'importe quel mot : titre, artiste, label, catalogue, membre, lieu de stockage… La recherche est <strong>instantanée</strong> et insensible aux accents.</p>
-          <p>Les termes <strong>« double »</strong> et <strong>« gatefold »</strong> sont reconnus : taper <code>gatefold</code> remonte tous les vinyles avec pochette gatefold.</p>
+          <p>Recherche instantanée sur titre, artiste, label, catalogue, notes, emplacement, personne qui a emprunté…</p>
+          <p>Les termes <strong>« double »</strong>, <strong>« triple »</strong>, <strong>« gatefold »</strong> et <strong>« live »</strong> sont reconnus.</p>
           <h3>Panneau de filtres</h3>
-          <p>Cliquez sur <strong>« Filtres »</strong> pour ouvrir les options avancées :</p>
           <ul>
             <li>Artiste, Genre, Format, Label, Pays</li>
-            <li><strong>Options de format</strong> — deux cases à cocher : « Double album uniquement » et « Gatefold uniquement »</li>
-            <li>Année d'impression, État disque, État pochette</li>
-            <li>Pressage (édition), Pressage audio (Mono / Stéréo)</li>
-            <li><strong>Enregistrement</strong> — Studio / Live / Démo</li>
+            <li><strong>Options de format</strong> — Double / Triple / Gatefold</li>
+            <li>Année d'impression, États disque et pochette</li>
+            <li>Pressage, Pressage audio, <strong>Enregistrement</strong></li>
+            <li><strong>Acquisition</strong> — Neuf / Occasion</li>
+            <li><strong>Étagère</strong> — filtrer par emplacement ⌂</li>
+            <li><strong>Prêt</strong> — Prêtés uniquement / Disponibles uniquement</li>
             <li><strong>Statut</strong> — Possédé / Recherché</li>
-            <li><strong>Note</strong> — 1★ à 5★, ou « Non noté »</li>
-            <li>Valeur minimum / maximum</li>
-            <li>Rareté</li>
+            <li><strong>Note</strong> — 1★ à 5★</li>
+            <li>Valeur min. / max., Rareté</li>
           </ul>
-          <p class="tip">💡 Les filtres se <strong>cumulent</strong> : cochez plusieurs critères pour affiner. Exemple : « Gatefold uniquement » + Enregistrement = Live + Genre = Jazz.</p>
           <h3>Filtre alphabétique A → Z</h3>
-          <p>Une barre de lettres au-dessus de la bibliothèque. Cliquez sur une lettre pour n'afficher que les artistes commençant par cette lettre. La lettre <strong>« # »</strong> regroupe les chiffres et symboles. Les lettres <strong>grisées</strong> n'ont aucun vinyle associé.</p>
+          <p>La barre ignore les articles : <code>The Beatles</code> se trouve sous <strong>B</strong>, <code>Les Rita Mitsouko</code> sous <strong>R</strong>.</p>
           <h3>Tri</h3>
-          <p>Menu déroulant en haut à droite : par ajout récent, valeur, rareté, année, artiste, titre, format.</p>
+          <p>Menu déroulant en haut à droite : ajout récent, valeur, rareté, année, artiste, titre, format.</p>
         `
       },
       {
@@ -3518,27 +3524,28 @@ function premiereLettreTri(name){
         title: "Consulter une fiche",
         icon: "◇",
         content: `
-          <p>Cliquez sur n'importe quelle carte pour ouvrir la <strong>fiche détaillée</strong>.</p>
+          <p>Cliquez sur une carte pour ouvrir la <strong>fiche détaillée</strong>.</p>
           <h3>Ce que vous y trouvez</h3>
           <ul>
             <li>La <strong>pochette recto en grand</strong></li>
-            <li>Le <strong>verso</strong> juste en dessous (si renseigné) — utile pour voir les crédits, tracklist, notes de pochette</li>
+            <li>Le <strong>verso</strong> juste en dessous si renseigné</li>
             <li>L'image du <strong>vinyle</strong> en bas si renseignée</li>
-            <li>Tous les champs en sections : Identification, État, Avancé, Valeur</li>
-            <li>Les <strong>options de format</strong> affichées en tags (Double album / Pochette gatefold)</li>
             <li>Le <strong>bloc valeur</strong> : auto, manuelle, prix d'achat, plus-value</li>
+            <li>Le <strong>graphique d'évolution</strong> de la valeur (si ≥ 2 estimations)</li>
+            <li>Le bloc <strong>⌂ Emplacement</strong> doré</li>
+            <li>Le bloc <strong>➜ Prêté à</strong> si le disque est prêté</li>
             <li>Les <strong>étoiles</strong> de notation sous le titre</li>
-            <li>Le tag <strong>« ★ Recherché »</strong> si c'est un vinyle de la wishlist</li>
-            <li>La <strong>date d'achat formatée</strong> (ex. « juin 1973 »)</li>
+            <li>Toutes les sections : Identification, État, Rangement, Prêt, Avancé, Valeur</li>
           </ul>
           <h3>Boutons d'action</h3>
           <ul>
-            <li><strong>↻ Estimer la valeur</strong> — interroge Discogs pour un prix marché</li>
-            <li><strong>⎙ Fiche PDF</strong> — génère une fiche imprimable (avec le verso)</li>
-            <li><strong>Modifier la fiche</strong> — ouvre le formulaire</li>
-            <li><strong>Export JSON</strong> / <strong>Export CSV</strong> — export individuel</li>
-            <li><strong>Supprimer</strong> — suppression définitive (confirmation demandée)</li>
+            <li><strong>↻ Estimer la valeur</strong> — interroge Discogs</li>
+            <li><strong>⎙ Fiche PDF</strong> — fiche imprimable individuelle</li>
+            <li><strong>Streaming</strong> — Spotify, Apple Music, Deezer, YouTube Music</li>
+            <li><strong>Modifier la fiche</strong> / <strong>Supprimer</strong></li>
           </ul>
+          <h3>Écouter le disque</h3>
+          <p>Les boutons de streaming ouvrent une <strong>recherche</strong> sur le service choisi avec l'artiste et le titre. Pratique pour écouter un vinyle qu'on manipule.</p>
         `
       },
       {
@@ -3547,20 +3554,31 @@ function premiereLettreTri(name){
         icon: "★",
         content: `
           <p>Chaque vinyle a un <strong>statut</strong> : <em>Possédé</em> (par défaut) ou <em>Recherché</em>.</p>
+          <ul>
+            <li>Badge rouge <strong>★ Recherché</strong> sur la vignette</li>
+            <li>Filtre <strong>Statut</strong> dans le panneau</li>
+            <li><strong>Prix cible</strong> visible dans la fiche</li>
+          </ul>
+          <p class="tip">💡 Combinez avec le tri par valeur pour repérer les wishlists les plus coûteuses à surveiller.</p>
+        `
+      },
+      {
+        id: "prets",
+        title: "Suivi des prêts",
+        icon: "➜",
+        content: `
+          <p>Vous prêtez un vinyle à un ami ? Notez-le.</p>
           <h3>Utilisation</h3>
           <ul>
-            <li>Dans le formulaire, choisissez le statut en haut de la section Identification.</li>
-            <li>Pour un vinyle recherché, renseignez aussi le <strong>Prix cible</strong> (prix max que vous voulez mettre).</li>
+            <li>Dans la fiche, section <strong>Prêt</strong> : nommez la personne, indiquez les dates.</li>
+            <li>Un badge doré <strong>➜ Prêté</strong> apparaît en bas à droite de la vignette</li>
+            <li>Dans la fiche détail, un bloc doré affiche le prêt et le nombre de jours écoulés</li>
           </ul>
-          <h3>Repérage visuel</h3>
-          <ul>
-            <li>Un badge rouge <strong>★ Recherché</strong> apparaît sur la pochette dans la bibliothèque</li>
-            <li>Un léger voile rouge teinte la carte</li>
-            <li>Dans la fiche, un tag rouge s'affiche avec le prix cible</li>
-          </ul>
-          <h3>Filtrer</h3>
-          <p>Le filtre <strong>« Statut »</strong> dans le panneau vous permet d'afficher uniquement la collection possédée, uniquement la wishlist, ou tout.</p>
-          <p class="tip">💡 Combinez avec le tri par valeur pour repérer les wishlists les plus coûteuses à surveiller.</p>
+          <h3>Filtre dédié</h3>
+          <p>Dans le panneau de filtres, choisissez <strong>« Prêtés uniquement »</strong> ou <strong>« Disponibles uniquement »</strong>.</p>
+          <h3>Tableau de bord</h3>
+          <p>La carte <strong>« Prêts en cours »</strong> liste tous les disques prêtés, avec le nom et le nombre de jours. Les prêts de plus de 6 mois s'affichent en rouge.</p>
+          <p class="tip">💡 Pour marquer un retour : ouvrez la fiche, effacez le nom dans « Prêté à », enregistrez.</p>
         `
       },
       {
@@ -3568,21 +3586,13 @@ function premiereLettreTri(name){
         title: "Notation étoiles",
         icon: "⭐",
         content: `
-          <p>Notez chaque vinyle de <strong>1 à 5 étoiles</strong> selon votre appréciation personnelle.</p>
-          <h3>Comment noter</h3>
+          <p>Notez chaque vinyle de <strong>1 à 5 étoiles</strong>.</p>
           <ul>
-            <li>Dans le formulaire, une rangée de 5 étoiles cliquables</li>
             <li>Cliquez sur la 3<sup>e</sup> étoile → note = 3/5</li>
-            <li>Cliquez à nouveau sur la même étoile → annule (note = 0)</li>
-            <li>Le petit <strong>✕</strong> à droite efface complètement la note</li>
+            <li>Re-clic sur la même étoile → annule</li>
+            <li><strong>✕</strong> efface complètement</li>
+            <li>Filtre Note : 5★, 4★+, 3★+, 2★+, 1★+, ou « Non noté »</li>
           </ul>
-          <h3>Où voir les étoiles</h3>
-          <ul>
-            <li>Sur les cartes : en bas à droite, format compact</li>
-            <li>Dans la fiche détail : sous le titre, en grand</li>
-          </ul>
-          <h3>Filtrer par note</h3>
-          <p>Le filtre <strong>« Note »</strong> propose : 5 étoiles, 4+, 3+, 2+, 1+, ou « Non noté ».</p>
           <h3>Suggestion d'échelle</h3>
           <ul>
             <li>★★★★★ — Indispensable, jamais vendu</li>
@@ -3598,19 +3608,13 @@ function premiereLettreTri(name){
         title: "Date d'achat flexible",
         icon: "📅",
         content: `
-          <p>Vous ne vous souvenez pas de la date exacte d'un achat ? Pas de problème.</p>
-          <h3>Formats acceptés</h3>
           <table class="shortcuts">
-            <tr><td><code>1973</code></td><td>Année seule → affichée « 1973 »</td></tr>
-            <tr><td><code>06/1973</code></td><td>Mois + année → affiché « juin 1973 »</td></tr>
-            <tr><td><code>14/06/1973</code></td><td>Date complète → affichée « 14 juin 1973 »</td></tr>
-            <tr><td><code>2019-06-14</code></td><td>Format ISO accepté aussi</td></tr>
+            <tr><td><code>1973</code></td><td>Année seule → « 1973 »</td></tr>
+            <tr><td><code>06/1973</code></td><td>Mois + année → « juin 1973 »</td></tr>
+            <tr><td><code>14/06/1973</code></td><td>Date complète</td></tr>
+            <tr><td><code>2019-06-14</code></td><td>Format ISO</td></tr>
           </table>
-          <h3>Comment saisir</h3>
-          <p>Le champ <strong>Date d'achat</strong> du formulaire est un champ texte libre. Tapez simplement ce que vous savez — l'appli détecte le format automatiquement.</p>
-          <p class="tip">💡 Astuce : si vous savez juste que c'est des années 80 mais pas plus, tapez <code>1985</code> environ. Vous pourrez toujours préciser plus tard.</p>
-          <h3>Affichage intelligent</h3>
-          <p>Dans la fiche, la date est toujours <strong>formatée en français lisible</strong> : « juin 1973 », « 14 juin 2019 », etc. Fini les dates brutes type <code>1973-06-14</code>.</p>
+          <p class="tip">💡 Si vous ne vous souvenez que de l'année, tapez juste <code>1973</code>. Vous pourrez préciser plus tard.</p>
         `
       },
       {
@@ -3618,16 +3622,19 @@ function premiereLettreTri(name){
         title: "Tableau de bord",
         icon: "📊",
         content: `
-          <p>Cliquez sur <strong>« 📊 Statistiques »</strong> dans la barre d'outils pour ouvrir le tableau de bord.</p>
-          <h3>5 graphiques disponibles</h3>
+          <p>Cliquez sur <strong>« 📊 Statistiques »</strong> pour ouvrir le tableau de bord. Il contient <strong>8 cartes</strong> :</p>
           <ul>
-            <li><strong>Répartition par décennie</strong> — combien de 50's, 60's, 70's…</li>
-            <li><strong>Top 5 artistes</strong> — vos artistes les plus représentés</li>
-            <li><strong>Top 5 genres</strong> — les genres dominants</li>
-            <li><strong>Formats</strong> — donut avec la répartition 33T / 45T / Maxi…</li>
-            <li><strong>Valeur par décennie</strong> — où se concentre la valeur</li>
+            <li><strong>Prêts en cours</strong> — liste des disques prêtés, avec alerte si > 6 mois</li>
+            <li><strong>Évolution de la collection</strong> — courbe de valeur dans le temps</li>
+            <li><strong>Répartition par décennie</strong></li>
+            <li><strong>Top 5 artistes</strong></li>
+            <li><strong>Top 5 genres</strong></li>
+            <li><strong>Formats</strong> — donut 33T / 45T / Maxi…</li>
+            <li><strong>Pressages</strong> — originaux vs repressages</li>
+            <li><strong>Acquisitions</strong> — Neuf vs Occasion</li>
+            <li><strong>Valeur par décennie</strong></li>
           </ul>
-          <p class="tip">💡 Le tableau de bord se met à jour automatiquement à chaque ajout ou modification.</p>
+          <p class="tip">💡 Le tableau de bord se met à jour automatiquement.</p>
         `
       },
       {
@@ -3636,30 +3643,25 @@ function premiereLettreTri(name){
         icon: "💾",
         content: `
           <h3>Sauvegarde automatique</h3>
-          <p>L'appli exporte automatiquement un fichier JSON <strong>tous les 7 jours</strong>, au lancement.</p>
-          <p>Un badge <strong>💾 J-X</strong> dans la barre du haut indique les jours restants avant la prochaine sauvegarde.</p>
-          <ul>
-            <li>Cliquez sur le badge pour <strong>sauvegarder immédiatement</strong></li>
-            <li>Le fichier s'appelle <code>vinyl-archive-jacques-AAAA-MM-JJ.json</code></li>
-            <li>Il est enregistré dans votre dossier <strong>Téléchargements</strong></li>
-            <li>Si la sauvegarde est en retard, le badge affiche <strong>💾 ⚠</strong> en rouge</li>
-          </ul>
+          <p>Fichier JSON exporté automatiquement <strong>tous les 7 jours</strong>. Badge <strong>💾 J-X</strong> dans la barre du haut.</p>
           <h3>Exports manuels</h3>
-          <p>Bouton <strong>« Exporter ▾ »</strong> dans la barre d'outils :</p>
+          <p>Bouton <strong>« Exporter ▾ »</strong> :</p>
           <ul>
-            <li><strong>Export JSON</strong> — sauvegarde complète, réimportable (inclut les nouveaux champs verso, enregistrement, Double, Gatefold)</li>
-            <li><strong>Export CSV</strong> — ouvrable dans Excel / Numbers (colonnes « Double album », « Gatefold » et « Enregistrement » incluses)</li>
-            <li><strong>Export PDF</strong> — liste imprimable de la collection</li>
+            <li><strong>Export JSON</strong> — sauvegarde complète, réimportable</li>
+            <li><strong>Export CSV</strong> — ouvrable dans Excel / Numbers</li>
+            <li><strong>Export PDF (liste)</strong> — liste imprimable compacte</li>
+            <li><strong>Export PDF (catalogue livre)</strong> — voir ci-dessous</li>
             <li><strong>Importer un fichier JSON</strong> — restaurer une sauvegarde</li>
           </ul>
-          <h3>Restaurer une sauvegarde</h3>
-          <ol>
-            <li>Ouvrez l'appli</li>
-            <li><strong>Exporter ▾ → Importer un fichier JSON</strong></li>
-            <li>Sélectionnez votre fichier de sauvegarde</li>
-            <li>Les vinyles reviennent (les doublons sont gérés par identifiant unique)</li>
-          </ol>
-          <p class="tip">💡 Conseil : créez un dossier « Sauvegardes Vinyl Archive » sur votre ordinateur et déplacez-y les fichiers une fois par mois.</p>
+          <h3>Le catalogue PDF « livre »</h3>
+          <p>Génère un <strong>vrai catalogue imprimable</strong> :</p>
+          <ul>
+            <li><strong>Page de couverture</strong> dorée avec titre et date</li>
+            <li><strong>Une page par vinyle</strong> : pochette + verso + tous les champs clés</li>
+            <li><strong>Index alphabétique</strong> par artiste en fin de document</li>
+          </ul>
+          <p class="tip">💡 Idéal pour l'assurance en cas de sinistre, ou pour feuilleter votre collection sur papier.</p>
+          <p class="hint"><em>Astuce impression : dans la fenêtre d'impression, destination = « Enregistrer au format PDF ».</em></p>
         `
       },
       {
@@ -3669,18 +3671,17 @@ function premiereLettreTri(name){
         content: `
           <p>Accessibles via le bouton <strong>⚙︎</strong> dans la barre du haut.</p>
           <h3>Token Discogs</h3>
-          <p>Permet la récupération automatique des pochettes et l'estimation de valeur via le marketplace Discogs. Voir la section « Démarrage rapide » pour l'obtenir.</p>
+          <p>Permet la récupération automatique des pochettes et l'estimation de valeur. Gratuit, à générer sur <a href="https://www.discogs.com/settings/developers" target="_blank" rel="noopener">discogs.com/settings/developers</a>.</p>
           <h3>Proxy CORS (avancé)</h3>
-          <p>Pour activer les sources eBay et Vinted, il faut configurer un petit proxy. Optionnel — Discogs suffit largement pour les vinyles.</p>
+          <p>Pour activer eBay et Vinted — optionnel. Discogs suffit largement.</p>
           <h3>Stockage</h3>
           <ul>
-            <li><strong>IndexedDB</strong> (par défaut) — stockage local du navigateur, très large</li>
+            <li><strong>IndexedDB</strong> (par défaut) — local au navigateur</li>
             <li><strong>localStorage</strong> (repli) — si IndexedDB indisponible</li>
           </ul>
-          <p class="tip">⚠️ Vos données sont stockées <strong>dans le navigateur</strong>, pas dans un cloud. Si vous videz le cache ou changez de navigateur, elles seront perdues — d'où l'importance des sauvegardes JSON régulières.</p>
+          <p class="tip">⚠️ Vos données sont stockées <strong>dans le navigateur de chaque appareil</strong>. Pour les synchroniser entre Mac, iPad et iPhone, utilisez l'export/import JSON — ou attendez l'intégration Supabase.</p>
           <h3>Vider la collection</h3>
           <p>Bouton rouge en bas des Paramètres. Deux confirmations demandées.</p>
-          <p class="tip">⚠️ Pensez à exporter avant de vider.</p>
         `
       },
       {
@@ -3688,13 +3689,11 @@ function premiereLettreTri(name){
         title: "Raccourcis clavier",
         icon: "⌨",
         content: `
-          <h3>Navigation globale</h3>
           <table class="shortcuts">
             <tr><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td><td>Focus sur la recherche</td></tr>
             <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd></td><td>Nouveau vinyle</td></tr>
             <tr><td><kbd>H</kbd></td><td>Ouvrir ce mode d'emploi</td></tr>
             <tr><td><kbd>Échap</kbd></td><td>Fermer la fenêtre active</td></tr>
-            <tr><td><kbd>Entrée</kbd></td><td>Valider (page d'accueil)</td></tr>
           </table>
           <p class="hint"><em>Sur Mac, remplacez Ctrl par Cmd ⌘.</em></p>
         `
@@ -3705,40 +3704,30 @@ function premiereLettreTri(name){
         icon: "?",
         content: `
           <h3>Ma collection a disparu !</h3>
-          <p>Vos données sont stockées dans le <strong>navigateur</strong>, pas dans le fichier HTML. Si vous avez changé de navigateur, d'appareil, ou vidé le cache, elles sont inaccessibles.</p>
-          <p><strong>Solution</strong> : réimportez votre dernière sauvegarde JSON.</p>
-          <h3>J'ai deux collections différentes</h3>
-          <p>Vous utilisez peut-être <strong>deux contextes différents</strong> : le navigateur classique et l'appli installée (PWA). Ces deux contextes ont des stockages séparés.</p>
-          <p><strong>Solution</strong> : choisissez UN SEUL mode d'utilisation (navigateur ou appli), ou synchronisez manuellement par export/import JSON.</p>
+          <p>Vos données sont dans le <strong>navigateur</strong>. Réimportez votre dernière sauvegarde JSON.</p>
+          <h3>J'ai deux collections différentes sur deux appareils</h3>
+          <p>Chaque navigateur a ses propres données. Utilisez <strong>Export JSON → transfert → Import JSON</strong> entre appareils. Une synchro cloud est prévue ultérieurement.</p>
           <h3>L'estimation de valeur ne marche pas</h3>
           <ul>
-            <li>Vérifiez que le <strong>token Discogs</strong> est bien renseigné (⚙︎ Paramètres)</li>
-            <li>Vérifiez votre connexion internet</li>
+            <li>Token Discogs renseigné ? (⚙︎)</li>
+            <li>Connexion internet ?</li>
             <li>L'estimation interne fonctionne toujours, même hors ligne</li>
           </ul>
           <h3>La pochette ne s'affiche pas</h3>
           <ul>
-            <li>Si l'image est une URL externe, elle peut être bloquée par Neocities (CSP)</li>
-            <li>Préférez l'<strong>upload local</strong> ou la <strong>récupération Discogs</strong></li>
+            <li>URL externe bloquée ? Préférez l'<strong>upload local</strong> ou <strong>Discogs</strong></li>
           </ul>
           <h3>Pourquoi le verso n'est-il pas récupérable depuis Discogs ?</h3>
-          <p>L'API publique de Discogs ne fournit que la <strong>pochette recto</strong> (image principale). Pour le verso, il faut :</p>
-          <ul>
-            <li>Soit <strong>uploader une photo</strong> prise avec votre téléphone/appareil photo</li>
-            <li>Soit <strong>coller une URL</strong> vers une image hébergée ailleurs (par exemple une photo de la pochette trouvée en ligne)</li>
-          </ul>
-          <h3>Comment sauvegarder avant une modification risquée ?</h3>
-          <p>Cliquez sur <strong>💾</strong> dans la barre du haut → confirmation → un fichier JSON est téléchargé immédiatement.</p>
+          <p>L'API publique ne fournit que le recto. Pour le verso : upload photo ou URL externe.</p>
+          <h3>Comment ne pas perdre mes saisies en cours ?</h3>
+          <p>L'appli ne sauvegarde pas de brouillon automatique. Enregistrez régulièrement, ou attendez l'ajout d'un brouillon persistant.</p>
+          <h3>Le catalogue PDF met du temps à s'ouvrir</h3>
+          <p>Normal : une page par vinyle. Pour 100 vinyles, comptez quelques secondes.</p>
           <h3>L'appli est lente</h3>
           <ul>
-            <li>Limitez le nombre d'images stockées (le base64 alourdit)</li>
-            <li>Le verso ajoute une image supplémentaire par fiche — pensez à compresser avant upload si besoin</li>
-            <li>Videz le cache régulièrement après avoir sauvegardé</li>
+            <li>Limitez le nombre d'images base64 (ça alourdit)</li>
+            <li>Videz le cache régulièrement après sauvegarde</li>
           </ul>
-          <h3>Le champ Date d'achat ne propose plus de calendrier</h3>
-          <p>C'est volontaire : le champ accepte maintenant l'<strong>année seule</strong> (<code>1973</code>), le mois/année (<code>06/1973</code>) ou la date complète (<code>14/06/1973</code>). Voir la section « Date d'achat flexible ».</p>
-          <h3>Une question de plus ?</h3>
-          <p>Consultez la section concernée ou revenez voir la personne qui a préparé l'appli. 😉</p>
         `
       }
     ];
