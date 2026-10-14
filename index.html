@@ -214,7 +214,20 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .modal-head h2{font-size:23px;line-height:1.22}
 .modal-head .sub{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--or);margin-top:6px;font-weight:500}
 .close-x{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;border:1px solid var(--or-dim);color:var(--creme-dim);font-size:17px;transition:.22s;line-height:1}
-.close-x:hover{border-color:var(--brique);color:#e8a5a5;background:rgba(166,58,58,.14);transform:rotate(90deg)}
+.btn-back{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 14px; border-radius:3px;
+  border:1px solid var(--or-dim);
+  color:var(--creme-dim); background:transparent;
+  font-family:'Inter',sans-serif;
+  font-size:11px; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase;
+  cursor:pointer; transition:.2s; white-space:nowrap;
+  line-height:1;
+}
+.btn-back:hover{ border-color:var(--or); color:var(--or-clair); background:var(--or-soft); }
+.btn-back .arrow{ font-size:14px; line-height:1; display:inline-block; transform:translateY(-1px); }
+  .close-x:hover{border-color:var(--brique);color:#e8a5a5;background:rgba(166,58,58,.14);transform:rotate(90deg)}
 
 .fiche-body{padding:30px 32px 36px}
 .fiche-cols{display:grid;grid-template-columns:290px 1fr;gap:40px}
@@ -624,8 +637,11 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
 <!-- ══════════════ TABLEAU DE BORD ══════════════ -->
 <div class="dashboard-panel" id="dashboardPanel">
   <div class="dashboard-inner">
-    <div class="section-title" style="margin-bottom:16px">
+    <div class="section-title" style="margin-bottom:16px;gap:14px">
       <span class="ico">◆</span>Tableau de bord de la collection
+      <button class="btn-back" onclick="document.getElementById('dashboardPanel').classList.remove('open')" title="Fermer les statistiques" style="margin-left:auto;margin-right:0">
+        <span class="arrow">←</span> Retour
+      </button>
     </div>
     <div class="dashboard-grid" id="dashboardGrid"></div>
   </div>
@@ -850,11 +866,12 @@ const Store = (() => {
   };
 })();
 
-const State = {
+cons t State = {
   vinyles: [], filtered: [], view: "grid",
    filters: { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", emp_etagere:"", pret:"", vmin:"", vmax:"", rarete:"" },
   sort: "date_ajout_desc", detailId: null, editingId: null,
-  formImages: { image_pochette:null, image_pochette_verso:null, image_vinyle:null }, formPriceSources: null
+  formImages: { image_pochette:null, image_pochette_verso:null, image_vinyle:null }, formPriceSources: null,
+  formOpenedFrom: null
 };
 
 const Settings = {
@@ -1226,7 +1243,11 @@ function renderDetail(v){
   }).join("");
   const coverBlock = v.image_pochette ? `<img src="${esc(v.image_pochette)}" alt="Pochette">` : `<div class="cover-empty"><span>${esc(initiales(v.titre))}</span></div>`;
   $("#detailModal").innerHTML = `
-    <div class="modal-head"><div><h2>${esc(v.titre || "Sans titre")}</h2><div class="sub">${esc(v.artiste || "Artiste inconnu")}${v.annee_impression ? " · " + esc(v.annee_impression) : ""}</div></div><button class="close-x" onclick="App.closeDetail()" title="Fermer">✕</button></div>
+      <div class="modal-head" style="align-items:center">
+      <button class="btn-back" onclick="App.closeDetail()" title="Retour à la bibliothèque"><span class="arrow">←</span> Retour</button>
+      <div style="flex:1;min-width:0"><h2>${esc(v.titre || "Sans titre")}</h2><div class="sub">${esc(v.artiste || "Artiste inconnu")}${v.annee_impression ? " · " + esc(v.annee_impression) : ""}</div></div>
+      <button class="close-x" onclick="App.closeDetail()" title="Fermer">✕</button>
+    </div>
     <div class="fiche-body"><div class="fiche-cols">
       <div class="fiche-media">
         <div class="fiche-cover">${coverBlock}</div>
@@ -1348,7 +1369,13 @@ function renderForm(v){
   const isEdit = !!v, data = v || {};
   const sectionsHTML = GROUPS.map(g => `<div class="form-section"><div class="section-title"><span class="ico">${g.icon}</span>${esc(g.title)}</div><div class="form-grid">${g.fields.map(f => fieldHTML(f, data[f.key])).join("")}</div></div>`).join("");
   $("#formModal").innerHTML = `
-    <div class="modal-head"><div><h2>${isEdit ? "Modifier la fiche" : "Nouveau vinyle"}</h2><div class="sub">${isEdit ? esc(data.titre || "") : "Ajout à la collection"}</div></div><button class="close-x" onclick="App.closeForm()" title="Fermer">✕</button></div>
+      <div class="modal-head" style="align-items:center">
+      <button class="btn-back" onclick="App.retourDepuisForm()" title="Retour">
+        <span class="arrow">←</span> ${State.formOpenedFrom ? "Fiche" : "Retour"}
+      </button>
+      <div style="flex:1;min-width:0"><h2>${isEdit ? "Modifier la fiche" : "Nouveau vinyle"}</h2><div class="sub">${isEdit ? esc(data.titre || "") : "Ajout à la collection"}</div></div>
+      <button class="close-x" onclick="App.closeForm()" title="Fermer">✕</button>
+    </div>
     <div class="form-body">
       <form id="vinylForm" autocomplete="off">
         ${sectionsHTML}
@@ -1454,7 +1481,11 @@ function renderSettings(){
   const storageLabel = Store.mode === "idb" ? "IndexedDB (navigateur)" : "localStorage (repli)";
   const count = State.vinyles.length;
   $("#settingsModal").innerHTML = `
-    <div class="modal-head"><div><h2>Paramètres</h2><div class="sub">Sources de prix & données</div></div><button class="close-x" onclick="App.closeSettings()" title="Fermer">✕</button></div>
+    <div class="modal-head" style="align-items:center">
+      <button class="btn-back" onclick="App.closeSettings()" title="Retour à la bibliothèque"><span class="arrow">←</span> Retour</button>
+      <div style="flex:1;min-width:0"><h2>Paramètres</h2><div class="sub">Sources de prix & données</div></div>
+      <button class="close-x" onclick="App.closeSettings()" title="Fermer">✕</button>
+    </div>
     <div class="form-body">
       <div class="form-section"><div class="section-title"><span class="ico">◆</span>Discogs API</div>
         <div class="field" style="margin-bottom:14px"><label>Token personnel Discogs</label>
@@ -2538,9 +2569,11 @@ const App = {
     $("#detailOverlay").classList.add("open"); document.body.style.overflow = "hidden"; $("#detailOverlay").scrollTop = 0;
   },
   closeDetail(){ $("#detailOverlay").classList.remove("open"); document.body.style.overflow = ""; State.detailId = null; },
-  openForm(id){
+    openForm(id){
     const v = id ? State.vinyles.find(x => x.id === id) : null;
     State.editingId = id;
+    /* Mémorise si on vient d'une fiche (retour possible vers elle) */
+    State.formOpenedFrom = State.detailId || null;
     State.formImages = {
       image_pochette:       v ? (v.image_pochette || null) : null,
       image_pochette_verso: v ? (v.image_pochette_verso || null) : null,
@@ -2551,7 +2584,15 @@ const App = {
     $("#formOverlay").classList.add("open"); document.body.style.overflow = "hidden"; $("#formOverlay").scrollTop = 0;
     setTimeout(() => { const t = $("#fld_titre"); if(t) t.focus(); }, 120);
   },
-  closeForm(){ $("#formOverlay").classList.remove("open"); document.body.style.overflow = ""; State.editingId = null; State.formImages = { image_pochette:null, image_pochette_verso:null, image_vinyle:null }; },
+    closeForm(){ $("#formOverlay").classList.remove("open"); document.body.style.overflow = ""; State.editingId = null; State.formOpenedFrom = null; State.formImages = { image_pochette:null, image_pochette_verso:null, image_vinyle:null }; },
+  retourDepuisForm(){
+    const fromId = State.formOpenedFrom;
+    this.closeForm();
+    if(fromId){
+      const fiche = State.vinyles.find(x => x.id === fromId);
+      if(fiche) this.openDetail(fromId);
+    }
+  },
   readForm(){
     const form = $("#vinylForm"); if(!form) return null;
     const data = {};
@@ -4596,9 +4637,12 @@ function premiereLettreTri(name){
     overlay.id = "helpOverlay";
     overlay.className = "help-overlay";
     overlay.innerHTML = `
-      <div class="help-modal">
+            <div class="help-modal">
         <div class="help-header">
-          <div>
+          <button class="btn-back" id="helpBack" title="Retour à la bibliothèque" style="margin-right:16px">
+            <span class="arrow">←</span> Retour
+          </button>
+          <div style="flex:1;min-width:0">
             <h2>Mode d'emploi</h2>
             <div class="help-sub">Vinyl Archive — Jacques Edition</div>
           </div>
@@ -4882,6 +4926,8 @@ function premiereLettreTri(name){
     }
 
     document.getElementById("helpClose").addEventListener("click", close);
+        const helpBackBtn = document.getElementById("helpBack");
+    if(helpBackBtn) helpBackBtn.addEventListener("click", close);
     overlay.addEventListener("mousedown", e => {
       if(e.target === overlay) close();
     });
