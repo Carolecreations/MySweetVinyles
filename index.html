@@ -570,9 +570,13 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
       <div class="field"><label>Format</label><select id="f_format"><option value="">Tous</option></select></div>
       <div class="field"><label>Options de format</label>
         <div style="display:flex;flex-direction:column;gap:6px">
-          <label class="checkbox-field" style="padding:7px 10px;min-height:34px">
+                   <label class="checkbox-field" style="padding:7px 10px;min-height:34px">
             <input type="checkbox" id="f_double">
             <span style="font-size:11.5px">Double album uniquement</span>
+          </label>
+          <label class="checkbox-field" style="padding:7px 10px;min-height:34px">
+            <input type="checkbox" id="f_triple">
+            <span style="font-size:11.5px">Triple album uniquement</span>
           </label>
           <label class="checkbox-field" style="padding:7px 10px;min-height:34px">
             <input type="checkbox" id="f_gatefold">
@@ -647,7 +651,8 @@ const GROUPS = [
     { key:"titre", label:"Titre", type:"text", span:2, required:true, ph:"ex. Kind of Blue" },
     { key:"artiste", label:"Artiste / Groupe", type:"text", span:2, required:true, ph:"ex. Miles Davis" },
     { key:"format", label:"Format", type:"select", options:FORMATS },
-    { key:"format_double",   label:"Double album",       type:"checkbox" },
+       { key:"format_double",   label:"Double album",       type:"checkbox" },
+    { key:"format_triple",   label:"Triple album",       type:"checkbox" },
     { key:"format_gatefold", label:"Pochette gatefold",  type:"checkbox" },
     { key:"enregistrement", label:"Enregistrement", type:"select", options:ENREGISTREMENT },
     { key:"genre", label:"Genre", type:"text", list:"dl_genres", ph:"ex. Jazz" },
@@ -722,12 +727,18 @@ function valeurAffichee(v){
 function valeurEffective(v){ const val = valeurAffichee(v); return val === null ? 0 : val; }
 function tagsParticularites(str){ if(!str) return []; return String(str).split(/[,;·|]/).map(s => s.trim()).filter(Boolean); }
 function formatBadge(v){
-  const parts = [v.format, v.format_double ? "Double" : "", v.format_gatefold ? "Gatefold" : ""].filter(Boolean);
+  const parts = [
+    v.format,
+    v.format_double ? "Double" : "",
+    v.format_triple ? "Triple" : "",
+    v.format_gatefold ? "Gatefold" : ""
+  ].filter(Boolean);
   return parts.join(" · ");
 }
 function formatTags(v){
   const tags = [];
   if(v.format_double)   tags.push("Double album");
+  if(v.format_triple)   tags.push("Triple album");
   if(v.format_gatefold) tags.push("Pochette gatefold");
   return tags;
 }
@@ -798,7 +809,7 @@ const Store = (() => {
 
 const State = {
   vinyles: [], filtered: [], view: "grid",
-    filters: { q:"", artiste:"", genre:"", format:"", double:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", vmin:"", vmax:"", rarete:"" },
+     filters: { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", vmin:"", vmax:"", rarete:"" },
   sort: "date_ajout_desc", detailId: null, editingId: null,
   formImages: { image_pochette:null, image_pochette_verso:null, image_vinyle:null }, formPriceSources: null
 };
@@ -815,7 +826,8 @@ function heuristicEstimate(v){
   const genre  = (v.genre || "").toLowerCase();
   const BASE_FORMAT = { "33T":16, "45T":9, "78T":22, "Maxi":13, "Picture Disc":26, "Coffret":38, "10\"":15, "Autre":14 };
   let base = BASE_FORMAT[format] ?? 15;
-  if(v.format_double)   base *= 1.55;
+   if(v.format_double)   base *= 1.55;
+  if(v.format_triple)   base *= 2.10;
   if(v.format_gatefold) base *= 1.15;
   const GENRE_COEF = { "jazz":1.75, "classique":1.5, "rock":1.35, "blues":1.4, "soul":1.4, "funk":1.45, "disco":1.1, "pop":0.85, "variété":0.7, "chanson française":1.0, "électro":1.15, "reggae":1.2, "rap":1.2, "folk":1.15, "metal":1.25, "punk":1.3, "bossa nova":1.5, "bande originale":1.3, "gospel":1.3, "country":0.95, "musique du monde":1.1 };
   for(const k in GENRE_COEF){ if(genre.includes(k)){ base *= GENRE_COEF[k]; break; } }
@@ -966,6 +978,7 @@ function applyFilters(){
         v.notes, v.particularites, v.annee_impression, v.annee_enregistrement,
                v.format, v.pressage, v.pressage_audio, v.enregistrement, v.couleur_vinyle, v.acquisition,
         v.format_double ? "double album" : "",
+        v.format_triple ? "triple album" : "",
         v.format_gatefold ? "gatefold pochette" : ""
       ].filter(Boolean).join(" "));
       const tokens = q.split(/\s+/).filter(Boolean);
@@ -984,7 +997,8 @@ function applyFilters(){
     if(!eq(v.enregistrement, f.enregistrement)) return false;
     if(!eq(v.acquisition, f.acquisition)) return false;
     if(!eq(v.rarete, f.rarete)) return false;
-    if(f.double   && v.format_double   !== true) return false;
+       if(f.double   && v.format_double   !== true) return false;
+    if(f.triple   && v.format_triple   !== true) return false;
     if(f.gatefold && v.format_gatefold !== true) return false;
     if(f.annee){ const a = num(v.annee_impression); if(a === null || String(a) !== String(f.annee)) return false; }
     const val = valeurAffichee(v);
@@ -1421,7 +1435,7 @@ function telecharger(nomFichier, contenu, mime){
 }
 const CSV_COLUMNS = [
   ["titre","Titre"],["artiste","Artiste"],["format","Format"],
-  ["format_double","Double album"],["format_gatefold","Gatefold"],
+   ["format_double","Double album"],["format_triple","Triple album"],["format_gatefold","Gatefold"],
   ["genre","Genre"],
   ["enregistrement","Enregistrement"],
   ["annee_enregistrement","Année enregistrement"],["annee_impression","Année impression"],
@@ -1508,9 +1522,10 @@ function fichePrintBody(v){
   const extras = [];
   if(v.notes) extras.push(`<h2>Notes personnelles</h2><div class="notes">${esc(v.notes)}</div>`);
   if(v.particularites) extras.push(`<h2>Particularités</h2><div class="notes">${esc(v.particularites)}</div>`);
-  const metaLines = [
+   const metaLines = [
     v.format,
     v.format_double ? "Double album" : "",
+    v.format_triple ? "Triple album" : "",
     v.format_gatefold ? "Gatefold" : "",
     v.label,
     v.annee_impression
@@ -1571,11 +1586,17 @@ const App = {
       const handler = debounce(() => { State.filters[key] = el.value; this.refresh(false); }, key === "vmin" || key === "vmax" ? 380 : 0);
       el.addEventListener(el.tagName === "INPUT" ? "input" : "change", handler);
     });
-    /* Cases à cocher « Double » / « Gatefold » */
-    ["f_double","f_gatefold"].forEach(id => {
+       /* Cases à cocher « Double » / « Triple » / « Gatefold » */
+    ["f_double","f_triple","f_gatefold"].forEach(id => {
       const el = $("#" + id); if(!el) return;
-      const key = id === "f_double" ? "double" : "gatefold";
-      el.addEventListener("change", () => { State.filters[key] = el.checked; this.refresh(false); });
+      const key = id === "f_double" ? "double" : id === "f_triple" ? "triple" : "gatefold";
+      el.addEventListener("change", () => {
+        State.filters[key] = el.checked;
+        /* Exclusivité : Double et Triple ne peuvent pas être cochés ensemble */
+        if(key === "double" && el.checked){ State.filters.triple = false; const t = $("#f_triple"); if(t) t.checked = false; }
+        if(key === "triple" && el.checked){ State.filters.double = false; const d = $("#f_double"); if(d) d.checked = false; }
+        this.refresh(false);
+      });
     });
     $("#btnResetFilters").addEventListener("click", () => this.resetFilters());
     $("#sortSelect").addEventListener("change", e => { State.sort = e.target.value; this.refresh(false); });
@@ -1612,13 +1633,13 @@ const App = {
   setView(v){ State.view = v; $("#viewGrid").classList.toggle("on", v === "grid"); $("#viewList").classList.toggle("on", v === "list"); renderLibrary(); },
   refresh(full = true){ applyFilters(); if(full) renderFilterOptions(); renderStats(); renderDashboard(); renderLibrary(); updateFilterBadge(); },
   resetFilters(){
-        State.filters = { q:"", artiste:"", genre:"", format:"", double:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", vmin:"", vmax:"", rarete:"" };
+         State.filters = { q:"", artiste:"", genre:"", format:"", double:false, triple:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", acquisition:"", vmin:"", vmax:"", rarete:"" };
     $("#globalSearch").value = "";
     ["#f_artiste","#f_genre","#f_format","#f_label","#f_pays","#f_annee",
      "#f_etat_disque","#f_etat_pochette","#f_pressage","#f_pressage_audio",
           "#f_enregistrement", "#f_acquisition",
      "#f_vmin","#f_vmax","#f_rarete"].forEach(sel => { const el = $(sel); if(el) el.value = ""; });
-    ["#f_double","#f_gatefold"].forEach(sel => { const el = $(sel); if(el) el.checked = false; });
+      ["#f_double","#f_triple","#f_gatefold"].forEach(sel => { const el = $(sel); if(el) el.checked = false; });
     this.refresh(false);
   },
   openDetail(id){
