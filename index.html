@@ -3985,5 +3985,83 @@ if("serviceWorker" in navigator){
   }
 })();
 </script>
+  <script>
+/* ═══════════════════════════════════════════════════════════════════
+   CORRECTIF IPAD v2 — Fermeture immédiate, voix préservée
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  function patchWelcome(){
+    const page     = document.getElementById("welcomePage");
+    const btnEnter = document.getElementById("welcomeEnter");
+    const btnSkip  = document.getElementById("welcomeSkip");
+    if(!page) return;
+
+    try {
+      if(location.search.includes("skip=1")){
+        page.classList.add("hide");
+        page.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        return;
+      }
+    } catch(e){}
+
+    let done = false;
+
+    function closeIt(){
+      if(done) return;
+      done = true;
+      try { page.classList.add("hide"); } catch(e){}
+      try { page.setAttribute("aria-hidden", "true"); } catch(e){}
+      try { document.body.style.overflow = ""; } catch(e){}
+      setTimeout(() => {
+        try {
+          const s = document.getElementById("globalSearch");
+          if(s && s.focus) s.focus();
+        } catch(e){}
+      }, 300);
+    }
+
+    function captureClose(){
+      closeIt();
+      /* on ne preventDefault PAS — l'original lance la voix ensuite */
+    }
+
+    if(btnEnter){
+      btnEnter.addEventListener("click",    captureClose, { capture:true });
+      btnEnter.addEventListener("touchend", captureClose, { capture:true, passive:true });
+    }
+    if(btnSkip){
+      btnSkip.addEventListener("click",    captureClose, { capture:true });
+      btnSkip.addEventListener("touchend", captureClose, { capture:true, passive:true });
+    }
+
+    try {
+      page.addEventListener("click", e => {
+        if(e.target === page || (e.target.classList && e.target.classList.contains("welcome-inner"))) closeIt();
+      }, { capture:true });
+    } catch(e){}
+
+    document.addEventListener("keydown", e => {
+      if(done) return;
+      if(e.key === "Escape"){ e.preventDefault(); closeIt(); }
+    });
+
+    setTimeout(() => {
+      if(!done){
+        console.warn("Page d'accueil : fermeture automatique (délai 15 s)");
+        closeIt();
+      }
+    }, 15000);
+
+    console.log("%c♪ Correctif iPad v2 actif (voix préservée)", "color:#C9A86A;font-weight:bold");
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", () => setTimeout(patchWelcome, 100));
+  } else {
+    setTimeout(patchWelcome, 100);
+  }
+})();
+</script>
 </body>
 </html>
