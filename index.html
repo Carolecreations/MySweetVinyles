@@ -4,11 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vinyl Archive – Jacques Edition</title>
-<!-- Icône pour les navigateurs modernes (Chrome, Firefox, etc.) -->
 <link rel="icon" type="image/svg+xml" href="icon.svg">
-<!-- Icône pour l'écran d'accueil de l'iPad et de l'iPhone (LE PLUS IMPORTANT) -->
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<!-- Ancien format de favicon pour la compatibilité -->
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0D0D0D">
@@ -16,19 +13,12 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Vinyl Archive">
-<!-- Favicons PC -->
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="shortcut icon" href="favicon.ico">
-
-<!-- iPad / iPhone -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-
-<!-- Android -->
 <link rel="manifest" href="manifest.json">
-
-<!-- Couleur de la barre d'adresse sur mobile -->
 <meta name="theme-color" content="#0D0D0D">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -129,7 +119,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .view-toggle button.on{background:var(--or-soft);color:var(--or)}
 
 .filters-panel{position:relative;z-index:1;margin:18px 32px 0;border:1px solid var(--or-dim);border-radius:var(--radius);background:linear-gradient(180deg,#131313,#0f0f0f);overflow:hidden;max-height:0;opacity:0;transition:max-height .4s ease,opacity .3s ease,margin .3s}
-.filters-panel.open{max-height:600px;opacity:1}
+.filters-panel.open{max-height:900px;opacity:1}
 .filters-inner{padding:20px 22px}
 .filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
 .field{display:flex;flex-direction:column;gap:6px}
@@ -138,6 +128,26 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 3px rgba(201,168,106,.08)}
 .field textarea{resize:vertical;min-height:70px;line-height:1.5}
 .field input::placeholder,.field textarea::placeholder{color:rgba(245,242,233,.22)}
+.field .checkbox-field{
+  display:flex; align-items:center; gap:10px;
+  padding:9px 12px; min-height:38px;
+  background:#0a0a0a;
+  border:1px solid rgba(201,168,106,.18);
+  border-radius:3px;
+  cursor:pointer;
+  transition:.2s;
+}
+.field .checkbox-field:hover{border-color:var(--or)}
+.field .checkbox-field input[type=checkbox]{
+  width:16px; height:16px; margin:0;
+  accent-color:var(--or);
+  cursor:pointer;
+  flex-shrink:0;
+}
+.field .checkbox-field span{
+  font-size:12.5px; color:var(--creme);
+  letter-spacing:.02em;
+}
 .filters-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid rgba(201,168,106,.12)}
 .chip-count{font-size:11px;color:var(--or);letter-spacing:.08em}
 
@@ -326,7 +336,6 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
   text-align:center; padding:40px 0;
 }
 
-/* Barres horizontales */
 .dash-bar-row{
   display:grid;
   grid-template-columns:78px 1fr 38px;
@@ -356,7 +365,6 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
   font-size:13px;
 }
 
-/* Barres verticales */
 .dash-vbars{
   display:flex;
   align-items:flex-end;
@@ -393,7 +401,6 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
   letter-spacing:.08em; color:var(--creme-faint);
 }
 
-/* Donut */
 .dash-donut-wrap{
   display:flex; gap:16px; align-items:center;
 }
@@ -561,6 +568,18 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
       <div class="field"><label>Artiste</label><select id="f_artiste"><option value="">Tous</option></select></div>
       <div class="field"><label>Genre</label><select id="f_genre"><option value="">Tous</option></select></div>
       <div class="field"><label>Format</label><select id="f_format"><option value="">Tous</option></select></div>
+      <div class="field"><label>Options de format</label>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <label class="checkbox-field" style="padding:7px 10px;min-height:34px">
+            <input type="checkbox" id="f_double">
+            <span style="font-size:11.5px">Double album uniquement</span>
+          </label>
+          <label class="checkbox-field" style="padding:7px 10px;min-height:34px">
+            <input type="checkbox" id="f_gatefold">
+            <span style="font-size:11.5px">Gatefold uniquement</span>
+          </label>
+        </div>
+      </div>
       <div class="field"><label>Label</label><select id="f_label"><option value="">Tous</option></select></div>
       <div class="field"><label>Pays</label><select id="f_pays"><option value="">Tous</option></select></div>
       <div class="field"><label>Année d'impression</label><input id="f_annee" type="number" placeholder="ex. 1973"></div>
@@ -568,6 +587,7 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
       <div class="field"><label>État pochette</label><select id="f_etat_pochette"><option value="">Tous</option></select></div>
       <div class="field"><label>Pressage</label><select id="f_pressage"><option value="">Tous</option></select></div>
             <div class="field"><label>Pressage audio</label><select id="f_pressage_audio"><option value="">Tous</option></select></div>
+      <div class="field"><label>Enregistrement</label><select id="f_enregistrement"><option value="">Tous</option></select></div>
       <div class="field"><label>Valeur min. (€)</label><input id="f_vmin" type="number" placeholder="0"></div>
       <div class="field"><label>Valeur max. (€)</label><input id="f_vmax" type="number" placeholder="∞"></div>
       <div class="field"><label>Rareté</label><select id="f_rarete"><option value="">Toutes</option></select></div>
@@ -610,6 +630,7 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
    ═══════════════════════════════════════════════════════════════════ */
 
 const FORMATS   = ["33T","45T","78T","Maxi","Picture Disc","Coffret","10\"","Autre"];
+const ENREGISTREMENT = ["Studio","Live","Démo"];
 const ETATS     = ["Mint","Near Mint","VG+","VG","G","Poor"];
 const PRESSAGE  = ["1st Press","Repress","Remastered","Limited Edition","Promo","Test Pressing","Autre"];
 const PRESSAGE_AUDIO = ["Mono","Stéréo","Mono / Stéréo","Inconnu"];
@@ -624,6 +645,9 @@ const GROUPS = [
     { key:"titre", label:"Titre", type:"text", span:2, required:true, ph:"ex. Kind of Blue" },
     { key:"artiste", label:"Artiste / Groupe", type:"text", span:2, required:true, ph:"ex. Miles Davis" },
     { key:"format", label:"Format", type:"select", options:FORMATS },
+    { key:"format_double",   label:"Double album",       type:"checkbox" },
+    { key:"format_gatefold", label:"Pochette gatefold",  type:"checkbox" },
+    { key:"enregistrement", label:"Enregistrement", type:"select", options:ENREGISTREMENT },
     { key:"genre", label:"Genre", type:"text", list:"dl_genres", ph:"ex. Jazz" },
     { key:"annee_enregistrement", label:"Année d'enregistrement", type:"number", ph:"1959" },
     { key:"annee_impression", label:"Année d'impression", type:"number", ph:"1959" },
@@ -653,8 +677,9 @@ const GROUPS = [
 ];
 
 const MEDIA_FIELDS = [
-  { key:"image_pochette", label:"Image pochette" },
-  { key:"image_vinyle",   label:"Image du vinyle (optionnel)" }
+  { key:"image_pochette",       label:"Image pochette (recto)" },
+  { key:"image_pochette_verso", label:"Image pochette (verso)" },
+  { key:"image_vinyle",         label:"Image du vinyle (optionnel)" }
 ];
 
 const $  = (s, r=document) => r.querySelector(s);
@@ -693,6 +718,16 @@ function valeurAffichee(v){
 }
 function valeurEffective(v){ const val = valeurAffichee(v); return val === null ? 0 : val; }
 function tagsParticularites(str){ if(!str) return []; return String(str).split(/[,;·|]/).map(s => s.trim()).filter(Boolean); }
+function formatBadge(v){
+  const parts = [v.format, v.format_double ? "Double" : "", v.format_gatefold ? "Gatefold" : ""].filter(Boolean);
+  return parts.join(" · ");
+}
+function formatTags(v){
+  const tags = [];
+  if(v.format_double)   tags.push("Double album");
+  if(v.format_gatefold) tags.push("Pochette gatefold");
+  return tags;
+}
 
 const Store = (() => {
   const DB_NAME = "VinylArchiveJacques", DB_VER = 1, STORE = "vinyles";
@@ -751,9 +786,9 @@ const Store = (() => {
 
 const State = {
   vinyles: [], filtered: [], view: "grid",
-  filters: { q:"", artiste:"", genre:"", format:"", label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", vmin:"", vmax:"", rarete:"" },
+  filters: { q:"", artiste:"", genre:"", format:"", double:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", vmin:"", vmax:"", rarete:"" },
   sort: "date_ajout_desc", detailId: null, editingId: null,
-  formImages: { image_pochette:null, image_vinyle:null }, formPriceSources: null
+  formImages: { image_pochette:null, image_pochette_verso:null, image_vinyle:null }, formPriceSources: null
 };
 
 const Settings = {
@@ -768,6 +803,8 @@ function heuristicEstimate(v){
   const genre  = (v.genre || "").toLowerCase();
   const BASE_FORMAT = { "33T":16, "45T":9, "78T":22, "Maxi":13, "Picture Disc":26, "Coffret":38, "10\"":15, "Autre":14 };
   let base = BASE_FORMAT[format] ?? 15;
+  if(v.format_double)   base *= 1.55;
+  if(v.format_gatefold) base *= 1.15;
   const GENRE_COEF = { "jazz":1.75, "classique":1.5, "rock":1.35, "blues":1.4, "soul":1.4, "funk":1.45, "disco":1.1, "pop":0.85, "variété":0.7, "chanson française":1.0, "électro":1.15, "reggae":1.2, "rap":1.2, "folk":1.15, "metal":1.25, "punk":1.3, "bossa nova":1.5, "bande originale":1.3, "gospel":1.3, "country":0.95, "musique du monde":1.1 };
   for(const k in GENRE_COEF){ if(genre.includes(k)){ base *= GENRE_COEF[k]; break; } }
   const an = num(v.annee_impression);
@@ -912,7 +949,13 @@ function applyFilters(){
   const q = normStr(f.q.trim());
   State.filtered = State.vinyles.filter(v => {
     if(q){
-      const hay = normStr([v.titre, v.artiste, v.label, v.catalogue, v.codebarres, v.genre, v.pays, v.notes, v.particularites, v.annee_impression,         v.annee_enregistrement, v.format, v.pressage, v.pressage_audio, v.couleur_vinyle].filter(Boolean).join(" "));
+      const hay = normStr([
+        v.titre, v.artiste, v.label, v.catalogue, v.codebarres, v.genre, v.pays,
+        v.notes, v.particularites, v.annee_impression, v.annee_enregistrement,
+        v.format, v.pressage, v.pressage_audio, v.enregistrement, v.couleur_vinyle,
+        v.format_double ? "double album" : "",
+        v.format_gatefold ? "gatefold pochette" : ""
+      ].filter(Boolean).join(" "));
       const tokens = q.split(/\s+/).filter(Boolean);
       if(!tokens.every(t => hay.includes(t))) return false;
     }
@@ -925,8 +968,11 @@ function applyFilters(){
     if(!eq(v.etat_disque, f.etat_disque)) return false;
     if(!eq(v.etat_pochette, f.etat_pochette)) return false;
     if(!eq(v.pressage, f.pressage)) return false;
-        if(!eq(v.pressage_audio, f.pressage_audio)) return false;
+    if(!eq(v.pressage_audio, f.pressage_audio)) return false;
+    if(!eq(v.enregistrement, f.enregistrement)) return false;
     if(!eq(v.rarete, f.rarete)) return false;
+    if(f.double   && v.format_double   !== true) return false;
+    if(f.gatefold && v.format_gatefold !== true) return false;
     if(f.annee){ const a = num(v.annee_impression); if(a === null || String(a) !== String(f.annee)) return false; }
     const val = valeurAffichee(v);
     if(f.vmin !== "" && f.vmin !== null && f.vmin !== undefined){ const min = num(f.vmin); if(min !== null && (val === null || val < min)) return false; }
@@ -997,9 +1043,10 @@ function renderLibrary(){
   }
   lib.innerHTML = State.filtered.map((v, i) => {
     const val = valeurAffichee(v);
+    const badgeTxt = formatBadge(v);
     return `<article class="card" data-id="${esc(v.id)}" style="animation-delay:${Math.min(i*22,420)}ms">
       <div class="cover">${coverHTML(v)}
-        ${v.format ? `<span class="badge">${esc(v.format)}</span>` : ""}
+        ${badgeTxt ? `<span class="badge">${esc(badgeTxt)}</span>` : ""}
         ${["Très rare","Collector"].includes(v.rarete) ? `<span class="badge rar">${esc(v.rarete)}</span>` : ""}
       </div>
       <div class="card-body">
@@ -1037,11 +1084,13 @@ function renderFilterOptions(){
   fill("#f_etat_disque", ETATS.filter(e => State.vinyles.some(v => v.etat_disque === e)), "Tous");
   fill("#f_etat_pochette", ETATS.filter(e => State.vinyles.some(v => v.etat_pochette === e)), "Tous");
   fill("#f_pressage", PRESSAGE.filter(p => State.vinyles.some(v => v.pressage === p)), "Tous");
+  fill("#f_pressage_audio", PRESSAGE_AUDIO.filter(p => State.vinyles.some(v => v.pressage_audio === p)), "Tous");
+  fill("#f_enregistrement", ENREGISTREMENT.filter(e => State.vinyles.some(v => v.enregistrement === e)), "Tous");
   fill("#f_rarete", RARETES, "Toutes");
 }
 function updateFilterBadge(){
   const f = State.filters;
-  const actifs = Object.keys(f).filter(k => k !== "q" && f[k] !== "" && f[k] !== null && f[k] !== undefined).length;
+  const actifs = Object.keys(f).filter(k => k !== "q" && f[k] !== "" && f[k] !== null && f[k] !== undefined && f[k] !== false).length;
   $("#filterBadge").textContent = actifs ? `(${actifs})` : "";
   $("#filterCount").textContent = actifs ? `${actifs} filtre${actifs>1?"s":""} actif${actifs>1?"s":""} · ${State.filtered.length} résultat${State.filtered.length>1?"s":""}` : "";
 }
@@ -1063,8 +1112,20 @@ function renderDetail(v){
       </div>` : ""}
     </div>`;
   const sectionHTML = GROUPS.map(g => {
+    /* Cas spécial : ajout des tags d'options de format à la fin de la section Identification */
+    let extrasFormat = "";
+    if(g.id === "ident"){
+      const tags = formatTags(v);
+      if(tags.length){
+        extrasFormat = `<div class="data-item" style="grid-column:1/-1">
+          <div class="k">Options de format</div>
+          <div class="particularites-tags">${tags.map(t => `<span class="tag">${esc(t)}</span>`).join("")}</div>
+        </div>`;
+      }
+    }
     const items = g.fields.map(f => {
       let raw = v[f.key], affichage = "";
+      if(f.type === "checkbox") return ""; /* traités via les tags ci-dessus */
       if(f.key === "valeur_auto" || f.key === "valeur_manuelle" || f.key === "prix_achat"){
         const n = num(raw); affichage = n === null ? `<span class="v muted">Non renseigné</span>` : `<span class="v gold">${fmtEuro(n)}</span>`;
       } else if(f.key === "notes"){
@@ -1081,8 +1142,8 @@ function renderDetail(v){
       } else { return ""; }
       return `<div class="data-item"><div class="k">${esc(f.label)}</div>${affichage}</div>`;
     }).filter(Boolean).join("");
-    if(!items) return "";
-    return `<div class="section"><div class="section-title"><span class="ico">${g.icon}</span>${esc(g.title)}</div><div class="data-grid">${items}</div></div>`;
+    if(!items && !extrasFormat) return "";
+    return `<div class="section"><div class="section-title"><span class="ico">${g.icon}</span>${esc(g.title)}</div><div class="data-grid">${items}${extrasFormat}</div></div>`;
   }).join("");
   const coverBlock = v.image_pochette ? `<img src="${esc(v.image_pochette)}" alt="Pochette">` : `<div class="cover-empty"><span>${esc(initiales(v.titre))}</span></div>`;
   $("#detailModal").innerHTML = `
@@ -1090,6 +1151,7 @@ function renderDetail(v){
     <div class="fiche-body"><div class="fiche-cols">
       <div class="fiche-media">
         <div class="fiche-cover">${coverBlock}</div>
+        ${v.image_pochette_verso ? `<div class="fiche-vinyl-mini"><img src="${esc(v.image_pochette_verso)}" alt="Verso de la pochette"></div>` : ""}
         ${v.image_vinyle ? `<div class="fiche-vinyl-mini"><img src="${esc(v.image_vinyle)}" alt="Vinyle"></div>` : ""}
         ${valueBlock}
         <div class="price-engine" id="priceEngine" style="display:none"></div>
@@ -1137,6 +1199,17 @@ function fieldHTML(f, value, idPrefix="fld"){
   const req = f.required ? "required" : "", ro = f.readonly ? "readonly" : "";
   const cls = f.span === 2 ? "field span2" : "field";
   const style = f.span === 2 ? 'style="grid-column:span 2"' : "";
+
+  /* Cases à cocher */
+  if(f.type === "checkbox"){
+    const isChecked = val === true || val === "true" || val === 1 || val === "1";
+    return `<div class="${cls}" ${style}>
+      <label class="checkbox-field">
+        <input type="checkbox" id="${id}" data-key="${esc(f.key)}" ${isChecked ? "checked" : ""}>
+        <span>${esc(f.label)}</span>
+      </label>
+    </div>`;
+  }
   if(f.type === "select"){
     const opts = [`<option value="">—</option>`].concat(f.options.map(o => `<option value="${esc(o)}" ${String(val)===String(o)?"selected":""}>${esc(o)}</option>`)).join("");
     return `<div class="${cls}" ${style}><label for="${id}">${esc(f.label)}</label><select id="${id}" data-key="${esc(f.key)}" ${req}>${opts}</select></div>`;
@@ -1149,6 +1222,9 @@ function fieldHTML(f, value, idPrefix="fld"){
 }
 function imagePickerHTML(key, label, current){
   const preview = current ? `<img src="${esc(current)}" alt="${esc(label)}">` : `<span class="ph">Aucune<br>image</span>`;
+  const discogsBtn = key === "image_pochette"
+    ? `<button type="button" class="btn sm ghost" data-imgfetch="${key}" style="align-self:flex-start">⤓ Récupérer depuis Discogs</button>`
+    : "";
   return `<div class="field" style="grid-column:span 1"><label>${esc(label)}</label>
     <div class="img-picker">
       <div class="img-preview" id="prev_${key}">${preview}</div>
@@ -1158,7 +1234,7 @@ function imagePickerHTML(key, label, current){
           <button type="button" class="btn sm ghost" data-imgclear="${key}">Retirer</button>
         </div>
         <input type="text" data-imgurl="${key}" placeholder="…ou coller une URL d'image" value="${current && !String(current).startsWith('data:') ? esc(current) : ""}">
-        <button type="button" class="btn sm ghost" data-imgfetch="${key}" style="align-self:flex-start">⤓ Récupérer depuis Discogs</button>
+        ${discogsBtn}
       </div>
     </div></div>`;
 }
@@ -1171,7 +1247,8 @@ function renderForm(v){
       <form id="vinylForm" autocomplete="off">
         ${sectionsHTML}
         <div class="form-section"><div class="section-title"><span class="ico">▣</span>Média</div><div class="form-grid">
-          ${imagePickerHTML("image_pochette", "Image pochette", data.image_pochette)}
+          ${imagePickerHTML("image_pochette", "Image pochette (recto)", data.image_pochette)}
+          ${imagePickerHTML("image_pochette_verso", "Image pochette (verso)", data.image_pochette_verso)}
           ${imagePickerHTML("image_vinyle", "Image du vinyle (optionnel)", data.image_vinyle)}
         </div></div>
         <div class="form-actions">
@@ -1215,7 +1292,7 @@ function renderForm(v){
   $$("[data-imgfetch]").forEach(btn => {
     btn.addEventListener("click", async () => {
       const key = btn.dataset.imgfetch;
-      if(!key.startsWith("image_pochette")) return;
+      if(key !== "image_pochette") return;
       const token = Settings.data.discogsToken;
       if(!token){ toast("Discogs", "Renseignez votre token dans les Paramètres ⚙︎", true); return; }
       const form = $("#vinylForm");
@@ -1317,7 +1394,10 @@ function telecharger(nomFichier, contenu, mime){
   setTimeout(() => URL.revokeObjectURL(url), 1500);
 }
 const CSV_COLUMNS = [
-  ["titre","Titre"],["artiste","Artiste"],["format","Format"],["genre","Genre"],
+  ["titre","Titre"],["artiste","Artiste"],["format","Format"],
+  ["format_double","Double album"],["format_gatefold","Gatefold"],
+  ["genre","Genre"],
+  ["enregistrement","Enregistrement"],
   ["annee_enregistrement","Année enregistrement"],["annee_impression","Année impression"],
   ["pays","Pays"],["label","Label"],["catalogue","N° catalogue"],["codebarres","Code-barres"],
     ["etat_disque","État disque"],["etat_pochette","État pochette"],["pressage","Pressage"],
@@ -1329,7 +1409,11 @@ const CSV_COLUMNS = [
 function csvEscape(val){ const s = String(val ?? ""); if(/[";\n\r]/.test(s)) return '"' + s.replace(/"/g, '""') + '"'; return s; }
 function buildCSV(items){
   const header = CSV_COLUMNS.map(c => csvEscape(c[1])).join(";");
-  const rows = items.map(v => CSV_COLUMNS.map(c => csvEscape(v[c[0]])).join(";"));
+  const rows = items.map(v => CSV_COLUMNS.map(c => {
+    const raw = v[c[0]];
+    if(typeof raw === "boolean") return raw ? "Oui" : "Non";
+    return csvEscape(raw);
+  }).join(";"));
   return "\uFEFF" + [header, ...rows].join("\r\n");
 }
 function buildPrintHTML(title, bodyHTML){
@@ -1377,21 +1461,39 @@ function fichePrintBody(v){
   const grid = GROUPS.map(g => {
     const items = g.fields.map(f => {
       let raw = v[f.key];
+      if(f.type === "checkbox") return "";
       if(raw === null || raw === undefined || raw === "" || f.key === "valeur_auto" || f.key === "valeur_manuelle") return "";
       if(f.key === "notes" || f.key === "particularites") return "";
       if(f.type === "date"){ const d = new Date(raw); raw = isNaN(d) ? raw : d.toLocaleDateString("fr-FR"); }
       if(f.key === "prix_achat") raw = fmtEuro(num(raw));
       return `<div class="item"><div class="k">${esc(f.label)}</div><div class="v">${esc(raw)}</div></div>`;
     }).filter(Boolean).join("");
-    if(!items) return "";
-    return `<h2>${esc(g.title)}</h2><div class="grid">${items}</div>`;
+    /* Ajout des options de format comme items visibles */
+    let extras = "";
+    if(g.id === "ident"){
+      const tags = formatTags(v);
+      if(tags.length){
+        extras = `<div class="item"><div class="k">Options de format</div><div class="v">${esc(tags.join(" · "))}</div></div>`;
+      }
+    }
+    if(!items && !extras) return "";
+    return `<h2>${esc(g.title)}</h2><div class="grid">${items}${extras}</div>`;
   }).join("");
   const extras = [];
   if(v.notes) extras.push(`<h2>Notes personnelles</h2><div class="notes">${esc(v.notes)}</div>`);
   if(v.particularites) extras.push(`<h2>Particularités</h2><div class="notes">${esc(v.particularites)}</div>`);
+  const metaLines = [
+    v.format,
+    v.format_double ? "Double album" : "",
+    v.format_gatefold ? "Gatefold" : "",
+    v.label,
+    v.annee_impression
+  ].filter(Boolean).map(esc).join("<br>");
   return `<div class="brand"><div><h1>${esc(v.titre || "Sans titre")}</h1><div class="sub">${esc(v.artiste || "")}</div></div>
-    <div class="meta">${v.format ? esc(v.format) + "<br>" : ""}${v.label ? esc(v.label) + "<br>" : ""}${v.annee_impression ? esc(v.annee_impression) : ""}</div></div>
-    <div class="cols"><div class="cover">${v.image_pochette ? `<img src="${esc(v.image_pochette)}" alt="">` : `<div class="ph">${esc(initiales(v.titre))}</div>`}
+    <div class="meta">${metaLines}</div></div>
+    <div class="cols"><div class="cover">
+      ${v.image_pochette ? `<img src="${esc(v.image_pochette)}" alt="">` : `<div class="ph">${esc(initiales(v.titre))}</div>`}
+      ${v.image_pochette_verso ? `<img src="${esc(v.image_pochette_verso)}" alt="Verso" style="margin-top:10px;width:100%;border:1px solid #c8c0aa;display:block">` : ""}
       <div class="val-box"><div class="k">Valeur estimée</div><div class="v">${valAff === null ? "—" : fmtEuro(valAff)}</div></div>
     </div><div class="main">${grid}${extras.join("")}</div></div>`;
 }
@@ -1399,7 +1501,7 @@ function collectionPrintBody(items){
   const total = items.reduce((s,v) => s + valeurEffective(v), 0);
   const rows = items.map(v => `<tr>
       <td>${esc(v.artiste || "")}</td><td><b>${esc(v.titre || "")}</b></td>
-      <td>${esc(v.format || "")}</td><td>${esc(v.annee_impression || "")}</td>
+      <td>${esc(formatBadge(v))}</td><td>${esc(v.annee_impression || "")}</td>
       <td>${esc(v.label || "")}</td><td>${esc(v.etat_disque || "")}</td>
       <td class="num">${valeurAffichee(v) === null ? "—" : fmtEuro(valeurAffichee(v))}</td>
     </tr>`).join("");
@@ -1435,12 +1537,19 @@ const App = {
       "#f_label":"label", "#f_pays":"pays", "#f_annee":"annee",
       "#f_etat_disque":"etat_disque", "#f_etat_pochette":"etat_pochette",
       "#f_pressage":"pressage", "#f_pressage_audio":"pressage_audio",
+      "#f_enregistrement":"enregistrement",
       "#f_vmin":"vmin", "#f_vmax":"vmax", "#f_rarete":"rarete"
     };
     Object.entries(mapFiltres).forEach(([sel, key]) => {
       const el = $(sel); if(!el) return;
       const handler = debounce(() => { State.filters[key] = el.value; this.refresh(false); }, key === "vmin" || key === "vmax" ? 380 : 0);
       el.addEventListener(el.tagName === "INPUT" ? "input" : "change", handler);
+    });
+    /* Cases à cocher « Double » / « Gatefold » */
+    ["f_double","f_gatefold"].forEach(id => {
+      const el = $("#" + id); if(!el) return;
+      const key = id === "f_double" ? "double" : "gatefold";
+      el.addEventListener("change", () => { State.filters[key] = el.checked; this.refresh(false); });
     });
     $("#btnResetFilters").addEventListener("click", () => this.resetFilters());
     $("#sortSelect").addEventListener("change", e => { State.sort = e.target.value; this.refresh(false); });
@@ -1477,11 +1586,13 @@ const App = {
   setView(v){ State.view = v; $("#viewGrid").classList.toggle("on", v === "grid"); $("#viewList").classList.toggle("on", v === "list"); renderLibrary(); },
   refresh(full = true){ applyFilters(); if(full) renderFilterOptions(); renderStats(); renderDashboard(); renderLibrary(); updateFilterBadge(); },
   resetFilters(){
-    State.filters = { q:"", artiste:"", genre:"", format:"", label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", vmin:"", vmax:"", rarete:"" };
+    State.filters = { q:"", artiste:"", genre:"", format:"", double:false, gatefold:false, label:"", pays:"", annee:"", etat_disque:"", etat_pochette:"", pressage:"", pressage_audio:"", enregistrement:"", vmin:"", vmax:"", rarete:"" };
     $("#globalSearch").value = "";
-       ["#f_artiste","#f_genre","#f_format","#f_label","#f_pays","#f_annee",
+    ["#f_artiste","#f_genre","#f_format","#f_label","#f_pays","#f_annee",
      "#f_etat_disque","#f_etat_pochette","#f_pressage","#f_pressage_audio",
+     "#f_enregistrement",
      "#f_vmin","#f_vmax","#f_rarete"].forEach(sel => { const el = $(sel); if(el) el.value = ""; });
+    ["#f_double","#f_gatefold"].forEach(sel => { const el = $(sel); if(el) el.checked = false; });
     this.refresh(false);
   },
   openDetail(id){
@@ -1493,17 +1604,28 @@ const App = {
   openForm(id){
     const v = id ? State.vinyles.find(x => x.id === id) : null;
     State.editingId = id;
-    State.formImages = { image_pochette: v ? (v.image_pochette || null) : null, image_vinyle: v ? (v.image_vinyle || null) : null };
+    State.formImages = {
+      image_pochette:       v ? (v.image_pochette || null) : null,
+      image_pochette_verso: v ? (v.image_pochette_verso || null) : null,
+      image_vinyle:         v ? (v.image_vinyle || null) : null
+    };
     if($("#detailOverlay").classList.contains("open")) this.closeDetail();
     renderForm(v);
     $("#formOverlay").classList.add("open"); document.body.style.overflow = "hidden"; $("#formOverlay").scrollTop = 0;
     setTimeout(() => { const t = $("#fld_titre"); if(t) t.focus(); }, 120);
   },
-  closeForm(){ $("#formOverlay").classList.remove("open"); document.body.style.overflow = ""; State.editingId = null; State.formImages = { image_pochette:null, image_vinyle:null }; },
+  closeForm(){ $("#formOverlay").classList.remove("open"); document.body.style.overflow = ""; State.editingId = null; State.formImages = { image_pochette:null, image_pochette_verso:null, image_vinyle:null }; },
   readForm(){
     const form = $("#vinylForm"); if(!form) return null;
     const data = {};
-    $$("[data-key]", form).forEach(el => { const k = el.dataset.key; let val = el.value; if(el.type === "number"){ val = val === "" ? null : num(val); } else { val = val.trim(); } data[k] = val; });
+    $$("[data-key]", form).forEach(el => {
+      const k = el.dataset.key;
+      let val;
+      if(el.type === "checkbox"){ val = el.checked; }
+      else if(el.type === "number"){ val = el.value === "" ? null : num(el.value); }
+      else { val = el.value.trim(); }
+      data[k] = val;
+    });
     MEDIA_FIELDS.forEach(mf => { data[mf.key] = State.formImages[mf.key] || null; });
     return data;
   },
@@ -1609,7 +1731,7 @@ const App = {
     setTimeout(() => document.addEventListener("mousedown", close), 0);
   },
   exportJSON(){
-    const payload = { app: "Vinyl Archive – Jacques Edition", version: 1, exporte_le: new Date().toISOString(), nombre: State.vinyles.length, vinyles: State.vinyles };
+    const payload = { app: "Vinyl Archive – Jacques Edition", version: 2, exporte_le: new Date().toISOString(), nombre: State.vinyles.length, vinyles: State.vinyles };
     telecharger(`vinyl-archive-jacques-${aujourdhuiISO()}.json`, JSON.stringify(payload, null, 2), "application/json;charset=utf-8");
     toast("Export JSON", `${State.vinyles.length} fiche(s) exportée(s)`);
   },
@@ -1671,14 +1793,17 @@ const App = {
   async loadExample(){
     const now = new Date().toISOString();
     const exemple = {
-      id: uid(), titre: "Kind of Blue", artiste: "Miles Davis", format: "33T", genre: "Jazz",
+      id: uid(), titre: "Kind of Blue", artiste: "Miles Davis", format: "33T",
+      format_double: false, format_gatefold: true,
+      enregistrement: "Studio",
+      genre: "Jazz",
       annee_enregistrement: 1959, annee_impression: 1959, pays: "USA", label: "Columbia",
       catalogue: "CL 1355", codebarres: "", etat_disque: "VG+", etat_pochette: "VG",
       pressage: "1st Press", couleur_vinyle: "Noir", rarete: "Rare",
       particularites: "Original inner sleeve, sticker promo",
       notes: "Son exceptionnel. Enregistré en deux sessions seulement, une légende.",
       date_achat: "2019-06-14", prix_achat: 85, valeur_auto: 180, valeur_manuelle: 200,
-      image_pochette: null, image_vinyle: null,
+      image_pochette: null, image_pochette_verso: null, image_vinyle: null,
       historique_prix: [{ date: now, valeur: 200, devise: "EUR" }],
       date_ajout: now, date_modif: now
     };
@@ -1871,7 +1996,6 @@ document.addEventListener("DOMContentLoaded", () => App.init());
 window.App = App;
 /* ═══════════════════════════════════════════════════════════════════
    FILTRE ALPHABÉTIQUE A → Z
-   Insère une barre de lettres au-dessus de la bibliothèque.
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   function initAlphaBar(){
@@ -1881,20 +2005,17 @@ window.App = App;
     }
     if(document.getElementById("alphaBar")) return;
 
-    /* ─── 1. Création de la barre ─── */
     const LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     const bar = document.createElement("div");
     bar.className = "alpha-bar";
     bar.id = "alphaBar";
 
-    /* Bouton "Tous" */
     const btnAll = document.createElement("button");
     btnAll.className = "alpha-btn active";
     btnAll.dataset.letter = "";
     btnAll.textContent = "Tous";
     bar.appendChild(btnAll);
 
-    /* Lettres A→Z */
     LETTERS.forEach(l => {
       const b = document.createElement("button");
       b.className = "alpha-btn";
@@ -1903,19 +2024,16 @@ window.App = App;
       bar.appendChild(b);
     });
 
-    /* Bouton "#" (chiffres, symboles) */
     const bSharp = document.createElement("button");
     bSharp.className = "alpha-btn";
     bSharp.dataset.letter = "#";
     bSharp.textContent = "#";
     bar.appendChild(bSharp);
 
-    /* Insertion juste avant la bibliothèque */
     const library = document.getElementById("library");
     if(!library) return;
     library.parentNode.insertBefore(bar, library);
 
-    /* ─── 2. Style CSS ─── */
     const style = document.createElement("style");
     style.textContent = `
       .alpha-bar{
@@ -1969,16 +2087,13 @@ window.App = App;
     `;
     document.head.appendChild(style);
 
-    /* ─── 3. Met à jour l'état (actif/inactif) des lettres ─── */
     function updateLetterStates(){
-      /* Cache la barre si collection vide */
       if(!State.vinyles.length){
         bar.style.display = "none";
         return;
       }
       bar.style.display = "flex";
 
-      /* Détecte les premières lettres utilisées */
       const used = {};
       State.vinyles.forEach(v => {
         const name = (v.artiste || v.titre || "").trim();
@@ -1991,27 +2106,22 @@ window.App = App;
 
       bar.querySelectorAll(".alpha-btn").forEach(btn => {
         const l = btn.dataset.letter;
-        if(l === "") return; /* "Tous" toujours actif */
+        if(l === "") return;
         if(used[l]) btn.classList.remove("disabled");
         else btn.classList.add("disabled");
       });
     }
 
-    /* ─── 4. Clic sur une lettre ─── */
     bar.addEventListener("click", e => {
       const btn = e.target.closest(".alpha-btn");
       if(!btn || btn.classList.contains("disabled")) return;
-
       const letter = btn.dataset.letter;
-
       bar.querySelectorAll(".alpha-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
-
       State.filters.alpha = letter;
       if(App.refresh) App.refresh(false);
     });
 
-    /* ─── 5. Filtrage ─── */
     State.filters.alpha = "";
     const originalApplyFilters = window.applyFilters;
     window.applyFilters = function(){
@@ -2029,14 +2139,12 @@ window.App = App;
       }
     };
 
-    /* ─── 6. Met à jour l'état après chaque rendu ─── */
     const originalRenderLibrary = window.renderLibrary;
     window.renderLibrary = function(){
       originalRenderLibrary();
       updateLetterStates();
     };
 
-    /* ─── 7. Reset global ─── */
     const originalResetFilters = App.resetFilters;
     App.resetFilters = function(){
       originalResetFilters.call(this);
@@ -2046,7 +2154,6 @@ window.App = App;
       if(allBtn) allBtn.classList.add("active");
     };
 
-    /* ─── 8. État initial ─── */
     updateLetterStates();
 
     console.log("%c🔤 Filtre alphabétique activé", "color:#C9A86A;font-weight:bold");
@@ -2060,7 +2167,6 @@ window.App = App;
 })();
 /* ═══════════════════════════════════════════════════════════════════
    WISHLIST — Possédé / Recherché
-   S'ajoute au code existant sans le modifier.
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   function initWishlist(){
@@ -2069,10 +2175,8 @@ window.App = App;
       return;
     }
 
-    /* ─── 1. Constantes ─── */
     const STATUTS = ["Possédé", "Recherché"];
 
-    /* ─── 2. Ajoute le champ « Statut » dans la section Identification ─── */
     const identGroup = GROUPS.find(g => g.id === "ident");
     if(identGroup && !identGroup.fields.some(f => f.key === "statut")){
       identGroup.fields.unshift({
@@ -2083,7 +2187,6 @@ window.App = App;
       });
     }
 
-    /* ─── 3. Ajoute le champ « Prix cible » dans la section Valeur ─── */
     const valeurGroup = GROUPS.find(g => g.id === "valeur");
     if(valeurGroup && !valeurGroup.fields.some(f => f.key === "prix_cible")){
       valeurGroup.fields.push({
@@ -2094,7 +2197,6 @@ window.App = App;
       });
     }
 
-    /* ─── 4. Ajoute les colonnes au CSV ─── */
     if(typeof CSV_COLUMNS !== "undefined"){
       if(!CSV_COLUMNS.some(c => c[0] === "statut")){
         CSV_COLUMNS.unshift(["statut", "Statut"]);
@@ -2105,7 +2207,6 @@ window.App = App;
       }
     }
 
-    /* ─── 5. Statut par défaut « Possédé » ─── */
     const originalReadForm = App.readForm;
     App.readForm = function(){
       const data = originalReadForm.call(this);
@@ -2113,7 +2214,6 @@ window.App = App;
       return data;
     };
 
-    /* ─── 6. Badge sur les cartes de la bibliothèque ─── */
     const originalRenderLibrary = window.renderLibrary;
     window.renderLibrary = function(){
       originalRenderLibrary();
@@ -2134,7 +2234,6 @@ window.App = App;
       });
     };
 
-    /* ─── 7. Tag dans la fiche détail ─── */
     const originalRenderDetail = window.renderDetail;
     window.renderDetail = function(v){
       originalRenderDetail(v);
@@ -2149,7 +2248,6 @@ window.App = App;
       }
     };
 
-    /* ─── 8. Ajout du filtre Statut dans le panneau ─── */
     const filtersGrid = document.querySelector('.filters-grid');
     if(filtersGrid && !document.getElementById('f_statut')){
       const div = document.createElement('div');
@@ -2166,7 +2264,6 @@ window.App = App;
       }
     }
 
-    /* ─── 9. Filtrage par statut ─── */
     State.filters.statut = "";
     const originalApplyFilters = window.applyFilters;
     window.applyFilters = function(){
@@ -2177,7 +2274,6 @@ window.App = App;
       }
     };
 
-    /* ─── 10. Reset des filtres inclut le statut ─── */
     const originalResetFilters = App.resetFilters;
     App.resetFilters = function(){
       originalResetFilters.call(this);
@@ -2186,7 +2282,6 @@ window.App = App;
       State.filters.statut = "";
     };
 
-    /* ─── 11. Style CSS ─── */
     const style = document.createElement('style');
     style.textContent = `
       .badge-wishlist{
@@ -2216,9 +2311,13 @@ window.App = App;
   }
 
   if(document.readyState === "loading"){
-    /* ═══════════════════════════════════════════════════════════════════
+    document.addEventListener("DOMContentLoaded", initWishlist);
+  } else {
+    initWishlist();
+  }
+})();
+/* ═══════════════════════════════════════════════════════════════════
    SAUVEGARDE AUTOMATIQUE HEBDOMADAIRE
-   Génère un fichier JSON tous les 7 jours + badge dans la topbar.
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   function initBackup(){
@@ -2233,7 +2332,6 @@ window.App = App;
     const INTERVAL_DAYS = 7;
     const INTERVAL_MS = INTERVAL_DAYS * 24 * 60 * 60 * 1000;
 
-    /* ─── 1. Fonction de sauvegarde ─── */
     function doBackup(isAuto){
       if(!State.vinyles.length){
         if(!isAuto) console.log("Sauvegarde ignorée : collection vide");
@@ -2242,7 +2340,7 @@ window.App = App;
       const now = new Date();
       const payload = {
         app: "Vinyl Archive – Jacques Edition",
-        version: 1.1,
+        version: 2,
         exporte_le: now.toISOString(),
         sauvegarde_auto: !!isAuto,
         nombre: State.vinyles.length,
@@ -2267,7 +2365,6 @@ window.App = App;
       return true;
     }
 
-    /* ─── 2. Vérifie si une sauvegarde est due ─── */
     function isBackupDue(){
       let last = 0;
       try {
@@ -2277,7 +2374,6 @@ window.App = App;
       return (Date.now() - last) >= INTERVAL_MS;
     }
 
-    /* ─── 3. Calcul des jours restants ─── */
     function daysUntilNext(){
       let last = 0;
       try {
@@ -2289,7 +2385,6 @@ window.App = App;
       return Math.ceil(diff / (24 * 60 * 60 * 1000));
     }
 
-    /* ─── 4. Badge dans la topbar ─── */
     function createBadge(){
       if(document.getElementById("btnBackup")) return;
       const actions = document.querySelector(".top-actions");
@@ -2330,11 +2425,9 @@ window.App = App;
       }
     }
 
-    /* ─── 5. Vérification au démarrage ─── */
     function checkOnStartup(){
       if(!State.vinyles.length) return;
       if(isBackupDue()){
-        /* Délai de 3 secondes pour laisser l'appli s'initialiser complètement */
         setTimeout(() => {
           doBackup(true);
         }, 3000);
@@ -2343,14 +2436,12 @@ window.App = App;
       }
     }
 
-    /* ─── 6. Mise à jour du badge à chaque refresh ─── */
     const originalRefresh = App.refresh;
     App.refresh = function(full){
       originalRefresh.call(this, full);
       updateBadge();
     };
 
-    /* ─── 7. Initialisation ─── */
     createBadge();
     setTimeout(checkOnStartup, 1500);
 
@@ -2363,14 +2454,8 @@ window.App = App;
     initBackup();
   }
 })();
-    document.addEventListener("DOMContentLoaded", initWishlist);
-  } else {
-    initWishlist();
-  }
-})();
 /* ═══════════════════════════════════════════════════════════════════
    NOTATION ÉTOILES (1 à 5)
-   Ajoute une notation par étoiles avec affichage et filtre.
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   function initStars(){
@@ -2381,7 +2466,6 @@ window.App = App;
     if(window.__starsInit) return;
     window.__starsInit = true;
 
-    /* ─── 1. Champ "note" dans la section Identification ─── */
     const identGroup = GROUPS.find(g => g.id === "ident");
     if(identGroup && !identGroup.fields.some(f => f.key === "note")){
       identGroup.fields.push({
@@ -2393,13 +2477,11 @@ window.App = App;
       });
     }
 
-    /* ─── 2. Colonne CSV ─── */
     if(typeof CSV_COLUMNS !== "undefined" && !CSV_COLUMNS.some(c => c[0] === "note")){
       const idx = CSV_COLUMNS.findIndex(c => c[0] === "rarete");
       if(idx >= 0) CSV_COLUMNS.splice(idx + 1, 0, ["note", "Note"]);
     }
 
-    /* ─── 3. Rendu des étoiles (HTML) ─── */
     function starsHTML(value, size){
       const v = Math.max(0, Math.min(5, parseInt(value, 10) || 0));
       const s = size === "sm" ? "font-size:11px" : "";
@@ -2411,14 +2493,12 @@ window.App = App;
       return html;
     }
 
-    /* ─── 4. Injecte les étoiles cliquables dans le formulaire ─── */
     const originalRenderForm = window.renderForm;
     window.renderForm = function(v){
       originalRenderForm(v);
       const inputNote = document.querySelector('#vinylForm [data-key="note"]');
       if(!inputNote) return;
 
-      /* Remplace le champ texte par une rangée d'étoiles cliquables */
       const container = inputNote.parentNode;
       const current = v ? (parseInt(v.note, 10) || 0) : 0;
 
@@ -2459,7 +2539,6 @@ window.App = App;
         if(!star) return;
         const clicked = parseInt(star.dataset.star, 10);
         const currentVal = parseInt(picker.dataset.value, 10) || 0;
-        /* Si on clique sur la même étoile que la note actuelle → annule */
         const newVal = (clicked === currentVal) ? 0 : clicked;
 
         picker.dataset.value = String(newVal);
@@ -2481,7 +2560,6 @@ window.App = App;
       });
     };
 
-    /* ─── 5. Affichage des étoiles sur les cartes ─── */
     const originalRenderLibrary = window.renderLibrary;
     window.renderLibrary = function(){
       originalRenderLibrary();
@@ -2504,7 +2582,6 @@ window.App = App;
       });
     };
 
-    /* ─── 6. Affichage dans la fiche détail ─── */
     const originalRenderDetail = window.renderDetail;
     window.renderDetail = function(v){
       originalRenderDetail(v);
@@ -2522,7 +2599,6 @@ window.App = App;
       head.appendChild(div);
     };
 
-    /* ─── 7. Filtre "Note" dans le panneau ─── */
     const filtersGrid = document.querySelector('.filters-grid');
     if(filtersGrid && !document.getElementById('f_note')){
       const div = document.createElement('div');
@@ -2549,7 +2625,6 @@ window.App = App;
       }
     }
 
-    /* ─── 8. Filtrage par note ─── */
     State.filters.note = "";
     const originalApplyFilters = window.applyFilters;
     window.applyFilters = function(){
@@ -2566,7 +2641,6 @@ window.App = App;
       }
     };
 
-    /* ─── 9. Reset global inclut la note ─── */
     const originalResetFilters = App.resetFilters;
     App.resetFilters = function(){
       originalResetFilters.call(this);
@@ -2575,10 +2649,8 @@ window.App = App;
       State.filters.note = "";
     };
 
-    /* ─── 10. Style CSS ─── */
     const style = document.createElement('style');
     style.textContent = `
-      /* Étoiles en lecture */
       .stars{ font-size:13px; letter-spacing:1px; line-height:1; }
       .stars .star, .stars .off{ color:#C9A86A; }
       .stars .off{ color:rgba(245,242,233,.14); }
@@ -2598,8 +2670,6 @@ window.App = App;
         letter-spacing:.14em; text-transform:uppercase;
         color:var(--creme-faint);
       }
-
-      /* Étoiles cliquables dans le formulaire */
       .star-picker{
         display:flex; align-items:center; gap:4px;
         padding:8px 12px;
@@ -2631,7 +2701,6 @@ window.App = App;
         cursor:pointer;
       }
       .star-clear:hover{ color:#d98c8c; background:rgba(166,58,58,.14); opacity:1; }
-
       @media (max-width:760px){
         .star-pick{ font-size:19px; }
       }
@@ -2647,11 +2716,151 @@ window.App = App;
     initStars();
   }
 })();
+/* ═══════════════════════════════════════════════════════════════════
+   DATE D'ACHAT FLEXIBLE
+   ═══════════════════════════════════════════════════════════════════ */
+(function(){
+  function initDateFlex(){
+    if(typeof GROUPS === "undefined" || typeof App === "undefined"){
+      setTimeout(initDateFlex, 200);
+      return;
+    }
+    if(window.__dateFlexInit) return;
+    window.__dateFlexInit = true;
+
+    const valeurGroup = GROUPS.find(g => g.id === "valeur");
+    const dateField = valeurGroup ? valeurGroup.fields.find(f => f.key === "date_achat") : null;
+
+    function displayDateAchat(raw){
+      if(!raw) return "";
+      const s = String(raw).trim();
+      if(/^\d{4}$/.test(s)) return s;
+      if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
+        const [y, m, d] = s.split("-");
+        const date = new Date(parseInt(y,10), parseInt(m,10)-1, parseInt(d,10));
+        if(!isNaN(date.getTime())){
+          return date.toLocaleDateString("fr-FR", {day:"numeric", month:"long", year:"numeric"});
+        }
+      }
+      if(/^\d{4}-\d{2}$/.test(s)){
+        const [y, m] = s.split("-");
+        const MOIS = ["janvier","février","mars","avril","mai","juin",
+                     "juillet","août","septembre","octobre","novembre","décembre"];
+        const idx = parseInt(m,10) - 1;
+        if(idx >= 0 && idx < 12) return MOIS[idx] + " " + y;
+      }
+      if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)){
+        const [d, m, y] = s.split("/");
+        const date = new Date(parseInt(y,10), parseInt(m,10)-1, parseInt(d,10));
+        if(!isNaN(date.getTime())){
+          return date.toLocaleDateString("fr-FR", {day:"numeric", month:"long", year:"numeric"});
+        }
+      }
+      if(/^\d{1,2}\/\d{4}$/.test(s)){
+        const [m, y] = s.split("/");
+        const MOIS = ["janvier","février","mars","avril","mai","juin",
+                     "juillet","août","septembre","octobre","novembre","décembre"];
+        const idx = parseInt(m,10) - 1;
+        if(idx >= 0 && idx < 12) return MOIS[idx] + " " + y;
+      }
+      return s;
+    }
+    window.displayDateAchat = displayDateAchat;
+
+    function normalizeDateAchat(raw){
+      const s = String(raw || "").trim();
+      if(!s) return "";
+      if(/^\d{4}$/.test(s)) return s;
+      if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+      if(/^\d{4}-\d{2}$/.test(s)) return s;
+      if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)){
+        const [d, m, y] = s.split("/");
+        return y + "-" + String(m).padStart(2,"0") + "-" + String(d).padStart(2,"0");
+      }
+      if(/^\d{1,2}\/\d{4}$/.test(s)){
+        const [m, y] = s.split("/");
+        return y + "-" + String(m).padStart(2,"0");
+      }
+      return s;
+    }
+
+    const originalRenderForm = window.renderForm;
+    window.renderForm = function(v){
+      const rawValue = v ? (v.date_achat || "") : "";
+      originalRenderForm(v);
+      const input = document.querySelector('#vinylForm [data-key="date_achat"]');
+      if(input){
+        input.type = "text";
+        input.value = rawValue;
+        input.placeholder = "1973 · 06/1973 · 14/06/1973";
+        input.setAttribute("autocomplete", "off");
+        input.title = "Année seule acceptée si vous ne vous souvenez pas du jour exact";
+        const wrapper = input.parentNode;
+        if(wrapper && !wrapper.querySelector('.date-hint')){
+          const hint = document.createElement('div');
+          hint.className = 'date-hint';
+          hint.style.cssText = 'font-size:10.5px;color:var(--creme-faint);margin-top:5px;font-style:italic;line-height:1.4;';
+          hint.textContent = '💡 Année seule acceptée (ex. 1973) — pas besoin du jour exact.';
+          wrapper.appendChild(hint);
+        }
+      }
+    };
+
+    const originalReadForm = App.readForm;
+    App.readForm = function(){
+      const data = originalReadForm.call(this);
+      if(data && data.date_achat){
+        data.date_achat = normalizeDateAchat(data.date_achat);
+      }
+      return data;
+    };
+
+    const originalRenderDetail = window.renderDetail;
+    window.renderDetail = function(v){
+      originalRenderDetail(v);
+      if(!v.date_achat) return;
+      const display = displayDateAchat(v.date_achat);
+      const items = document.querySelectorAll('#detailModal .data-item');
+      for(const item of items){
+        const k = item.querySelector('.k');
+        if(k && /date\s*d'achat/i.test(k.textContent)){
+          const vEl = item.querySelector('.v');
+          if(vEl) vEl.textContent = display;
+          break;
+        }
+      }
+    };
+
+    if(typeof window.fichePrintBody === "function"){
+      const originalFichePrintBody = window.fichePrintBody;
+      window.fichePrintBody = function(v){
+        const copy = Object.assign({}, v);
+        if(copy.date_achat){
+          copy.date_achat = displayDateAchat(copy.date_achat);
+        }
+        const origType = dateField ? dateField.type : null;
+        if(dateField) dateField.type = "text";
+        try {
+          return originalFichePrintBody(copy);
+        } finally {
+          if(dateField && origType !== null) dateField.type = origType;
+        }
+      };
+    }
+
+    console.log("%c📅 Date d'achat flexible activée (année / mois / jour)", "color:#C9A86A;font-weight:bold");
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", initDateFlex);
+  } else {
+    initDateFlex();
+  }
+})();
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════
      PAGE DE PRÉSENTATION — Disquaire vintage + voix d'accueil
-     Affichée À CHAQUE ouverture (aucun drapeau localStorage)
      ═══════════════════════════════════════════════════════════ -->
 <div id="welcomePage" class="welcome-page" aria-hidden="false">
   <div class="welcome-inner">
@@ -2861,41 +3070,27 @@ window.App = App;
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    PAGE DE PRÉSENTATION + VOIX D'ACCUEIL
-   Accepte : base64 complet, base64 multiligne, ou URL distante
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
-
-  /* ─────────────────────────────────────────────────────────
-     ▶▶▶ COLLEZ VOTRE BASE64 ICI (entre les guillemets) ◀◀◀
-     Le code nettoie automatiquement les espaces et retours
-     à la ligne — vous pouvez coller la chaîne telle quelle,
-     même si elle s'affiche sur plusieurs lignes.
-     ───────────────────────────────────────────────────────── */
   const VOICE_DATA_URI = "https://ia601902.us.archive.org/21/items/intro_20261013/intro.mp3";
-
-  /* Texte de secours si aucune source audio n'est trouvée */
   const TEXTE_SECOURS = "Bienvenue dans Vinyl Archive, édition Jacques. Votre collection vous attend.";
 
-  /* ─── Récupération des éléments DOM ─── */
   const page        = document.getElementById("welcomePage");
   const btnEnter    = document.getElementById("welcomeEnter");
   const btnSkip     = document.getElementById("welcomeSkip");
   const audioStatus = document.getElementById("audioStatus");
   if(!page) return;
 
-  /* ─── Nettoyage de la chaîne (espaces + retours à la ligne) ─── */
   const sourceNettoyee = String(VOICE_DATA_URI || "")
-    .replace(/\s+/g, "")          // supprime tous les espaces, tabulations, retours
-    .replace(/^["']|["']$/g, ""); // supprime d'éventuels guillemets résiduels
+    .replace(/\s+/g, "")
+    .replace(/^["']|["']$/g, "");
 
-  /* ─── Détection automatique : base64 ou URL ? ─── */
   const isBase64 = sourceNettoyee.indexOf("data:audio") === 0;
   const isURL    = /^https?:\/\//i.test(sourceNettoyee);
   const sourceValide = sourceNettoyee !== "" &&
                        sourceNettoyee !== "COLLEZ_VOTRE_BASE64_ICI" &&
                        (isBase64 || isURL);
 
-  /* ─── Préparation de l'élément audio ─── */
   const audioEl = new Audio();
   audioEl.preload = "auto";
   audioEl.volume = 1.0;
@@ -2917,7 +3112,6 @@ window.App = App;
     );
   }
 
-  /* ─── Indicateur visuel pendant la lecture ─── */
   audioEl.addEventListener("play", () => {
     if(audioStatus){
       audioStatus.textContent = "Voix d'accueil en cours…";
@@ -2935,7 +3129,6 @@ window.App = App;
     lancerVoixSynthese();
   });
 
-  /* ─── Voix de synthèse (secours) ─── */
   function lancerVoixSynthese(){
     if(!("speechSynthesis" in window)){
       if(audioStatus) audioStatus.textContent = "Aucune voix disponible";
@@ -2968,7 +3161,6 @@ window.App = App;
     }
   }
 
-  /* ─── Lancement de la voix (fichier prioritaire, sinon synthèse) ─── */
   function lancerVoix(){
     if(!sourceValide){
       lancerVoixSynthese();
@@ -2984,7 +3176,6 @@ window.App = App;
     }
   }
 
-  /* ─── Fermeture de la page de présentation ─── */
   function dismiss(){
     try { audioEl.pause(); } catch(e){}
     if("speechSynthesis" in window) window.speechSynthesis.cancel();
@@ -2996,40 +3187,32 @@ window.App = App;
     }, 500);
   }
 
-  /* ─── Bouton "Entrer dans la collection" ─── */
   btnEnter?.addEventListener("click", () => {
     lancerVoix();
-    /* On attend la fin de la lecture avant de fermer */
     if(sourceValide && isFinite(audioEl.duration) && audioEl.duration > 0){
       const duree = audioEl.duration * 1000;
       setTimeout(dismiss, Math.min(duree + 400, 12000));
     } else {
-      /* Si la durée n'est pas encore connue, on ferme après un délai raisonnable */
       setTimeout(dismiss, 3500);
     }
   });
 
-  /* ─── Bouton "Ne plus afficher pour cette session" ─── */
   btnSkip?.addEventListener("click", dismiss);
 
-  /* ─── Raccourcis clavier ─── */
   document.addEventListener("keydown", e => {
     if(page.classList.contains("hide")) return;
     if(e.key === "Enter"){ e.preventDefault(); btnEnter?.click(); }
     if(e.key === "Escape"){ dismiss(); }
   });
 
-  /* ─── Réaffichage manuel depuis la console ─── */
   window.showWelcome = () => {
     page.classList.remove("hide");
     page.setAttribute("aria-hidden", "false");
   };
-
 })();
 
 /* ═══════════════════════════════════════════════════════════════════
-   MODE D'EMPLOI INTÉGRÉ — Version complète
-   Consultable via le bouton "?" de la topbar ou la touche H.
+   MODE D'EMPLOI INTÉGRÉ
    ═══════════════════════════════════════════════════════════════════ */
 (function(){
   function initHelp(){
@@ -3045,7 +3228,7 @@ window.App = App;
           <h3>Première utilisation</h3>
           <ol>
             <li>Cliquez sur <strong>« + Nouveau vinyle »</strong> pour ajouter votre premier disque.</li>
-            <li>Remplissez au minimum le <strong>Titre</strong> et l'<strong>Artiste</strong> — les deux seuls champs obligatoires.</li>
+            <li>Remplissez au minimum le <strong>Titre</strong> et l'<strong>Artiste</strong>.</li>
             <li>Enregistrez : la fiche apparaît dans la bibliothèque.</li>
           </ol>
           <h3>Configurer Discogs (recommandé)</h3>
@@ -3056,7 +3239,6 @@ window.App = App;
             <li>Cliquez sur <strong>« Generate new token »</strong> et copiez le code.</li>
             <li>Dans l'appli, cliquez sur <strong>⚙︎ Paramètres</strong> et collez le token.</li>
           </ol>
-          <p class="tip">💡 Sans token Discogs, tout fonctionne — vous chargez juste les pochettes manuellement.</p>
         `
       },
       {
@@ -3067,12 +3249,14 @@ window.App = App;
           <p>Le formulaire est organisé en <strong>5 sections</strong> :</p>
           <h3>1. Identification</h3>
           <ul>
-            <li><strong>Statut</strong> — Possédé ou Recherché (voir section Wishlist)</li>
+            <li><strong>Statut</strong> — Possédé ou Recherché</li>
             <li><strong>Titre</strong> et <strong>Artiste</strong> — obligatoires</li>
-            <li><strong>Format</strong> — 33T, 45T, 78T, 10" 33T, 10" 45T, Maxi, Picture Disc…</li>
+            <li><strong>Format</strong> — 33T, 45T, 78T, Maxi…</li>
+            <li><strong>Double album</strong> et <strong>Pochette gatefold</strong> — cases à cocher indépendantes</li>
+            <li><strong>Enregistrement</strong> — Studio, Live ou Démo</li>
             <li><strong>Genre</strong>, <strong>Année d'enregistrement</strong>, <strong>Année d'impression</strong></li>
             <li><strong>Pays</strong>, <strong>Label</strong>, <strong>N° catalogue</strong>, <strong>Code-barres</strong></li>
-            <li><strong>Note personnelle</strong> — notation par étoiles (voir section dédiée)</li>
+            <li><strong>Note personnelle</strong> — notation par étoiles</li>
           </ul>
           <h3>2. État & Conservation</h3>
           <p>État du disque et de la pochette : Mint, Near Mint, VG+, VG, G, Poor.</p>
@@ -3080,19 +3264,19 @@ window.App = App;
           <ul>
             <li><strong>Pressage</strong> — 1st Press, Repress, Remastered, Limited…</li>
             <li><strong>Pressage audio</strong> — Mono, Stéréo, Mono / Stéréo, Inconnu</li>
-            <li><strong>Couleur du vinyle</strong> — Noir, Rouge translucide, etc.</li>
-            <li><strong>Rareté</strong> — Courant, Peu courant, Rare, Très rare, Collector</li>
-            <li><strong>Particularités</strong> — insert, poster, sticker, édition promo…</li>
-            <li><strong>Notes personnelles</strong> — pavé texte libre</li>
+            <li><strong>Couleur du vinyle</strong></li>
+            <li><strong>Rareté</strong></li>
+            <li><strong>Particularités</strong></li>
+            <li><strong>Notes personnelles</strong></li>
           </ul>
           <h3>4. Acquisition & Valeur</h3>
           <ul>
-            <li><strong>Date d'achat</strong> — année seule acceptée (voir section Date flexible)</li>
+            <li><strong>Date d'achat</strong> — année seule acceptée</li>
             <li><strong>Prix d'achat</strong>, <strong>Valeur manuelle</strong>, <strong>Valeur auto</strong></li>
-            <li><strong>Prix cible</strong> — pour les vinyles de la wishlist</li>
+            <li><strong>Prix cible</strong> — pour la wishlist</li>
           </ul>
           <h3>5. Média</h3>
-          <p>Pochette recto, pochette verso, vinyle : par fichier local, URL, ou récupération Discogs.</p>
+          <p>Pochette recto, <strong>pochette verso</strong>, vinyle : par fichier local, URL, ou récupération Discogs (recto uniquement).</p>
         `
       },
       {
@@ -3101,23 +3285,20 @@ window.App = App;
         icon: "🔍",
         content: `
           <h3>Barre de recherche</h3>
-          <p>En haut, tapez n'importe quel mot : titre, artiste, label, catalogue, membre, lieu de stockage… La recherche est <strong>instantanée</strong> et insensible aux accents.</p>
+          <p>Recherche instantanée sur tous les champs, y compris « double » et « gatefold ».</p>
           <h3>Panneau de filtres</h3>
-          <p>Cliquez sur <strong>« Filtres »</strong> pour ouvrir les options avancées :</p>
           <ul>
             <li>Artiste, Genre, Format, Label, Pays</li>
+            <li><strong>Double album uniquement</strong>, <strong>Gatefold uniquement</strong> (cases à cocher)</li>
             <li>Année d'impression, État disque, État pochette</li>
-            <li>Pressage (édition), Pressage audio (Mono / Stéréo)</li>
+            <li>Pressage, Pressage audio, <strong>Enregistrement</strong> (Studio / Live / Démo)</li>
             <li><strong>Statut</strong> — Possédé / Recherché</li>
-            <li><strong>Note</strong> — 1★ à 5★, ou « Non noté »</li>
+            <li><strong>Note</strong> — 1★ à 5★</li>
             <li>Valeur minimum / maximum</li>
             <li>Rareté</li>
           </ul>
-          <p class="tip">💡 Les filtres se <strong>cumulent</strong> : cochez plusieurs critères pour affiner.</p>
           <h3>Filtre alphabétique A → Z</h3>
-          <p>Une barre de lettres au-dessus de la bibliothèque. Cliquez sur une lettre pour n'afficher que les artistes commençant par cette lettre. La lettre <strong>« # »</strong> regroupe les chiffres et symboles. Les lettres <strong>grisées</strong> n'ont aucun vinyle associé.</p>
-          <h3>Tri</h3>
-          <p>Menu déroulant en haut à droite : par ajout récent, valeur, rareté, année, artiste, titre, format.</p>
+          <p>Barre de lettres au-dessus de la bibliothèque.</p>
         `
       },
       {
@@ -3125,23 +3306,14 @@ window.App = App;
         title: "Consulter une fiche",
         icon: "◇",
         content: `
-          <p>Cliquez sur n'importe quelle carte pour ouvrir la <strong>fiche détaillée</strong>.</p>
-          <h3>Ce que vous y trouvez</h3>
+          <p>Cliquez sur une carte pour ouvrir la fiche détaillée.</p>
           <ul>
-            <li>La <strong>pochette en grand</strong> (recto + verso si renseignés)</li>
-            <li>Tous les champs en sections : Identification, État, Avancé, Valeur</li>
-            <li>Le <strong>bloc valeur</strong> : auto, manuelle, prix d'achat, plus-value</li>
-            <li>Les <strong>étoiles</strong> de notation sous le titre</li>
-            <li>Le tag <strong>« ★ Recherché »</strong> si c'est un vinyle de la wishlist</li>
-            <li>La <strong>date d'achat formatée</strong> (ex. « juin 1973 »)</li>
-          </ul>
-          <h3>Boutons d'action</h3>
-          <ul>
-            <li><strong>↻ Estimer la valeur</strong> — interroge Discogs pour un prix marché</li>
-            <li><strong>⎙ Fiche PDF</strong> — génère une fiche imprimable</li>
-            <li><strong>Modifier la fiche</strong> — ouvre le formulaire</li>
-            <li><strong>Export JSON</strong> / <strong>Export CSV</strong> — export individuel</li>
-            <li><strong>Supprimer</strong> — suppression définitive (confirmation demandée)</li>
+            <li>La <strong>pochette recto en grand</strong></li>
+            <li>Le <strong>verso</strong> juste en dessous si renseigné</li>
+            <li>Le <strong>vinyle</strong> si renseigné</li>
+            <li>Tous les champs en sections</li>
+            <li>Le bloc valeur : auto, manuelle, prix d'achat, plus-value</li>
+            <li>Les <strong>étoiles</strong> sous le titre</li>
           </ul>
         `
       },
@@ -3150,21 +3322,12 @@ window.App = App;
         title: "Wishlist (Possédé / Recherché)",
         icon: "★",
         content: `
-          <p>Chaque vinyle a un <strong>statut</strong> : <em>Possédé</em> (par défaut) ou <em>Recherché</em>.</p>
-          <h3>Utilisation</h3>
+          <p>Chaque vinyle a un statut : <em>Possédé</em> ou <em>Recherché</em>.</p>
           <ul>
-            <li>Dans le formulaire, choisissez le statut en haut de la section Identification.</li>
-            <li>Pour un vinyle recherché, renseignez aussi le <strong>Prix cible</strong> (prix max que vous voulez mettre).</li>
+            <li>Badge rouge <strong>★ Recherché</strong> sur la carte</li>
+            <li>Filtre <strong>Statut</strong> dans le panneau</li>
+            <li><strong>Prix cible</strong> visible dans la fiche</li>
           </ul>
-          <h3>Repérage visuel</h3>
-          <ul>
-            <li>Un badge rouge <strong>★ Recherché</strong> apparaît sur la pochette dans la bibliothèque</li>
-            <li>Un léger voile rouge teinte la carte</li>
-            <li>Dans la fiche, un tag rouge s'affiche avec le prix cible</li>
-          </ul>
-          <h3>Filtrer</h3>
-          <p>Le filtre <strong>« Statut »</strong> dans le panneau vous permet d'afficher uniquement la collection possédée, uniquement la wishlist, ou tout.</p>
-          <p class="tip">💡 Combinez avec le tri par valeur pour repérer les wishlists les plus coûteuses à surveiller.</p>
         `
       },
       {
@@ -3172,28 +3335,12 @@ window.App = App;
         title: "Notation étoiles",
         icon: "⭐",
         content: `
-          <p>Notez chaque vinyle de <strong>1 à 5 étoiles</strong> selon votre appréciation personnelle.</p>
-          <h3>Comment noter</h3>
+          <p>Notez chaque vinyle de <strong>1 à 5 étoiles</strong>.</p>
           <ul>
-            <li>Dans le formulaire, une rangée de 5 étoiles cliquables</li>
-            <li>Cliquez sur la 3<sup>e</sup> étoile → note = 3/5</li>
-            <li>Cliquez à nouveau sur la même étoile → annule (note = 0)</li>
-            <li>Le petit <strong>✕</strong> à droite efface complètement la note</li>
-          </ul>
-          <h3>Où voir les étoiles</h3>
-          <ul>
-            <li>Sur les cartes : en bas à droite, format compact</li>
-            <li>Dans la fiche détail : sous le titre, en grand</li>
-          </ul>
-          <h3>Filtrer par note</h3>
-          <p>Le filtre <strong>« Note »</strong> propose : 5 étoiles, 4+, 3+, 2+, 1+, ou « Non noté ».</p>
-          <h3>Suggestion d'échelle</h3>
-          <ul>
-            <li>★★★★★ — Indispensable, jamais vendu</li>
-            <li>★★★★ — Excellent, à garder</li>
-            <li>★★★ — Bon, plaisir occasionnel</li>
-            <li>★★ — Moyen, à revendre peut-être</li>
-            <li>★ — Déception</li>
+            <li>Clic sur la 3<sup>e</sup> étoile → note = 3/5</li>
+            <li>Re-clic sur la même étoile → annule</li>
+            <li><strong>✕</strong> efface complètement</li>
+            <li>Filtre Note : 5★, 4★+, 3★+, 2★+, 1★+, ou « Non noté »</li>
           </ul>
         `
       },
@@ -3202,19 +3349,12 @@ window.App = App;
         title: "Date d'achat flexible",
         icon: "📅",
         content: `
-          <p>Vous ne vous souvenez pas de la date exacte d'un achat ? Pas de problème.</p>
-          <h3>Formats acceptés</h3>
           <table class="shortcuts">
-            <tr><td><code>1973</code></td><td>Année seule → affichée « 1973 »</td></tr>
-            <tr><td><code>06/1973</code></td><td>Mois + année → affiché « juin 1973 »</td></tr>
-            <tr><td><code>14/06/1973</code></td><td>Date complète → affichée « 14 juin 1973 »</td></tr>
-            <tr><td><code>2019-06-14</code></td><td>Format ISO accepté aussi</td></tr>
+            <tr><td><code>1973</code></td><td>Année seule → « 1973 »</td></tr>
+            <tr><td><code>06/1973</code></td><td>Mois + année → « juin 1973 »</td></tr>
+            <tr><td><code>14/06/1973</code></td><td>Date complète</td></tr>
+            <tr><td><code>2019-06-14</code></td><td>Format ISO</td></tr>
           </table>
-          <h3>Comment saisir</h3>
-          <p>Le champ <strong>Date d'achat</strong> du formulaire est un champ texte libre. Tapez simplement ce que vous savez — l'appli détecte le format automatiquement.</p>
-          <p class="tip">💡 Astuce : si vous savez juste que c'est des années 80 mais pas plus, tapez <code>1985</code> environ. Vous pourrez toujours préciser plus tard.</p>
-          <h3>Affichage intelligent</h3>
-          <p>Dans la fiche, la date est toujours <strong>formatée en français lisible</strong> : « juin 1973 », « 14 juin 2019 », etc. Fini les dates brutes type <code>1973-06-14</code>.</p>
         `
       },
       {
@@ -3222,16 +3362,7 @@ window.App = App;
         title: "Tableau de bord",
         icon: "📊",
         content: `
-          <p>Cliquez sur <strong>« 📊 Statistiques »</strong> dans la barre d'outils pour ouvrir le tableau de bord.</p>
-          <h3>5 graphiques disponibles</h3>
-          <ul>
-            <li><strong>Répartition par décennie</strong> — combien de 50's, 60's, 70's…</li>
-            <li><strong>Top 5 artistes</strong> — vos artistes les plus représentés</li>
-            <li><strong>Top 5 genres</strong> — les genres dominants</li>
-            <li><strong>Formats</strong> — donut avec la répartition 33T / 45T / Maxi…</li>
-            <li><strong>Valeur par décennie</strong> — où se concentre la valeur</li>
-          </ul>
-          <p class="tip">💡 Le tableau de bord se met à jour automatiquement à chaque ajout ou modification.</p>
+          <p>5 graphiques : décennies, top artistes, top genres, formats, valeur par décennie.</p>
         `
       },
       {
@@ -3240,30 +3371,14 @@ window.App = App;
         icon: "💾",
         content: `
           <h3>Sauvegarde automatique</h3>
-          <p>L'appli exporte automatiquement un fichier JSON <strong>tous les 7 jours</strong>, au lancement.</p>
-          <p>Un badge <strong>💾 J-X</strong> dans la barre du haut indique les jours restants avant la prochaine sauvegarde.</p>
-          <ul>
-            <li>Cliquez sur le badge pour <strong>sauvegarder immédiatement</strong></li>
-            <li>Le fichier s'appelle <code>vinyl-archive-jacques-AAAA-MM-JJ.json</code></li>
-            <li>Il est enregistré dans votre dossier <strong>Téléchargements</strong></li>
-            <li>Si la sauvegarde est en retard, le badge affiche <strong>💾 ⚠</strong> en rouge</li>
-          </ul>
+          <p>Tous les 7 jours, badge <strong>💾 J-X</strong> dans la topbar.</p>
           <h3>Exports manuels</h3>
-          <p>Bouton <strong>« Exporter ▾ »</strong> dans la barre d'outils :</p>
           <ul>
-            <li><strong>Export JSON</strong> — sauvegarde complète, réimportable</li>
-            <li><strong>Export CSV</strong> — ouvrable dans Excel / Numbers</li>
-            <li><strong>Export PDF</strong> — liste imprimable de la collection</li>
-            <li><strong>Importer un fichier JSON</strong> — restaurer une sauvegarde</li>
+            <li><strong>Export JSON</strong> — complet, réimportable</li>
+            <li><strong>Export CSV</strong> — Excel / Numbers</li>
+            <li><strong>Export PDF</strong> — liste imprimable</li>
+            <li><strong>Importer JSON</strong> — restaurer une sauvegarde</li>
           </ul>
-          <h3>Restaurer une sauvegarde</h3>
-          <ol>
-            <li>Ouvrez l'appli</li>
-            <li><strong>Exporter ▾ → Importer un fichier JSON</strong></li>
-            <li>Sélectionnez votre fichier de sauvegarde</li>
-            <li>Les vinyles reviennent (les doublons sont gérés par identifiant unique)</li>
-          </ol>
-          <p class="tip">💡 Conseil : créez un dossier « Sauvegardes Vinyl Archive » sur votre ordinateur et déplacez-y les fichiers une fois par mois.</p>
         `
       },
       {
@@ -3271,20 +3386,11 @@ window.App = App;
         title: "Paramètres",
         icon: "⚙︎",
         content: `
-          <p>Accessibles via le bouton <strong>⚙︎</strong> dans la barre du haut.</p>
-          <h3>Token Discogs</h3>
-          <p>Permet la récupération automatique des pochettes et l'estimation de valeur via le marketplace Discogs. Voir la section « Démarrage rapide » pour l'obtenir.</p>
-          <h3>Proxy CORS (avancé)</h3>
-          <p>Pour activer les sources eBay et Vinted, il faut configurer un petit proxy. Optionnel — Discogs suffit largement pour les vinyles.</p>
-          <h3>Stockage</h3>
           <ul>
-            <li><strong>IndexedDB</strong> (par défaut) — stockage local du navigateur, très large</li>
-            <li><strong>localStorage</strong> (repli) — si IndexedDB indisponible</li>
+            <li><strong>Token Discogs</strong> — pour les pochettes et estimations</li>
+            <li><strong>Proxy CORS</strong> — eBay / Vinted (avancé)</li>
+            <li><strong>Stockage</strong> — IndexedDB par défaut, localStorage en repli</li>
           </ul>
-          <p class="tip">⚠️ Vos données sont stockées <strong>dans le navigateur</strong>, pas dans un cloud. Si vous videz le cache ou changez de navigateur, elles seront perdues — d'où l'importance des sauvegardes JSON régulières.</p>
-          <h3>Vider la collection</h3>
-          <p>Bouton rouge en bas des Paramètres. Deux confirmations demandées.</p>
-          <p class="tip">⚠️ Pensez à exporter avant de vider.</p>
         `
       },
       {
@@ -3292,15 +3398,12 @@ window.App = App;
         title: "Raccourcis clavier",
         icon: "⌨",
         content: `
-          <h3>Navigation globale</h3>
           <table class="shortcuts">
             <tr><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td><td>Focus sur la recherche</td></tr>
             <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd></td><td>Nouveau vinyle</td></tr>
             <tr><td><kbd>H</kbd></td><td>Ouvrir ce mode d'emploi</td></tr>
             <tr><td><kbd>Échap</kbd></td><td>Fermer la fenêtre active</td></tr>
-            <tr><td><kbd>Entrée</kbd></td><td>Valider (page d'accueil)</td></tr>
           </table>
-          <p class="hint"><em>Sur Mac, remplacez Ctrl par Cmd ⌘.</em></p>
         `
       },
       {
@@ -3309,33 +3412,18 @@ window.App = App;
         icon: "?",
         content: `
           <h3>Ma collection a disparu !</h3>
-          <p>Vos données sont stockées dans le <strong>navigateur</strong>, pas dans le fichier HTML. Si vous avez changé de navigateur, d'appareil, ou vidé le cache, elles sont inaccessibles.</p>
-          <p><strong>Solution</strong> : réimportez votre dernière sauvegarde JSON.</p>
-          <h3>J'ai deux collections différentes</h3>
-          <p>Vous utilisez peut-être <strong>deux contextes différents</strong> : le navigateur classique et l'appli installée (PWA). Ces deux contextes ont des stockages séparés.</p>
-          <p><strong>Solution</strong> : choisissez UN SEUL mode d'utilisation (navigateur ou appli), ou synchronisez manuellement par export/import JSON.</p>
+          <p>Vos données sont dans le <strong>navigateur</strong>. Réimportez votre sauvegarde JSON.</p>
           <h3>L'estimation de valeur ne marche pas</h3>
           <ul>
-            <li>Vérifiez que le <strong>token Discogs</strong> est bien renseigné (⚙︎ Paramètres)</li>
-            <li>Vérifiez votre connexion internet</li>
+            <li>Token Discogs renseigné ? (⚙︎)</li>
+            <li>Connexion internet ?</li>
             <li>L'estimation interne fonctionne toujours, même hors ligne</li>
           </ul>
           <h3>La pochette ne s'affiche pas</h3>
           <ul>
-            <li>Si l'image est une URL externe, elle peut être bloquée par Neocities (CSP)</li>
-            <li>Préférez l'<strong>upload local</strong> ou la <strong>récupération Discogs</strong></li>
+            <li>URL externe bloquée par Neocities (CSP) ?</li>
+            <li>Préférez l'<strong>upload local</strong> ou <strong>Discogs</strong></li>
           </ul>
-          <h3>Comment sauvegarder avant une modification risquée ?</h3>
-          <p>Cliquez sur <strong>💾</strong> dans la barre du haut → confirmation → un fichier JSON est téléchargé immédiatement.</p>
-          <h3>L'appli est lente</h3>
-          <ul>
-            <li>Limitez le nombre d'images stockées (le base64 alourdit)</li>
-            <li>Videz le cache régulièrement après avoir sauvegardé</li>
-          </ul>
-          <h3>Le champ Date d'achat ne propose plus de calendrier</h3>
-          <p>C'est volontaire : le champ accepte maintenant l'<strong>année seule</strong> (<code>1973</code>), le mois/année (<code>06/1973</code>) ou la date complète (<code>14/06/1973</code>). Voir la section « Date d'achat flexible ».</p>
-          <h3>Une question de plus ?</h3>
-          <p>Consultez la section concernée ou revenez voir la personne qui a préparé l'appli. 😉</p>
         `
       }
     ];
@@ -3372,7 +3460,7 @@ window.App = App;
         </div>
         <div class="help-footer">
           <span>Astuce : appuyez sur <kbd>H</kbd> pour ouvrir ce mode d'emploi à tout moment.</span>
-          <span class="help-version">v1.2 — Jacques Edition</span>
+          <span class="help-version">v1.3 — Jacques Edition</span>
         </div>
       </div>
     `;
@@ -3685,168 +3773,8 @@ window.App = App;
     initHelp();
   }
 })();
-/* ═══════════════════════════════════════════════════════════════════
-   DATE D'ACHAT FLEXIBLE
-   Accepte : année seule (1973), mois/année (06/1973),
-   ou date complète (14/06/1973 · 2019-06-14).
-   ═══════════════════════════════════════════════════════════════════ */
-(function(){
-  function initDateFlex(){
-    if(typeof GROUPS === "undefined" || typeof App === "undefined"){
-      setTimeout(initDateFlex, 200);
-      return;
-    }
-    if(window.__dateFlexInit) return;
-    window.__dateFlexInit = true;
-
-    /* ─── 1. Récupère le champ date_achat ─── */
-    const valeurGroup = GROUPS.find(g => g.id === "valeur");
-    const dateField = valeurGroup ? valeurGroup.fields.find(f => f.key === "date_achat") : null;
-
-    /* ─── 2. Formatage pour l'affichage ─── */
-    function displayDateAchat(raw){
-      if(!raw) return "";
-      const s = String(raw).trim();
-      /* Année seule */
-      if(/^\d{4}$/.test(s)) return s;
-      /* ISO complet : 2019-06-14 */
-      if(/^\d{4}-\d{2}-\d{2}$/.test(s)){
-        const [y, m, d] = s.split("-");
-        const date = new Date(parseInt(y,10), parseInt(m,10)-1, parseInt(d,10));
-        if(!isNaN(date.getTime())){
-          return date.toLocaleDateString("fr-FR", {day:"numeric", month:"long", year:"numeric"});
-        }
-      }
-      /* Année-mois : 1973-06 */
-      if(/^\d{4}-\d{2}$/.test(s)){
-        const [y, m] = s.split("-");
-        const MOIS = ["janvier","février","mars","avril","mai","juin",
-                     "juillet","août","septembre","octobre","novembre","décembre"];
-        const idx = parseInt(m,10) - 1;
-        if(idx >= 0 && idx < 12) return MOIS[idx] + " " + y;
-      }
-      /* DD/MM/YYYY */
-      if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)){
-        const [d, m, y] = s.split("/");
-        const date = new Date(parseInt(y,10), parseInt(m,10)-1, parseInt(d,10));
-        if(!isNaN(date.getTime())){
-          return date.toLocaleDateString("fr-FR", {day:"numeric", month:"long", year:"numeric"});
-        }
-      }
-      /* MM/YYYY */
-      if(/^\d{1,2}\/\d{4}$/.test(s)){
-        const [m, y] = s.split("/");
-        const MOIS = ["janvier","février","mars","avril","mai","juin",
-                     "juillet","août","septembre","octobre","novembre","décembre"];
-        const idx = parseInt(m,10) - 1;
-        if(idx >= 0 && idx < 12) return MOIS[idx] + " " + y;
-      }
-      return s;
-    }
-    window.displayDateAchat = displayDateAchat;
-
-    /* ─── 3. Normalisation à la sauvegarde ─── */
-    function normalizeDateAchat(raw){
-      const s = String(raw || "").trim();
-      if(!s) return "";
-      if(/^\d{4}$/.test(s)) return s;              /* Année seule */
-      if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;  /* ISO */
-      if(/^\d{4}-\d{2}$/.test(s)) return s;        /* ISO année-mois */
-      if(/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)){     /* DD/MM/YYYY → ISO */
-        const [d, m, y] = s.split("/");
-        return y + "-" + String(m).padStart(2,"0") + "-" + String(d).padStart(2,"0");
-      }
-      if(/^\d{1,2}\/\d{4}$/.test(s)){              /* MM/YYYY → YYYY-MM */
-        const [m, y] = s.split("/");
-        return y + "-" + String(m).padStart(2,"0");
-      }
-      return s;
-    }
-
-    /* ─── 4. Transformation de l'input dans le formulaire ─── */
-    const originalRenderForm = window.renderForm;
-    window.renderForm = function(v){
-      const rawValue = v ? (v.date_achat || "") : "";
-      originalRenderForm(v);
-      const input = document.querySelector('#vinylForm [data-key="date_achat"]');
-      if(input){
-        input.type = "text";
-        input.value = rawValue;
-        input.placeholder = "1973 · 06/1973 · 14/06/1973";
-        input.setAttribute("autocomplete", "off");
-        input.title = "Année seule acceptée si vous ne vous souvenez pas du jour exact";
-        /* Ajout d'un petit texte d'aide */
-        const wrapper = input.parentNode;
-        if(wrapper && !wrapper.querySelector('.date-hint')){
-          const hint = document.createElement('div');
-          hint.className = 'date-hint';
-          hint.style.cssText = 'font-size:10.5px;color:var(--creme-faint);margin-top:5px;font-style:italic;line-height:1.4;';
-          hint.textContent = '💡 Année seule acceptée (ex. 1973) — pas besoin du jour exact.';
-          wrapper.appendChild(hint);
-        }
-      }
-    };
-
-    /* ─── 5. Normalisation à l'enregistrement ─── */
-    const originalReadForm = App.readForm;
-    App.readForm = function(){
-      const data = originalReadForm.call(this);
-      if(data && data.date_achat){
-        data.date_achat = normalizeDateAchat(data.date_achat);
-      }
-      return data;
-    };
-
-    /* ─── 6. Bel affichage dans la fiche détail ─── */
-    const originalRenderDetail = window.renderDetail;
-    window.renderDetail = function(v){
-      originalRenderDetail(v);
-      if(!v.date_achat) return;
-      const display = displayDateAchat(v.date_achat);
-      const items = document.querySelectorAll('#detailModal .data-item');
-      for(const item of items){
-        const k = item.querySelector('.k');
-        if(k && /date\s*d'achat/i.test(k.textContent)){
-          const vEl = item.querySelector('.v');
-          if(vEl) vEl.textContent = display;
-          break;
-        }
-      }
-    };
-
-    /* ─── 7. Bel affichage dans le PDF ─── */
-    if(typeof window.fichePrintBody === "function"){
-      const originalFichePrintBody = window.fichePrintBody;
-      window.fichePrintBody = function(v){
-        const copy = Object.assign({}, v);
-        if(copy.date_achat){
-          copy.date_achat = displayDateAchat(copy.date_achat);
-        }
-        const origType = dateField ? dateField.type : null;
-        if(dateField) dateField.type = "text";
-        try {
-          return originalFichePrintBody(copy);
-        } finally {
-          if(dateField && origType !== null) dateField.type = origType;
-        }
-      };
-    }
-
-    console.log("%c📅 Date d'achat flexible activée (année / mois / jour)", "color:#C9A86A;font-weight:bold");
-  }
-
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", initDateFlex);
-  } else {
-    initDateFlex();
-  }
-})();
-  
 </script>
-   
-<!-- ═══════════════════════════════════════════════════════════
-     ENREGISTREMENT DU SERVICE WORKER (mode hors ligne)
-     ═══════════════════════════════════════════════════════════ -->
+
 <script>
 if("serviceWorker" in navigator){
   window.addEventListener("load", () => {
@@ -3856,8 +3784,6 @@ if("serviceWorker" in navigator){
   });
 }
 </script>
-  
-</body>
-</html>
+
 </body>
 </html>
