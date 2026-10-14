@@ -3219,6 +3219,7 @@ window.App = App;
     if(document.getElementById("helpOverlay")) return;
 
     const SECTIONS = [
+          const SECTIONS = [
       {
         id: "demarrage",
         title: "Démarrage rapide",
@@ -3228,7 +3229,7 @@ window.App = App;
           <h3>Première utilisation</h3>
           <ol>
             <li>Cliquez sur <strong>« + Nouveau vinyle »</strong> pour ajouter votre premier disque.</li>
-            <li>Remplissez au minimum le <strong>Titre</strong> et l'<strong>Artiste</strong>.</li>
+            <li>Remplissez au minimum le <strong>Titre</strong> et l'<strong>Artiste</strong> — les deux seuls champs obligatoires.</li>
             <li>Enregistrez : la fiche apparaît dans la bibliothèque.</li>
           </ol>
           <h3>Configurer Discogs (recommandé)</h3>
@@ -3239,6 +3240,7 @@ window.App = App;
             <li>Cliquez sur <strong>« Generate new token »</strong> et copiez le code.</li>
             <li>Dans l'appli, cliquez sur <strong>⚙︎ Paramètres</strong> et collez le token.</li>
           </ol>
+          <p class="tip">💡 Sans token Discogs, tout fonctionne — vous chargez juste les pochettes manuellement.</p>
         `
       },
       {
@@ -3249,14 +3251,14 @@ window.App = App;
           <p>Le formulaire est organisé en <strong>5 sections</strong> :</p>
           <h3>1. Identification</h3>
           <ul>
-            <li><strong>Statut</strong> — Possédé ou Recherché</li>
+            <li><strong>Statut</strong> — Possédé ou Recherché (voir section Wishlist)</li>
             <li><strong>Titre</strong> et <strong>Artiste</strong> — obligatoires</li>
-            <li><strong>Format</strong> — 33T, 45T, 78T, Maxi…</li>
-            <li><strong>Double album</strong> et <strong>Pochette gatefold</strong> — cases à cocher indépendantes</li>
+            <li><strong>Format</strong> — 33T, 45T, 78T, 10" 33T, 10" 45T, Maxi, Picture Disc…</li>
+            <li><strong>Double album</strong> et <strong>Pochette gatefold</strong> — deux cases à cocher indépendantes, cumulables avec n'importe quel format. Un 45T peut très bien être un gatefold, un 33T peut être un double album.</li>
             <li><strong>Enregistrement</strong> — Studio, Live ou Démo</li>
             <li><strong>Genre</strong>, <strong>Année d'enregistrement</strong>, <strong>Année d'impression</strong></li>
             <li><strong>Pays</strong>, <strong>Label</strong>, <strong>N° catalogue</strong>, <strong>Code-barres</strong></li>
-            <li><strong>Note personnelle</strong> — notation par étoiles</li>
+            <li><strong>Note personnelle</strong> — notation par étoiles (voir section dédiée)</li>
           </ul>
           <h3>2. État & Conservation</h3>
           <p>État du disque et de la pochette : Mint, Near Mint, VG+, VG, G, Poor.</p>
@@ -3264,19 +3266,30 @@ window.App = App;
           <ul>
             <li><strong>Pressage</strong> — 1st Press, Repress, Remastered, Limited…</li>
             <li><strong>Pressage audio</strong> — Mono, Stéréo, Mono / Stéréo, Inconnu</li>
-            <li><strong>Couleur du vinyle</strong></li>
-            <li><strong>Rareté</strong></li>
-            <li><strong>Particularités</strong></li>
-            <li><strong>Notes personnelles</strong></li>
+            <li><strong>Couleur du vinyle</strong> — Noir, Rouge translucide, etc.</li>
+            <li><strong>Rareté</strong> — Courant, Peu courant, Rare, Très rare, Collector</li>
+            <li><strong>Particularités</strong> — insert, poster, sticker, édition promo…</li>
+            <li><strong>Notes personnelles</strong> — pavé texte libre</li>
           </ul>
           <h3>4. Acquisition & Valeur</h3>
           <ul>
-            <li><strong>Date d'achat</strong> — année seule acceptée</li>
+            <li><strong>Date d'achat</strong> — année seule acceptée (voir section Date flexible)</li>
             <li><strong>Prix d'achat</strong>, <strong>Valeur manuelle</strong>, <strong>Valeur auto</strong></li>
-            <li><strong>Prix cible</strong> — pour la wishlist</li>
+            <li><strong>Prix cible</strong> — pour les vinyles de la wishlist</li>
           </ul>
           <h3>5. Média</h3>
-          <p>Pochette recto, <strong>pochette verso</strong>, vinyle : par fichier local, URL, ou récupération Discogs (recto uniquement).</p>
+          <ul>
+            <li><strong>Pochette recto</strong> — image principale, affichée sur la vignette et la fiche</li>
+            <li><strong>Pochette verso</strong> — affichée sous le recto dans la fiche détail et la fiche PDF</li>
+            <li><strong>Vinyle</strong> — image optionnelle du disque lui-même</li>
+          </ul>
+          <p>Chaque image peut être ajoutée de <strong>trois façons</strong> :</p>
+          <ul>
+            <li>Upload d'un <strong>fichier local</strong> (compressé automatiquement en JPEG)</li>
+            <li>Collage d'une <strong>URL d'image</strong> distante</li>
+            <li><strong>Récupération automatique depuis Discogs</strong> (bouton ⤓ — uniquement pour le recto, Discogs ne fournit pas les versos)</li>
+          </ul>
+          <p class="tip">💡 Le verso est particulièrement utile pour les pochettes gatefold, les tracklists imprimées, ou les éditions avec texte au dos (notes de pochette, crédits…).</p>
         `
       },
       {
@@ -3285,20 +3298,26 @@ window.App = App;
         icon: "🔍",
         content: `
           <h3>Barre de recherche</h3>
-          <p>Recherche instantanée sur tous les champs, y compris « double » et « gatefold ».</p>
+          <p>En haut, tapez n'importe quel mot : titre, artiste, label, catalogue, membre, lieu de stockage… La recherche est <strong>instantanée</strong> et insensible aux accents.</p>
+          <p>Les termes <strong>« double »</strong> et <strong>« gatefold »</strong> sont reconnus : taper <code>gatefold</code> remonte tous les vinyles avec pochette gatefold.</p>
           <h3>Panneau de filtres</h3>
+          <p>Cliquez sur <strong>« Filtres »</strong> pour ouvrir les options avancées :</p>
           <ul>
             <li>Artiste, Genre, Format, Label, Pays</li>
-            <li><strong>Double album uniquement</strong>, <strong>Gatefold uniquement</strong> (cases à cocher)</li>
+            <li><strong>Options de format</strong> — deux cases à cocher : « Double album uniquement » et « Gatefold uniquement »</li>
             <li>Année d'impression, État disque, État pochette</li>
-            <li>Pressage, Pressage audio, <strong>Enregistrement</strong> (Studio / Live / Démo)</li>
+            <li>Pressage (édition), Pressage audio (Mono / Stéréo)</li>
+            <li><strong>Enregistrement</strong> — Studio / Live / Démo</li>
             <li><strong>Statut</strong> — Possédé / Recherché</li>
-            <li><strong>Note</strong> — 1★ à 5★</li>
+            <li><strong>Note</strong> — 1★ à 5★, ou « Non noté »</li>
             <li>Valeur minimum / maximum</li>
             <li>Rareté</li>
           </ul>
+          <p class="tip">💡 Les filtres se <strong>cumulent</strong> : cochez plusieurs critères pour affiner. Exemple : « Gatefold uniquement » + Enregistrement = Live + Genre = Jazz.</p>
           <h3>Filtre alphabétique A → Z</h3>
-          <p>Barre de lettres au-dessus de la bibliothèque.</p>
+          <p>Une barre de lettres au-dessus de la bibliothèque. Cliquez sur une lettre pour n'afficher que les artistes commençant par cette lettre. La lettre <strong>« # »</strong> regroupe les chiffres et symboles. Les lettres <strong>grisées</strong> n'ont aucun vinyle associé.</p>
+          <h3>Tri</h3>
+          <p>Menu déroulant en haut à droite : par ajout récent, valeur, rareté, année, artiste, titre, format.</p>
         `
       },
       {
@@ -3306,14 +3325,26 @@ window.App = App;
         title: "Consulter une fiche",
         icon: "◇",
         content: `
-          <p>Cliquez sur une carte pour ouvrir la fiche détaillée.</p>
+          <p>Cliquez sur n'importe quelle carte pour ouvrir la <strong>fiche détaillée</strong>.</p>
+          <h3>Ce que vous y trouvez</h3>
           <ul>
             <li>La <strong>pochette recto en grand</strong></li>
-            <li>Le <strong>verso</strong> juste en dessous si renseigné</li>
-            <li>Le <strong>vinyle</strong> si renseigné</li>
-            <li>Tous les champs en sections</li>
-            <li>Le bloc valeur : auto, manuelle, prix d'achat, plus-value</li>
-            <li>Les <strong>étoiles</strong> sous le titre</li>
+            <li>Le <strong>verso</strong> juste en dessous (si renseigné) — utile pour voir les crédits, tracklist, notes de pochette</li>
+            <li>L'image du <strong>vinyle</strong> en bas si renseignée</li>
+            <li>Tous les champs en sections : Identification, État, Avancé, Valeur</li>
+            <li>Les <strong>options de format</strong> affichées en tags (Double album / Pochette gatefold)</li>
+            <li>Le <strong>bloc valeur</strong> : auto, manuelle, prix d'achat, plus-value</li>
+            <li>Les <strong>étoiles</strong> de notation sous le titre</li>
+            <li>Le tag <strong>« ★ Recherché »</strong> si c'est un vinyle de la wishlist</li>
+            <li>La <strong>date d'achat formatée</strong> (ex. « juin 1973 »)</li>
+          </ul>
+          <h3>Boutons d'action</h3>
+          <ul>
+            <li><strong>↻ Estimer la valeur</strong> — interroge Discogs pour un prix marché</li>
+            <li><strong>⎙ Fiche PDF</strong> — génère une fiche imprimable (avec le verso)</li>
+            <li><strong>Modifier la fiche</strong> — ouvre le formulaire</li>
+            <li><strong>Export JSON</strong> / <strong>Export CSV</strong> — export individuel</li>
+            <li><strong>Supprimer</strong> — suppression définitive (confirmation demandée)</li>
           </ul>
         `
       },
@@ -3322,12 +3353,21 @@ window.App = App;
         title: "Wishlist (Possédé / Recherché)",
         icon: "★",
         content: `
-          <p>Chaque vinyle a un statut : <em>Possédé</em> ou <em>Recherché</em>.</p>
+          <p>Chaque vinyle a un <strong>statut</strong> : <em>Possédé</em> (par défaut) ou <em>Recherché</em>.</p>
+          <h3>Utilisation</h3>
           <ul>
-            <li>Badge rouge <strong>★ Recherché</strong> sur la carte</li>
-            <li>Filtre <strong>Statut</strong> dans le panneau</li>
-            <li><strong>Prix cible</strong> visible dans la fiche</li>
+            <li>Dans le formulaire, choisissez le statut en haut de la section Identification.</li>
+            <li>Pour un vinyle recherché, renseignez aussi le <strong>Prix cible</strong> (prix max que vous voulez mettre).</li>
           </ul>
+          <h3>Repérage visuel</h3>
+          <ul>
+            <li>Un badge rouge <strong>★ Recherché</strong> apparaît sur la pochette dans la bibliothèque</li>
+            <li>Un léger voile rouge teinte la carte</li>
+            <li>Dans la fiche, un tag rouge s'affiche avec le prix cible</li>
+          </ul>
+          <h3>Filtrer</h3>
+          <p>Le filtre <strong>« Statut »</strong> dans le panneau vous permet d'afficher uniquement la collection possédée, uniquement la wishlist, ou tout.</p>
+          <p class="tip">💡 Combinez avec le tri par valeur pour repérer les wishlists les plus coûteuses à surveiller.</p>
         `
       },
       {
@@ -3335,12 +3375,28 @@ window.App = App;
         title: "Notation étoiles",
         icon: "⭐",
         content: `
-          <p>Notez chaque vinyle de <strong>1 à 5 étoiles</strong>.</p>
+          <p>Notez chaque vinyle de <strong>1 à 5 étoiles</strong> selon votre appréciation personnelle.</p>
+          <h3>Comment noter</h3>
           <ul>
-            <li>Clic sur la 3<sup>e</sup> étoile → note = 3/5</li>
-            <li>Re-clic sur la même étoile → annule</li>
-            <li><strong>✕</strong> efface complètement</li>
-            <li>Filtre Note : 5★, 4★+, 3★+, 2★+, 1★+, ou « Non noté »</li>
+            <li>Dans le formulaire, une rangée de 5 étoiles cliquables</li>
+            <li>Cliquez sur la 3<sup>e</sup> étoile → note = 3/5</li>
+            <li>Cliquez à nouveau sur la même étoile → annule (note = 0)</li>
+            <li>Le petit <strong>✕</strong> à droite efface complètement la note</li>
+          </ul>
+          <h3>Où voir les étoiles</h3>
+          <ul>
+            <li>Sur les cartes : en bas à droite, format compact</li>
+            <li>Dans la fiche détail : sous le titre, en grand</li>
+          </ul>
+          <h3>Filtrer par note</h3>
+          <p>Le filtre <strong>« Note »</strong> propose : 5 étoiles, 4+, 3+, 2+, 1+, ou « Non noté ».</p>
+          <h3>Suggestion d'échelle</h3>
+          <ul>
+            <li>★★★★★ — Indispensable, jamais vendu</li>
+            <li>★★★★ — Excellent, à garder</li>
+            <li>★★★ — Bon, plaisir occasionnel</li>
+            <li>★★ — Moyen, à revendre peut-être</li>
+            <li>★ — Déception</li>
           </ul>
         `
       },
@@ -3349,12 +3405,19 @@ window.App = App;
         title: "Date d'achat flexible",
         icon: "📅",
         content: `
+          <p>Vous ne vous souvenez pas de la date exacte d'un achat ? Pas de problème.</p>
+          <h3>Formats acceptés</h3>
           <table class="shortcuts">
-            <tr><td><code>1973</code></td><td>Année seule → « 1973 »</td></tr>
-            <tr><td><code>06/1973</code></td><td>Mois + année → « juin 1973 »</td></tr>
-            <tr><td><code>14/06/1973</code></td><td>Date complète</td></tr>
-            <tr><td><code>2019-06-14</code></td><td>Format ISO</td></tr>
+            <tr><td><code>1973</code></td><td>Année seule → affichée « 1973 »</td></tr>
+            <tr><td><code>06/1973</code></td><td>Mois + année → affiché « juin 1973 »</td></tr>
+            <tr><td><code>14/06/1973</code></td><td>Date complète → affichée « 14 juin 1973 »</td></tr>
+            <tr><td><code>2019-06-14</code></td><td>Format ISO accepté aussi</td></tr>
           </table>
+          <h3>Comment saisir</h3>
+          <p>Le champ <strong>Date d'achat</strong> du formulaire est un champ texte libre. Tapez simplement ce que vous savez — l'appli détecte le format automatiquement.</p>
+          <p class="tip">💡 Astuce : si vous savez juste que c'est des années 80 mais pas plus, tapez <code>1985</code> environ. Vous pourrez toujours préciser plus tard.</p>
+          <h3>Affichage intelligent</h3>
+          <p>Dans la fiche, la date est toujours <strong>formatée en français lisible</strong> : « juin 1973 », « 14 juin 2019 », etc. Fini les dates brutes type <code>1973-06-14</code>.</p>
         `
       },
       {
@@ -3362,7 +3425,16 @@ window.App = App;
         title: "Tableau de bord",
         icon: "📊",
         content: `
-          <p>5 graphiques : décennies, top artistes, top genres, formats, valeur par décennie.</p>
+          <p>Cliquez sur <strong>« 📊 Statistiques »</strong> dans la barre d'outils pour ouvrir le tableau de bord.</p>
+          <h3>5 graphiques disponibles</h3>
+          <ul>
+            <li><strong>Répartition par décennie</strong> — combien de 50's, 60's, 70's…</li>
+            <li><strong>Top 5 artistes</strong> — vos artistes les plus représentés</li>
+            <li><strong>Top 5 genres</strong> — les genres dominants</li>
+            <li><strong>Formats</strong> — donut avec la répartition 33T / 45T / Maxi…</li>
+            <li><strong>Valeur par décennie</strong> — où se concentre la valeur</li>
+          </ul>
+          <p class="tip">💡 Le tableau de bord se met à jour automatiquement à chaque ajout ou modification.</p>
         `
       },
       {
@@ -3371,14 +3443,30 @@ window.App = App;
         icon: "💾",
         content: `
           <h3>Sauvegarde automatique</h3>
-          <p>Tous les 7 jours, badge <strong>💾 J-X</strong> dans la topbar.</p>
-          <h3>Exports manuels</h3>
+          <p>L'appli exporte automatiquement un fichier JSON <strong>tous les 7 jours</strong>, au lancement.</p>
+          <p>Un badge <strong>💾 J-X</strong> dans la barre du haut indique les jours restants avant la prochaine sauvegarde.</p>
           <ul>
-            <li><strong>Export JSON</strong> — complet, réimportable</li>
-            <li><strong>Export CSV</strong> — Excel / Numbers</li>
-            <li><strong>Export PDF</strong> — liste imprimable</li>
-            <li><strong>Importer JSON</strong> — restaurer une sauvegarde</li>
+            <li>Cliquez sur le badge pour <strong>sauvegarder immédiatement</strong></li>
+            <li>Le fichier s'appelle <code>vinyl-archive-jacques-AAAA-MM-JJ.json</code></li>
+            <li>Il est enregistré dans votre dossier <strong>Téléchargements</strong></li>
+            <li>Si la sauvegarde est en retard, le badge affiche <strong>💾 ⚠</strong> en rouge</li>
           </ul>
+          <h3>Exports manuels</h3>
+          <p>Bouton <strong>« Exporter ▾ »</strong> dans la barre d'outils :</p>
+          <ul>
+            <li><strong>Export JSON</strong> — sauvegarde complète, réimportable (inclut les nouveaux champs verso, enregistrement, Double, Gatefold)</li>
+            <li><strong>Export CSV</strong> — ouvrable dans Excel / Numbers (colonnes « Double album », « Gatefold » et « Enregistrement » incluses)</li>
+            <li><strong>Export PDF</strong> — liste imprimable de la collection</li>
+            <li><strong>Importer un fichier JSON</strong> — restaurer une sauvegarde</li>
+          </ul>
+          <h3>Restaurer une sauvegarde</h3>
+          <ol>
+            <li>Ouvrez l'appli</li>
+            <li><strong>Exporter ▾ → Importer un fichier JSON</strong></li>
+            <li>Sélectionnez votre fichier de sauvegarde</li>
+            <li>Les vinyles reviennent (les doublons sont gérés par identifiant unique)</li>
+          </ol>
+          <p class="tip">💡 Conseil : créez un dossier « Sauvegardes Vinyl Archive » sur votre ordinateur et déplacez-y les fichiers une fois par mois.</p>
         `
       },
       {
@@ -3386,11 +3474,20 @@ window.App = App;
         title: "Paramètres",
         icon: "⚙︎",
         content: `
+          <p>Accessibles via le bouton <strong>⚙︎</strong> dans la barre du haut.</p>
+          <h3>Token Discogs</h3>
+          <p>Permet la récupération automatique des pochettes et l'estimation de valeur via le marketplace Discogs. Voir la section « Démarrage rapide » pour l'obtenir.</p>
+          <h3>Proxy CORS (avancé)</h3>
+          <p>Pour activer les sources eBay et Vinted, il faut configurer un petit proxy. Optionnel — Discogs suffit largement pour les vinyles.</p>
+          <h3>Stockage</h3>
           <ul>
-            <li><strong>Token Discogs</strong> — pour les pochettes et estimations</li>
-            <li><strong>Proxy CORS</strong> — eBay / Vinted (avancé)</li>
-            <li><strong>Stockage</strong> — IndexedDB par défaut, localStorage en repli</li>
+            <li><strong>IndexedDB</strong> (par défaut) — stockage local du navigateur, très large</li>
+            <li><strong>localStorage</strong> (repli) — si IndexedDB indisponible</li>
           </ul>
+          <p class="tip">⚠️ Vos données sont stockées <strong>dans le navigateur</strong>, pas dans un cloud. Si vous videz le cache ou changez de navigateur, elles seront perdues — d'où l'importance des sauvegardes JSON régulières.</p>
+          <h3>Vider la collection</h3>
+          <p>Bouton rouge en bas des Paramètres. Deux confirmations demandées.</p>
+          <p class="tip">⚠️ Pensez à exporter avant de vider.</p>
         `
       },
       {
@@ -3398,12 +3495,15 @@ window.App = App;
         title: "Raccourcis clavier",
         icon: "⌨",
         content: `
+          <h3>Navigation globale</h3>
           <table class="shortcuts">
             <tr><td><kbd>Ctrl</kbd> + <kbd>K</kbd></td><td>Focus sur la recherche</td></tr>
             <tr><td><kbd>Ctrl</kbd> + <kbd>N</kbd></td><td>Nouveau vinyle</td></tr>
             <tr><td><kbd>H</kbd></td><td>Ouvrir ce mode d'emploi</td></tr>
             <tr><td><kbd>Échap</kbd></td><td>Fermer la fenêtre active</td></tr>
+            <tr><td><kbd>Entrée</kbd></td><td>Valider (page d'accueil)</td></tr>
           </table>
+          <p class="hint"><em>Sur Mac, remplacez Ctrl par Cmd ⌘.</em></p>
         `
       },
       {
@@ -3412,20 +3512,43 @@ window.App = App;
         icon: "?",
         content: `
           <h3>Ma collection a disparu !</h3>
-          <p>Vos données sont dans le <strong>navigateur</strong>. Réimportez votre sauvegarde JSON.</p>
+          <p>Vos données sont stockées dans le <strong>navigateur</strong>, pas dans le fichier HTML. Si vous avez changé de navigateur, d'appareil, ou vidé le cache, elles sont inaccessibles.</p>
+          <p><strong>Solution</strong> : réimportez votre dernière sauvegarde JSON.</p>
+          <h3>J'ai deux collections différentes</h3>
+          <p>Vous utilisez peut-être <strong>deux contextes différents</strong> : le navigateur classique et l'appli installée (PWA). Ces deux contextes ont des stockages séparés.</p>
+          <p><strong>Solution</strong> : choisissez UN SEUL mode d'utilisation (navigateur ou appli), ou synchronisez manuellement par export/import JSON.</p>
           <h3>L'estimation de valeur ne marche pas</h3>
           <ul>
-            <li>Token Discogs renseigné ? (⚙︎)</li>
-            <li>Connexion internet ?</li>
+            <li>Vérifiez que le <strong>token Discogs</strong> est bien renseigné (⚙︎ Paramètres)</li>
+            <li>Vérifiez votre connexion internet</li>
             <li>L'estimation interne fonctionne toujours, même hors ligne</li>
           </ul>
           <h3>La pochette ne s'affiche pas</h3>
           <ul>
-            <li>URL externe bloquée par Neocities (CSP) ?</li>
-            <li>Préférez l'<strong>upload local</strong> ou <strong>Discogs</strong></li>
+            <li>Si l'image est une URL externe, elle peut être bloquée par Neocities (CSP)</li>
+            <li>Préférez l'<strong>upload local</strong> ou la <strong>récupération Discogs</strong></li>
           </ul>
+          <h3>Pourquoi le verso n'est-il pas récupérable depuis Discogs ?</h3>
+          <p>L'API publique de Discogs ne fournit que la <strong>pochette recto</strong> (image principale). Pour le verso, il faut :</p>
+          <ul>
+            <li>Soit <strong>uploader une photo</strong> prise avec votre téléphone/appareil photo</li>
+            <li>Soit <strong>coller une URL</strong> vers une image hébergée ailleurs (par exemple une photo de la pochette trouvée en ligne)</li>
+          </ul>
+          <h3>Comment sauvegarder avant une modification risquée ?</h3>
+          <p>Cliquez sur <strong>💾</strong> dans la barre du haut → confirmation → un fichier JSON est téléchargé immédiatement.</p>
+          <h3>L'appli est lente</h3>
+          <ul>
+            <li>Limitez le nombre d'images stockées (le base64 alourdit)</li>
+            <li>Le verso ajoute une image supplémentaire par fiche — pensez à compresser avant upload si besoin</li>
+            <li>Videz le cache régulièrement après avoir sauvegardé</li>
+          </ul>
+          <h3>Le champ Date d'achat ne propose plus de calendrier</h3>
+          <p>C'est volontaire : le champ accepte maintenant l'<strong>année seule</strong> (<code>1973</code>), le mois/année (<code>06/1973</code>) ou la date complète (<code>14/06/1973</code>). Voir la section « Date d'achat flexible ».</p>
+          <h3>Une question de plus ?</h3>
+          <p>Consultez la section concernée ou revenez voir la personne qui a préparé l'appli. 😉</p>
         `
       }
+    ];
     ];
 
     const overlay = document.createElement("div");
