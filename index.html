@@ -3219,7 +3219,6 @@ window.App = App;
     if(document.getElementById("helpOverlay")) return;
 
     const SECTIONS = [
-          const SECTIONS = [
       {
         id: "demarrage",
         title: "Démarrage rapide",
@@ -3548,7 +3547,6 @@ window.App = App;
           <p>Consultez la section concernée ou revenez voir la personne qui a préparé l'appli. 😉</p>
         `
       }
-    ];
     ];
 
     const overlay = document.createElement("div");
@@ -3960,13 +3958,7 @@ if("serviceWorker" in navigator){
       clone.addEventListener("click", enterHandler);
       clone.addEventListener("touchend", enterHandler, { passive:false });
     }
-    if(btnSkip){
-      const clone = btnSkip.cloneNode(true);
-      btnSkip.parentNode.replaceChild(clone, btnSkip);
-      clone.addEventListener("click", (e) => { if(e && e.preventDefault) e.preventDefault(); closeIt(); });
-      clone.addEventListener("touchend", (e) => { if(e && e.preventDefault) e.preventDefault(); closeIt(); }, { passive:false });
-    }
-
+   
     /* ─── Tap n'importe où sur la page → ferme aussi ─── */
     try {
       page.addEventListener("click", e => {
