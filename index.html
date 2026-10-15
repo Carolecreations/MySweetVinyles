@@ -5,21 +5,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vinyl Archive – Jacques Edition</title>
 <link rel="icon" type="image/svg+xml" href="icon.svg">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="shortcut icon" href="favicon.ico">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0D0D0D">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Vinyl Archive">
-<link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#0D0D0D">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Vinyl Archive">
@@ -120,36 +112,42 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 
 .filters-panel{position:relative;z-index:1;margin:18px 32px 0;border:1px solid var(--or-dim);border-radius:var(--radius);background:linear-gradient(180deg,#131313,#0f0f0f);overflow:hidden;max-height:0;opacity:0;transition:max-height .4s ease,opacity .3s ease,margin .3s}
 .filters-panel.open{max-height:900px;opacity:1}
-.filters-inner{padding:20px 22px}
+.filters-inner{padding:24px 26px}
 .filters-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px}
 .field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:9.5px;text-transform:uppercase;letter-spacing:.14em;color:var(--creme-faint);font-weight:500}
-.field input,.field select,.field textarea{width:100%;background:#0a0a0a;border:1px solid rgba(201,168,106,.18);color:var(--creme);padding:9px 11px;border-radius:3px;font-family:inherit;font-size:12.5px;transition:.2s}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 3px rgba(201,168,106,.08)}
+.field label{font-family:'Playfair Display',Georgia,serif;font-size:11px;text-transform:uppercase;letter-spacing:.18em;color:var(--or);font-weight:500;opacity:.82}
+.field input,.field select,.field textarea{width:100%;background:linear-gradient(180deg,#090909,#0c0c0c);border:1px solid rgba(201,168,106,.22);color:var(--creme);padding:10px 13px;border-radius:3px;font-family:'Inter',sans-serif;font-size:13px;letter-spacing:.02em;transition:.25s}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 3px rgba(201,168,106,.10),inset 0 0 10px rgba(201,168,106,.05);background:#0e0e0e}
 .field textarea{resize:vertical;min-height:70px;line-height:1.5}
-.field input::placeholder,.field textarea::placeholder{color:rgba(245,242,233,.22)}
+.field input::placeholder,.field textarea::placeholder{color:rgba(245,242,233,.22);font-style:italic}
 .field .checkbox-field{
   display:flex; align-items:center; gap:10px;
-  padding:9px 12px; min-height:38px;
+  padding:10px 13px; min-height:40px;
   background:#0a0a0a;
   border:1px solid rgba(201,168,106,.18);
   border-radius:3px;
   cursor:pointer;
-  transition:.2s;
+  transition:.22s;
 }
-.field .checkbox-field:hover{border-color:var(--or)}
+.field .checkbox-field:hover{
+  border-color:rgba(201,168,106,.5);
+  background:#0c0c0c;
+}
 .field .checkbox-field input[type=checkbox]{
-  width:16px; height:16px; margin:0;
+  width:15px; height:15px; margin:0;
   accent-color:var(--or);
   cursor:pointer;
   flex-shrink:0;
 }
 .field .checkbox-field span{
-  font-size:12.5px; color:var(--creme);
+  font-family:'Inter',sans-serif;
+  font-size:12.5px !important;
+  color:var(--creme-dim);
   letter-spacing:.02em;
+  text-transform:none;
 }
-.filters-foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;padding-top:16px;border-top:1px solid rgba(201,168,106,.12)}
-.chip-count{font-size:11px;color:var(--or);letter-spacing:.08em}
+.filters-foot{display:flex;justify-content:space-between;align-items:center;margin-top:22px;padding-top:18px;border-top:1px solid rgba(201,168,106,.14)}
+.chip-count{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:13px;letter-spacing:.03em;color:var(--or-clair)}
 
 .library{position:relative;z-index:1;padding:26px 32px 90px;display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:24px}
 .library.list-view{grid-template-columns:1fr;gap:10px}
@@ -4274,11 +4272,12 @@ function premiereLettreTri(name){
     .replace(/\s+/g, "")
     .replace(/^["']|["']$/g, "");
 
-  const isBase64 = sourceNettoyee.indexOf("data:audio") === 0;
-  const isURL    = /^https?:\/\//i.test(sourceNettoyee);
+   const isBase64   = sourceNettoyee.indexOf("data:audio") === 0;
+  const isURL      = /^https?:\/\//i.test(sourceNettoyee);
+  const isRelative = /^[a-zA-Z0-9._\/-]+\.(mp3|ogg|wav|m4a)(\?.*)?$/i.test(sourceNettoyee);
   const sourceValide = sourceNettoyee !== "" &&
                        sourceNettoyee !== "COLLEZ_VOTRE_BASE64_ICI" &&
-                       (isBase64 || isURL);
+                       (isBase64 || isURL || isRelative);
 
   const audioEl = new Audio();
   audioEl.preload = "auto";
