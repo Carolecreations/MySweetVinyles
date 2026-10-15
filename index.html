@@ -935,7 +935,7 @@ const State = {
 
 const Settings = {
   key: "vinylArchiveJacques.settings",
-  data: { discogsToken:"", audiodbKey:"2", musee:true, proxyUrl:"", devise:"EUR" },
+  data: { discogsToken:"", audiodbKey:"123", musee:true, proxyUrl:"", devise:"EUR" },
   load(){ try { const raw = localStorage.getItem(this.key); if(raw) Object.assign(this.data, JSON.parse(raw)); } catch(e){} return this.data; },
   save(patch){ Object.assign(this.data, patch); localStorage.setItem(this.key, JSON.stringify(this.data)); return this.data; }
 };
@@ -1029,7 +1029,7 @@ async function discogsFetch(v, token, opts){
 }
 
 async function audiodbFetch(v){
-  const key = (Settings.data.audiodbKey || "2").trim() || "2";
+  const key = (Settings.data.audiodbKey || "123").trim() || "123";
   if(!v.artiste) throw new Error("Artiste requis pour TheAudioDB");
   const params = new URLSearchParams({ s: v.artiste });
   if(v.titre) params.set("a", v.titre);
@@ -1115,13 +1115,31 @@ async function estimateValue(v, onProgress){
     out.sources.push({ name:"Discogs", status:"off", detail:"Token non renseigné (Paramètres ⚙︎)" });
     emit();
   }
-  {
+   {
     out.sources.push({ name:"TheAudioDB", status:"loading" }); emit();
     const src = out.sources[out.sources.length - 1];
-    try {
-      const r = await audiodbFetch(v);
-      src.status = "info"; src.detail = r.label + " — pas de prix (métadonnées)"; src.url = r.url;
-    } catch(e){ src.status = "err"; src.detail = e.message; }
+    const key = String(Settings.data.audiodbKey || "").trim();
+    if(!key){
+      src.status = "off";
+      src.detail = "Clé API non configurée (Paramètres ⚙︎)";
+    } else {
+      try {
+        const r = await audiodbFetch(v);
+        src.status = "info";
+        src.detail = r.label + " — pas de prix (métadonnées)";
+        src.url = r.url;
+      } catch(e){
+        const msg = String((e && e.message) || e);
+        /* Les erreurs 404 et 429 viennent presque toujours d'une clé invalide ou épuisée */
+        if(/HTTP 404|HTTP 429/.test(msg)){
+          src.status = "err";
+          src.detail = "Clé API invalide ou quota épuisé — vérifiez dans Paramètres ⚙︎ (clé gratuite : 123)";
+        } else {
+          src.status = "err";
+          src.detail = msg;
+        }
+      }
+    }
     emit();
   }
   if(proxyUrl){
@@ -1659,7 +1677,7 @@ function renderSettings(){
       <div class="form-section"><div class="section-title"><span class="ico">◆</span>TheAudioDB</div>
               <label style="display:flex;gap:10px;align-items:center;margin:0 0 16px;cursor:pointer;font-size:13px"><input type="checkbox" id="setMusee" ${s.musee === false ? "" : "checked"}><span>Fiche « musée » : fanart, logo, biographie et clip de l'artiste</span></label>
         <div class="field" style="margin-bottom:14px"><label>Clé API TheAudioDB</label>
-          <input id="setAudiodbKey" type="text" value="${esc(s.audiodbKey || "2")}" placeholder="2 (clé gratuite par défaut)"></div>
+                   <input id="setAudiodbKey" type="text" value="${esc(s.audiodbKey || "123")}" placeholder="123 (clé gratuite par défaut)"></div>
         <div class="hint">Interrogé en parallèle de Discogs (pochettes et métadonnées, pas de prix). La clé gratuite <code>2</code> fonctionne sans inscription ; une clé premium est disponible sur <a href="https://www.theaudiodb.com/api_guide.php" target="_blank" rel="noopener">theaudiodb.com</a>.</div>
       </div>
       <div class="form-section"><div class="section-title"><span class="ico">◇</span>eBay & Vinted (proxy CORS)</div>
@@ -4390,7 +4408,7 @@ const Musee = {
     } catch(e){}
   },
   async api(chemin, params){
-    const key = (Settings.data.audiodbKey || "2").trim() || "2";
+       const key = (Settings.data.audiodbKey || "123").trim() || "123";
     const res = await fetch(`https://www.theaudiodb.com/api/v1/json/${encodeURIComponent(key)}/${chemin}?` + new URLSearchParams(params));
     if(!res.ok) throw new Error("TheAudioDB HTTP " + res.status);
     return res.json();
