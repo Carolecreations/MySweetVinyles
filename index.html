@@ -1393,10 +1393,12 @@ function renderDetail(v){
     return `<div class="section"><div class="section-title"><span class="ico">${g.icon}</span>${esc(g.title)}</div><div class="data-grid">${items}${extrasFormat}</div></div>`;
   }).join("");
   const coverBlock = v.image_pochette ? `<img src="${esc(v.image_pochette)}" alt="Pochette">` : `<div class="cover-empty"><span>${esc(initiales(v.titre))}</span></div>`;
-  $("#detailModal").innerHTML = `
+   $("#detailModal").innerHTML = `
+      <div class="musee-bg" id="museeBg"></div>
       <div class="modal-head" style="align-items:center">
       <button class="btn-back" onclick="App.closeDetail()" title="Retour à la bibliothèque"><span class="arrow">←</span> Retour</button>
-      <div style="flex:1;min-width:0"><h2>${esc(v.titre || "Sans titre")}</h2><div class="sub">${esc(v.artiste || "Artiste inconnu")}${v.annee_impression ? " · " + esc(v.annee_impression) : ""}</div></div>
+           <div style="flex:1;min-width:0"><h2>${esc(v.titre || "Sans titre")}</h2><div class="sub">${esc(v.artiste || "Artiste inconnu")}${v.annee_impression ? " · " + esc(v.annee_impression) : ""}</div></div>
+      <div class="musee-logo" id="museeLogo"></div>
       <button class="close-x" onclick="App.closeDetail()" title="Fermer">✕</button>
     </div>
     <div class="fiche-body"><div class="fiche-cols">
@@ -1453,7 +1455,7 @@ function renderDetail(v){
           </div>
         ` : ""}
       </div>
-      <div>${sectionHTML}
+           <div><div id="museeBox"></div>${sectionHTML}
         <div class="divider"></div>
         <div class="hint" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px">
           <span>Ajouté le ${v.date_ajout ? new Date(v.date_ajout).toLocaleDateString("fr-FR") : "—"}</span>
