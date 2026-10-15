@@ -5107,7 +5107,86 @@ async function audiodbFetchRaw(v){
             <li>Cliquez sur <strong>« Generate new token »</strong> et copiez le code.</li>
             <li>Dans l'appli, cliquez sur <strong>⚙︎ Paramètres</strong> et collez le token.</li>
           </ol>
-          <p class="tip">💡 Sans token Discogs, tout fonctionne : TheAudioDB (clé gratuite intégrée) peut fournir la pochette, ou vous la chargez manuellement.</p>
+                   <p class="tip">💡 Sans token Discogs, tout fonctionne : TheAudioDB (clé gratuite intégrée) peut fournir la pochette, ou vous la chargez manuellement.</p>
+          <h3>Mode « Éditions rares »</h3>
+          <p>Le bouton <strong>◆ Éditions rares</strong> (barre du haut) classe vos disques par <strong>score de rareté</strong> : nombre de possesseurs et de demandeurs Discogs, exemplaires en vente, prix le plus bas, plus les indices de vos fiches (pressage original, avant 1970, vinyle de couleur).</p>
+          <h3>Fiche « musée »</h3>
+          <p>Dans la fiche d'un vinyle, TheAudioDB peut ajouter une <strong>image de fond</strong> (fanart), le <strong>logo</strong> de l'artiste, sa <strong>biographie</strong> et un <strong>clip</strong>. Les couleurs de la fiche s'accordent à la <strong>palette de la pochette</strong>. Désactivable dans ⚙︎ Paramètres.</p>
+        `
+      },
+            {
+        id: "rares",
+        title: "Éditions rares",
+        icon: "◆",
+        content: `
+          <p>Le bouton <strong>◆ Éditions rares</strong> de la barre du haut classe vos disques par <strong>score de rareté</strong>, calculé à partir de deux familles d'indices :</p>
+          <h3>1. Indices locaux (toujours disponibles)</h3>
+          <ul>
+            <li>Pressage d'avant 1970</li>
+            <li>Pressage original (<em>1st Press</em>, <em>Original</em>…)</li>
+            <li>Vinyle de couleur (autre que noir)</li>
+          </ul>
+          <h3>2. Indices Discogs (si votre token est renseigné)</h3>
+          <ul>
+            <li><strong>Possesseurs</strong> — moins il y en a, plus le disque est rare</li>
+            <li><strong>Demandeurs</strong> — le ratio demandeurs/possesseurs révèle la tension du marché</li>
+            <li><strong>Exemplaires en vente</strong> — 0 ou 3 annonces = signal fort</li>
+            <li><strong>Prix le plus bas</strong> — un plancher élevé confirme la rareté</li>
+          </ul>
+          <h3>Score et niveaux</h3>
+          <p>Le score se traduit en 5 niveaux :</p>
+          <ul>
+            <li><strong>Courant</strong> — score 0-2</li>
+            <li><strong>Peu courant</strong> — score 3-4</li>
+            <li><strong>Rare</strong> — score 5-6</li>
+            <li><strong>Très rare</strong> — score 7-9</li>
+            <li><strong>Collector</strong> — score ≥ 10</li>
+          </ul>
+          <h3>Utilisation</h3>
+          <ol>
+            <li>Cliquez sur <strong>◆ Éditions rares</strong>.</li>
+            <li>Cliquez sur <strong>▶ Analyser</strong> : l'appli interroge Discogs disque par disque (≈ 3 secondes par fiche pour respecter les quotas).</li>
+            <li>Les résultats sont conservés <strong>30 jours</strong> dans un cache local — une seule analyse suffit.</li>
+            <li>Le bouton <strong>Noter « … »</strong> met à jour la rareté d'une fiche seulement quand vous cliquez.</li>
+            <li><strong>Popsike</strong> ouvre la recherche pour vérifier les ventes réelles aux enchères.</li>
+          </ol>
+          <p class="tip">💡 Le cache local n'est <strong>pas</strong> inclus dans l'export JSON. Chaque navigateur a le sien.</p>
+          <h3>Filtres d'affichage</h3>
+          <ul>
+            <li><strong>Rares et plus</strong> (score ≥ 5) — la vue par défaut</li>
+            <li><strong>À surveiller et plus</strong> (score ≥ 3)</li>
+            <li><strong>Rareté à revoir</strong> — disques dont la rareté suggérée dépasse celle que vous avez notée</li>
+            <li><strong>Toute la collection</strong></li>
+          </ul>
+          <p class="hint">⚠️ Sans token Discogs, seuls les indices de vos fiches sont utilisés — le score reste indicatif.</p>
+        `
+      },
+      {
+        id: "musee",
+        title: "Fiche musée",
+        icon: "◇",
+        content: `
+          <p>Quand vous ouvrez la fiche détaillée d'un vinyle, Vinyl Archive interroge <strong>TheAudioDB</strong> pour enrichir la présentation :</p>
+          <h3>Ce qui peut apparaître</h3>
+          <ul>
+            <li><strong>Image de fond</strong> (fanart) — photo d'ambiance de l'artiste, en filigrane derrière la fiche</li>
+            <li><strong>Logo de l'artiste</strong> — en haut à droite du titre</li>
+            <li><strong>Biographie</strong> — quelques lignes, avec un bouton « Lire la suite »</li>
+            <li><strong>Clip</strong> — vignette YouTube, lue seulement quand vous cliquez ▶</li>
+            <li><strong>Année de première sortie</strong> de l'album (avec bouton pour la reprendre dans « Année d'enregistrement »)</li>
+            <li><strong>Pochette de secours</strong> — proposée si votre fiche n'en a pas, avec bouton pour l'enregistrer</li>
+          </ul>
+          <h3>Palette de la pochette</h3>
+          <p>Les couleurs de la fiche (accents dorés, dégradés) sont extraites de <strong>votre pochette</strong> : si elle est très colorée, la fiche prend sa teinte. Si elle est grise ou noire, la fiche garde l'or par défaut.</p>
+          <p class="hint">⚠️ L'extraction de palette échoue silencieusement si la pochette vient d'une URL externe qui bloque CORS (Discogs, TheAudioDB). Pour garantir l'effet, préférez uploader la pochette localement.</p>
+          <h3>Désactiver</h3>
+          <p>Dans <strong>⚙︎ Paramètres</strong>, décochez <strong>« Fiche musée »</strong> : les fiches redeviennent sobres.</p>
+          <h3>Si rien ne s'affiche</h3>
+          <ul>
+            <li>Vérifiez que <strong>TheAudioDB</strong> répond : Paramètres ⚙︎ → Clé API. La clé gratuite actuelle est <code>123</code>.</li>
+            <li>Certains artistes très confidentiels ou très récents ne sont pas dans TheAudioDB — c'est normal.</li>
+            <li>Les métadonnées TheAudioDB n'incluent <strong>aucun prix</strong> : c'est un enrichissement visuel uniquement.</li>
+          </ul>
         `
       },
       {
@@ -5404,6 +5483,19 @@ async function audiodbFetchRaw(v){
           <p>Chaque navigateur a ses propres données. Utilisez <strong>Export JSON → transfert → Import JSON</strong> entre appareils. Une synchro cloud est prévue ultérieurement.</p>
           <h3>Comment revenir à un formulaire que j'étais en train de remplir ?</h3>
           <p>L'appli ne garde <strong>pas</strong> de brouillon automatique. Si vous fermez le formulaire sans enregistrer, les saisies sont perdues. Pensez à enregistrer régulièrement.</p>
+                   <h3>TheAudioDB affiche « HTTP 404 » ou « clé invalide »</h3>
+          <p>TheAudioDB ne fournit <strong>aucun prix</strong> — uniquement des métadonnées. Un 404 signifie presque toujours que la <strong>clé API</strong> est obsolète.</p>
+          <ul>
+            <li>Ouvrez <strong>⚙︎ Paramètres</strong> et remplacez la clé par <code>123</code> (clé gratuite actuelle).</li>
+            <li>Si le 404 persiste, TheAudioDB est peut-être momentanément hors ligne (service communautaire, disponibilité non garantie). L'appli reste fonctionnelle : la ligne se contente d'un point rouge.</li>
+          </ul>
+          <h3>La fiche musée n'affiche rien</h3>
+          <ul>
+            <li><strong>Réglage</strong> : vérifiez que « Fiche musée » est bien cochée dans ⚙︎ Paramètres.</li>
+            <li><strong>TheAudioDB</strong> : voir le point précédent (clé API <code>123</code>).</li>
+            <li><strong>Artiste inconnu</strong> : les artistes très peu documentés ne sont pas dans la base — c'est normal.</li>
+            <li><strong>Couleurs absentes</strong> : si la pochette est terne (noire, blanche, grise), la palette s'abstient volontairement pour préserver l'or d'origine.</li>
+          </ul>
           <h3>L'estimation de valeur ne marche pas</h3>
           <ul>
             <li>Vérifiez que le <strong>token Discogs</strong> est bien renseigné (⚙︎ Paramètres)</li>
