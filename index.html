@@ -540,6 +540,53 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
   .brand-disc{ width:40px; height:40px; }
   .brand-text h1{ font-size:18px; }
 }
+  /* ═══ ÉDITIONS RARES — typographie raffinée ═══ */
+.rare-intro{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:13.5px;line-height:1.8;color:var(--creme-dim);margin-bottom:20px}
+.rare-intro strong{font-style:normal;font-weight:500;color:var(--or-clair)}
+.rare-bar{height:4px;background:rgba(201,168,106,.10);border-radius:3px;overflow:hidden;margin-top:14px}
+.rare-bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--or),var(--or-clair));transition:width .3s}
+.rare-row{display:grid;grid-template-columns:68px 1fr auto;gap:20px;align-items:flex-start;padding:20px 4px;border-bottom:1px solid rgba(201,168,106,.10)}
+.rare-thumb{width:68px;height:68px;border-radius:3px;background:#1a1a1a;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--creme-faint);border:1px solid rgba(201,168,106,.2);box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.rare-thumb img{width:100%;height:100%;object-fit:cover}
+.rare-title{font-family:'Playfair Display',Georgia,serif;font-size:18px;font-weight:500;line-height:1.25;letter-spacing:.005em;color:var(--creme);cursor:pointer;transition:.2s}
+.rare-title:hover{color:var(--or-clair)}
+.rare-title span{font-style:italic;font-size:14px;color:var(--creme-dim);font-weight:400}
+.rare-meta{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.06em;color:var(--creme-faint);margin-top:5px;text-transform:uppercase}
+.rare-meta + .rare-meta{text-transform:none;letter-spacing:.02em;opacity:.78}
+.rare-reasons{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+.rare-chip{font-family:'Playfair Display',Georgia,serif;font-style:italic;font-size:12px;letter-spacing:.02em;padding:4px 12px;border-radius:14px;border:1px solid rgba(201,168,106,.32);color:var(--or-clair);background:linear-gradient(135deg,rgba(201,168,106,.14),rgba(201,168,106,.04));white-space:nowrap}
+.rare-lvl{font-family:'Playfair Display',Georgia,serif;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;padding:6px 13px;border-radius:2px;border:1px solid rgba(201,168,106,.4);color:var(--or);background:linear-gradient(135deg,rgba(201,168,106,.14),transparent);white-space:nowrap}
+.rare-lvl.hi{border-color:rgba(166,58,58,.6);color:#e8b8b8;background:linear-gradient(135deg,rgba(166,58,58,.22),rgba(166,58,58,.05))}
+.rare-side{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:170px}
+.rare-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+@media (max-width:640px){
+  .rare-row{grid-template-columns:56px 1fr}
+  .rare-thumb{width:56px;height:56px}
+  .rare-side{grid-column:1 / -1;align-items:flex-start;min-width:0}
+  .rare-actions{justify-content:flex-start}
+}
+
+/* ═══ FICHE MUSÉE ═══ */
+#detailModal{isolation:isolate}
+#detailModal.musee{background:linear-gradient(165deg,var(--musee-tint) 0%,var(--musee-tint2) 55%,#0f0f0f 100%)}
+#detailModal.musee .modal-head{background:rgba(14,14,14,.72)}
+.musee-bg{position:absolute;left:0;right:0;top:0;height:760px;max-height:100%;z-index:-1;background-size:cover;background-position:center 22%;opacity:0;transition:opacity 1.4s ease;pointer-events:none;border-radius:5px 5px 0 0;-webkit-mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.7) 45%,transparent 100%);mask-image:linear-gradient(to bottom,#000 0%,rgba(0,0,0,.7) 45%,transparent 100%)}
+.musee-bg.on{opacity:.3}
+.musee-logo{margin-left:auto;margin-right:16px;display:flex;align-items:center}
+.musee-logo:empty{display:none}
+.musee-logo img{max-height:56px;max-width:210px;object-fit:contain;filter:drop-shadow(0 2px 10px rgba(0,0,0,.65))}
+.musee-box{margin-bottom:28px;padding:22px 24px;border:1px solid var(--or-dim);border-radius:4px;background:linear-gradient(160deg,var(--or-soft),rgba(0,0,0,.28));-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.musee-h{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--or);font-weight:600;margin-bottom:10px}
+.musee-bio p{font-size:13.5px;line-height:1.8;color:var(--creme-dim)}
+.musee-link{background:none;border:none;color:var(--or-clair);cursor:pointer;font:inherit;font-size:12px;padding:0;margin-top:8px;text-decoration:underline}
+.musee-clip{margin-top:22px}
+.musee-video{position:relative;aspect-ratio:16/9;border-radius:3px;overflow:hidden;background:#000 center/cover no-repeat;border:1px solid var(--or-dim)}
+.musee-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.musee-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:62px;height:62px;border-radius:50%;border:1px solid var(--or);background:rgba(13,13,13,.7);color:var(--or-clair);font-size:22px;cursor:pointer;padding-left:4px}
+.musee-play:hover{background:rgba(13,13,13,.9)}
+.musee-meta{margin-top:12px;font-size:11.5px;color:var(--creme-faint);line-height:1.6}
+.musee-meta a{color:var(--or-clair)}
+@media (max-width:640px){.musee-logo{display:none}.musee-box{padding:18px}}
 </style>
 </head>
 <body>
@@ -559,6 +606,7 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
     <input id="globalSearch" type="text" placeholder="Rechercher un titre, un artiste, un label, un numéro de catalogue…" autocomplete="off">
   </div>
   <div class="top-actions">
+    <button class="btn ghost" id="btnRare" title="Détecter les éditions rares de la collection">◆ Éditions rares</button>
     <button class="btn ghost" id="btnSettings" title="Paramètres & sources de prix">⚙︎</button>
     <button class="btn ghost" id="btnFilters">Filtres <span id="filterBadge"></span></button>
     <button class="btn primary" id="btnAdd">+ Nouveau vinyle</button>
@@ -649,7 +697,8 @@ pre.code{background:#080808;border:1px solid rgba(201,168,106,.16);border-radius
 <div class="overlay" id="detailOverlay"><div class="modal" id="detailModal"></div></div>
 <div class="overlay" id="formOverlay"><div class="modal" id="formModal"></div></div>
 <div class="overlay" id="settingsOverlay"><div class="modal narrow" id="settingsModal"></div></div>
-<div class="toasts" id="toasts"></div>
+<div class="overlay" id="rareOverlay"><div class="modal" id="rareModal"></div></div>
+  <div class="toasts" id="toasts"></div>
 
 <datalist id="dl_genres">
   <option>Rock</option><option>Pop</option><option>Jazz</option><option>Classique</option>
@@ -886,7 +935,7 @@ const State = {
 
 const Settings = {
   key: "vinylArchiveJacques.settings",
-  data: { discogsToken:"", audiodbKey:"2", proxyUrl:"", devise:"EUR" },
+  data: { discogsToken:"", audiodbKey:"2", musee:true, proxyUrl:"", devise:"EUR" },
   load(){ try { const raw = localStorage.getItem(this.key); if(raw) Object.assign(this.data, JSON.parse(raw)); } catch(e){} return this.data; },
   save(patch){ Object.assign(this.data, patch); localStorage.setItem(this.key, JSON.stringify(this.data)); return this.data; }
 };
@@ -930,7 +979,7 @@ async function discogsSuggest(releaseId, token, etat){
   return { value, grade, low: toEur(j[GRADE_DISCOGS["VG"]]), high: toEur(j[GRADE_DISCOGS["Near Mint"]]), approx, etatConnu: !!GRADE_DISCOGS[etat] };
 }
 
-async function discogsFetch(v, token){
+async function discogsFetch(v, token, opts){
   const params = new URLSearchParams({ type:"release", token, per_page:"10", page:"1" });
   if(v.artiste) params.set("artist", v.artiste);
   if(v.titre) params.set("release_title", v.titre);
@@ -965,8 +1014,10 @@ async function discogsFetch(v, token){
     const r2 = await fetch(`https://api.discogs.com/marketplace/stats/${best.id}?token=${encodeURIComponent(token)}`, { headers:{ "User-Agent":"VinylArchiveJacques/1.0" } });
     if(r2.ok){ const stats = await r2.json(); if(stats && stats.lowest_price){ const lp = stats.lowest_price; lowest = (typeof lp === "object") ? lp.value : lp; } }
   } catch(e){}
-  let suggest = null, suggestErr = null;
-  try { suggest = await discogsSuggest(best.id, token, v.etat_disque); } catch(e){ suggestErr = e.message; }
+   let suggest = null, suggestErr = null;
+  if(!opts || opts.suggest !== false){
+    try { suggest = await discogsSuggest(best.id, token, v.etat_disque); } catch(e){ suggestErr = e.message; }
+  }
   return {
     suggest, suggestErr,
     value: lowest !== null && lowest !== undefined ? Number(lowest) : null,
@@ -1606,6 +1657,7 @@ function renderSettings(){
         <div class="hint">Générez un token gratuit sur <a href="https://www.discogs.com/settings/developers" target="_blank" rel="noopener">discogs.com/settings/developers</a>. Pour obtenir les <strong>prix suggérés selon l'état</strong>, renseignez aussi vos réglages vendeur (paiement, expédition) sur Discogs ; sinon l'appli utilise l'annonce la plus basse.</div>
       </div>
       <div class="form-section"><div class="section-title"><span class="ico">◆</span>TheAudioDB</div>
+              <label style="display:flex;gap:10px;align-items:center;margin:0 0 16px;cursor:pointer;font-size:13px"><input type="checkbox" id="setMusee" ${s.musee === false ? "" : "checked"}><span>Fiche « musée » : fanart, logo, biographie et clip de l'artiste</span></label>
         <div class="field" style="margin-bottom:14px"><label>Clé API TheAudioDB</label>
           <input id="setAudiodbKey" type="text" value="${esc(s.audiodbKey || "2")}" placeholder="2 (clé gratuite par défaut)"></div>
         <div class="hint">Interrogé en parallèle de Discogs (pochettes et métadonnées, pas de prix). La clé gratuite <code>2</code> fonctionne sans inscription ; une clé premium est disponible sur <a href="https://www.theaudiodb.com/api_guide.php" target="_blank" rel="noopener">theaudiodb.com</a>.</div>
@@ -2569,7 +2621,9 @@ function cataloguePrintBody(items, modeTri){
     if(!parLettre[lettre][art]) parLettre[lettre][art] = [];
     parLettre[lettre][art].push(v.titre || "");
   });
-  const lettres = Object.keys(parLettre).sort((a,b) => a.localeCompare(b, "fr"));
+   const lettres = Object.keys(parLettre).sort((a,b) =>
+    (a === "#") - (b === "#") || a.localeCompare(b, "fr")
+  );
   const indexRows = lettres.map(lettre => {
     const artistesList = Object.keys(parLettre[lettre]).sort((a,b) => a.localeCompare(b, "fr"));
     const contenu = artistesList.map(a => {
@@ -2728,9 +2782,10 @@ const App = {
   async saveForm(){
     const data = this.readForm(); if(!data) return;
     if(!data.titre || !data.artiste){ toast("Champs requis", "Le titre et l'artiste sont obligatoires.", true); return; }
-    const now = new Date().toISOString();
+        const now = new Date().toISOString();
+    const etaitEdition = !!State.editingId;
     let item;
-    if(State.editingId){
+    if(etaitEdition){
       const existing = State.vinyles.find(x => x.id === State.editingId);
       if(!existing){ toast("Erreur", "Fiche introuvable", true); return; }
       item = Object.assign({}, existing, data, { date_modif: now });
@@ -2751,7 +2806,7 @@ const App = {
       const i = State.vinyles.findIndex(x => x.id === item.id);
       if(i >= 0) State.vinyles[i] = item; else State.vinyles.push(item);
       this.closeForm(); this.refresh();
-      toast(State.editingId ? "Fiche mise à jour" : "Vinyle ajouté", `${item.titre} — ${item.artiste}`);
+       toast(etaitEdition ? "Fiche mise à jour" : "Vinyle ajouté", `${item.titre} — ${item.artiste}`);
     } catch(e){ console.error(e); toast("Erreur d'enregistrement", e.message, true); }
   },
   async deleteVinyle(id){
@@ -2794,7 +2849,7 @@ const App = {
   openSettings(){ renderSettings(); $("#settingsOverlay").classList.add("open"); document.body.style.overflow = "hidden"; },
   closeSettings(){ $("#settingsOverlay").classList.remove("open"); document.body.style.overflow = ""; },
   saveSettings(){
-    Settings.save({ discogsToken: ($("#setDiscogsToken")?.value || "").trim(), audiodbKey: ($("#setAudiodbKey")?.value || "").trim() || "2", proxyUrl: ($("#setProxyUrl")?.value || "").trim() });
+       Settings.save({ discogsToken: ($("#setDiscogsToken")?.value || "").trim(), audiodbKey: ($("#setAudiodbKey")?.value || "").trim() || "2", musee: $("#setMusee") ? $("#setMusee").checked : Settings.data.musee !== false, proxyUrl: ($("#setProxyUrl")?.value || "").trim() });
     this.closeSettings(); toast("Paramètres", "Configuration enregistrée.");
   },
   openExportMenu(e){
@@ -4044,6 +4099,612 @@ function premiereLettreTri(name){
     initDateFlex();
   }
 })();
+  /* ═══════════════════════════════════════════════════════════════════
+   MODE « ÉDITIONS RARES » — Discogs + indices locaux + cache local
+   ═══════════════════════════════════════════════════════════════════ */
+const Rare = {
+  KEY: "vinylArchiveJacques.cacheRare",
+  TTL: 30 * 24 * 3600 * 1000,
+  scan: { running:false, stop:false, done:0, total:0, current:"", info:"" },
+  filtre: "rares",
+  _bound: false,
+
+  loadCache(){ try { return JSON.parse(localStorage.getItem(this.KEY) || "{}") || {}; } catch(e){ return {}; } },
+  saveCache(c){ try { localStorage.setItem(this.KEY, JSON.stringify(c)); } catch(e){ console.warn("Cache Éditions rares plein", e); } },
+  keyOf(v){ return [normStr(v.artiste), normStr(v.titre), normStr(v.catalogue), v.annee_impression || ""].join("|"); },
+  valide(e){ return !!e && (Date.now() - e.t) < this.TTL; },
+  collection(){ return State.vinyles.filter(v => v.statut !== "Recherché"); },
+  pause(ms){
+    return new Promise(res => {
+      const fin = Date.now() + ms;
+      const tick = () => { if(this.scan.stop || Date.now() >= fin) res(); else setTimeout(tick, 400); };
+      tick();
+    });
+  },
+
+  evaluer(v, info){
+    let score = 0; const raisons = [];
+    const add = (pts, txt) => { score += pts; raisons.push(txt); };
+    const an = parseInt(v.annee_impression, 10);
+    if(an && an < 1970) add(1, "Pressage d'avant 1970");
+    if(/1st|first|original|orig|premier/i.test(v.pressage || "")) add(1, "Pressage original");
+    if(v.couleur_vinyle && !/^(noir|black)$/i.test(String(v.couleur_vinyle).trim())) add(1, "Vinyle de couleur");
+    const verifie = !!(info && !info.none);
+    if(verifie){
+      const have = info.have, want = info.want;
+      if(typeof have === "number" && have > 0){
+        if(have < 30) add(2, "Très peu de possesseurs (" + have + ")");
+        else if(have < 150) add(1, "Peu de possesseurs (" + have + ")");
+        if(have >= 5 && typeof want === "number"){
+          const r = want / have;
+          if(r >= 1.5) add(3, "Très demandé (" + want + " cherchent, " + have + " possèdent)");
+          else if(r >= 0.75) add(2, "Demandé (" + want + " cherchent, " + have + " possèdent)");
+          else if(r >= 0.35) add(1, "Plutôt demandé (" + want + " pour " + have + ")");
+        }
+      }
+      if(typeof info.forSale === "number"){
+        if(info.forSale === 0) add(2, "Aucun exemplaire en vente");
+        else if(info.forSale <= 3) add(2, "Seulement " + info.forSale + " en vente");
+        else if(info.forSale <= 10) add(1, "Seulement " + info.forSale + " en vente");
+      }
+      if(typeof info.lowest === "number" && isFinite(info.lowest)){
+        if(info.lowest >= 150) add(4, "Dès " + fmtEuro(info.lowest) + " sur Discogs");
+        else if(info.lowest >= 60) add(3, "Dès " + fmtEuro(info.lowest) + " sur Discogs");
+        else if(info.lowest >= 30) add(2, "Dès " + fmtEuro(info.lowest) + " sur Discogs");
+        else if(info.lowest >= 15) add(1, "Dès " + fmtEuro(info.lowest) + " sur Discogs");
+      }
+    }
+    const niveau = score >= 10 ? "Collector" : score >= 7 ? "Très rare" : score >= 5 ? "Rare" : score >= 3 ? "Peu courant" : "Courant";
+    return { score, niveau, raisons, verifie };
+  },
+
+  lignes(){
+    const cache = this.loadCache();
+    return this.collection().map(v => {
+      const info = cache[this.keyOf(v)] || null;
+      const ev = this.evaluer(v, info);
+      return { v, info, ev, declare: RANG_RARETE[v.rarete] ?? -1, suggere: RANG_RARETE[ev.niveau] ?? 0 };
+    }).sort((a, b) => b.ev.score - a.ev.score);
+  },
+  aRevoir(l){ return l.suggere > l.declare && l.suggere >= 2; },
+  filtrer(lignes){
+    const f = this.filtre;
+    return lignes.filter(l => f === "tous" ? true : f === "surveiller" ? l.ev.score >= 3 : f === "revoir" ? this.aRevoir(l) : l.ev.score >= 5);
+  },
+
+  open(){
+    if(!this._bound){
+      this._bound = true;
+      const m = $("#rareModal");
+      m.addEventListener("click", e => {
+        const t = e.target.closest("[data-rare-act],[data-rare-open],[data-rare-apply]"); if(!t) return;
+        if(t.dataset.rareOpen){ App.openDetail(t.dataset.rareOpen); return; }
+        if(t.dataset.rareApply){ this.appliquer(t.dataset.rareApply, t.dataset.niveau); return; }
+        const a = t.dataset.rareAct;
+        if(a === "close") this.close();
+        else if(a === "scan") this.lancer(false);
+        else if(a === "rescan") this.lancer(true);
+        else if(a === "stop"){ this.scan.stop = true; this.scan.info = "Arrêt en cours…"; this.majProgress(); }
+        else if(a === "clear"){
+          if(this.scan.running){ toast("Éditions rares", "Arrêtez d'abord l'analyse en cours.", true); return; }
+          if(confirm("Vider le cache local des analyses Discogs ? Vos fiches ne sont pas touchées.")){ try { localStorage.removeItem(this.KEY); } catch(e){} this.render(); }
+        }
+      });
+      m.addEventListener("change", e => {
+        if(e.target && e.target.id === "rareFiltre"){ this.filtre = e.target.value; this.renderListe(); }
+      });
+    }
+    this.render();
+    $("#rareOverlay").classList.add("open"); document.body.style.overflow = "hidden"; $("#rareOverlay").scrollTop = 0;
+  },
+  close(){ $("#rareOverlay").classList.remove("open"); document.body.style.overflow = ""; },
+
+  render(){
+    const m = $("#rareModal"); if(!m) return;
+    const token = !!Settings.data.discogsToken;
+    const s = this.scan;
+    const cache = this.loadCache();
+    const vus = new Set();
+    const aFaire = this.collection().filter(v => { const k = this.keyOf(v); if(vus.has(k)) return false; vus.add(k); return !this.valide(cache[k]); }).length;
+    const minutes = Math.max(1, Math.ceil(aFaire * 3 / 60));
+    m.innerHTML = `
+      <div class="modal-head" style="align-items:center">
+        <button class="btn-back" data-rare-act="close" title="Retour à la bibliothèque"><span class="arrow">←</span> Retour</button>
+        <div style="flex:1;min-width:0"><h2>Éditions rares</h2><div class="sub">Détection Discogs + indices de votre fiche</div></div>
+        <button class="close-x" data-rare-act="close" title="Fermer">✕</button>
+      </div>
+      <div class="form-body">
+        <p class="rare-intro">Chaque disque reçoit un <strong>score de rareté</strong> : nombre de possesseurs et de demandeurs sur Discogs, exemplaires en vente, prix le plus bas, plus les indices de votre fiche (pressage original, avant 1970, vinyle de couleur). Les résultats sont gardés dans un <strong>cache local</strong> (30 jours) : une seule analyse suffit, puis tout est instantané.
+        <br><span style="opacity:.75">Popsike n'a pas d'accès automatique : son bouton ouvre la recherche pour <strong>confirmer les prix de vente réels</strong> des disques repérés.</span></p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          ${s.running
+            ? `<button class="btn sm" data-rare-act="stop">■ Arrêter l'analyse</button>`
+            : (token
+                ? `<button class="btn sm primary" data-rare-act="scan">▶ Analyser${aFaire ? " (" + aFaire + " disque" + (aFaire > 1 ? "s" : "") + " · ≈ " + minutes + " min)" : " — tout est à jour"}</button>
+                   <button class="btn sm ghost" data-rare-act="rescan">↻ Tout réanalyser</button>`
+                : `<span class="hint">Pour analyser avec Discogs, renseignez votre token dans ⚙︎ Paramètres. Sans lui, seuls les indices de vos fiches sont utilisés.</span>`)}
+          <button class="btn sm ghost" data-rare-act="clear" ${s.running ? "disabled" : ""}>Vider le cache</button>
+        </div>
+        <div id="rareProgress" style="display:${s.running ? "block" : "none"}">
+          <div class="rare-bar"><i id="rareBar"></i></div>
+          <div class="hint" id="rareProgressTxt" style="margin-top:8px"></div>
+        </div>
+        <div class="divider"></div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+          <div class="field" style="margin:0;min-width:240px"><label>Afficher</label>
+            <select id="rareFiltre">
+              <option value="rares" ${this.filtre === "rares" ? "selected" : ""}>Rares et plus (score ≥ 5)</option>
+              <option value="surveiller" ${this.filtre === "surveiller" ? "selected" : ""}>À surveiller et plus (score ≥ 3)</option>
+              <option value="revoir" ${this.filtre === "revoir" ? "selected" : ""}>Rareté à revoir (supérieure à celle notée)</option>
+              <option value="tous" ${this.filtre === "tous" ? "selected" : ""}>Toute la collection</option>
+            </select></div>
+          <div id="rareCompteurs" class="hint"></div>
+        </div>
+        <div id="rareListe"></div>
+      </div>`;
+    this.renderListe(); this.majProgress();
+  },
+
+  renderListe(){
+    const box = $("#rareListe"); if(!box) return;
+    const lignes = this.lignes();
+    const visibles = this.filtrer(lignes);
+    const analyses = lignes.filter(l => l.info && !l.info.none).length;
+    const rares = lignes.filter(l => l.ev.score >= 5).length;
+    const revoir = lignes.filter(l => this.aRevoir(l)).length;
+    const c = $("#rareCompteurs");
+    if(c) c.innerHTML = `${lignes.length} disque${lignes.length > 1 ? "s" : ""} · ${analyses} analysé${analyses > 1 ? "s" : ""} · <strong>${rares}</strong> rare${rares > 1 ? "s" : ""} · ${revoir} à revoir`;
+    const LIMITE = 150;
+    if(!visibles.length){
+      box.innerHTML = `<div class="hint" style="padding:26px 0;text-align:center">${lignes.length ? "Aucun disque dans cette catégorie pour le moment." : "La collection est vide."}</div>`;
+      return;
+    }
+    box.innerHTML = visibles.slice(0, LIMITE).map(l => this.rowHTML(l)).join("")
+      + (visibles.length > LIMITE ? `<div class="hint" style="padding:16px 0;text-align:center">… et ${visibles.length - LIMITE} autres (affinez avec le filtre).</div>` : "");
+  },
+
+  rowHTML(l){
+    const { v, info, ev } = l;
+    const liens = priceSearchLinks(v);
+    const hi = ev.score >= 7;
+    const stats = (info && !info.none) ? [
+      typeof info.have === "number" ? info.have + " possèdent" : "",
+      typeof info.want === "number" ? info.want + " cherchent" : "",
+      typeof info.forSale === "number" ? info.forSale + " en vente" : "",
+      typeof info.lowest === "number" ? "dès " + fmtEuro(info.lowest) : ""
+    ].filter(Boolean).join(" · ") : "";
+    const etat = (info && info.none) ? "Introuvable sur Discogs"
+      : ev.verifie ? "Discogs · analysé le " + new Date(info.t).toLocaleDateString("fr-FR")
+      : "Non vérifié (indices de la fiche seulement)";
+    const declareTxt = v.rarete ? "Notée « " + v.rarete + " »" : "Rareté non notée";
+    const lienDiscogs = (info && info.url) ? info.url : (liens ? liens.discogs : null);
+    return `<div class="rare-row">
+      <div class="rare-thumb">${v.image_pochette ? `<img loading="lazy" src="${esc(v.image_pochette)}" alt="">` : "♪"}</div>
+      <div>
+        <div class="rare-title" data-rare-open="${esc(v.id)}">${esc(v.titre || "Sans titre")} <span style="opacity:.6;font-size:13px">— ${esc(v.artiste || "")}</span></div>
+        <div class="rare-meta">${esc([v.annee_impression, v.label, v.pays, v.pressage].filter(Boolean).join(" · "))}</div>
+        <div class="rare-meta">${esc(etat)}${stats ? " — " + esc(stats) : ""}</div>
+        <div class="rare-reasons">${ev.raisons.map(r => `<span class="rare-chip">${esc(r)}</span>`).join("") || `<span class="rare-meta">Aucun indice de rareté</span>`}</div>
+      </div>
+      <div class="rare-side">
+        <span class="rare-lvl ${hi ? "hi" : ""}" title="Score ${ev.score}">${esc(ev.niveau)} · ${ev.score}</span>
+        <span class="rare-meta">${esc(declareTxt)}</span>
+        <div class="rare-actions">
+          ${this.aRevoir(l) ? `<button class="btn sm" data-rare-apply="${esc(v.id)}" data-niveau="${esc(ev.niveau)}">Noter « ${esc(ev.niveau)} »</button>` : ""}
+          ${liens ? `<a class="btn sm ghost" href="${esc(liens.popsike)}" target="_blank" rel="noopener" title="Ventes aux enchères passées sur Popsike" style="text-decoration:none">Popsike</a>` : ""}
+          ${lienDiscogs ? `<a class="btn sm ghost" href="${esc(lienDiscogs)}" target="_blank" rel="noopener" style="text-decoration:none">Discogs</a>` : ""}
+        </div>
+      </div>
+    </div>`;
+  },
+
+  majProgress(){
+    const s = this.scan, bar = $("#rareBar"), txt = $("#rareProgressTxt"), box = $("#rareProgress");
+    if(!bar || !txt) return;
+    if(box) box.style.display = s.running ? "block" : "none";
+    bar.style.width = (s.total ? Math.round(100 * s.done / s.total) : 0) + "%";
+    txt.textContent = s.info || (s.running ? `${s.done} / ${s.total} · ${s.current}` : "");
+  },
+
+  async appliquer(id, niveau){
+    const v = State.vinyles.find(x => x.id === id); if(!v || !niveau) return;
+    v.rarete = niveau; v.date_modif = new Date().toISOString();
+    try { await Store.put(v); App.refresh(false); this.renderListe(); toast("Rareté mise à jour", `${v.titre} → ${niveau}`); }
+    catch(e){ toast("Erreur", e.message, true); }
+  },
+
+  async lancer(force){
+    const token = Settings.data.discogsToken;
+    if(!token){ toast("Éditions rares", "Renseignez votre token Discogs dans les Paramètres ⚙︎", true); return; }
+    const s = this.scan; if(s.running) return;
+    const cache = this.loadCache();
+    const vus = new Set();
+    const file = this.collection().filter(v => {
+      const k = this.keyOf(v); if(vus.has(k)) return false; vus.add(k);
+      return force || !this.valide(cache[k]);
+    });
+    if(!file.length){ toast("Éditions rares", "Tout est déjà à jour dans le cache local."); return; }
+    Object.assign(s, { running:true, stop:false, done:0, total:file.length, current:"", info:"" });
+    this.render();
+    let erreursReseau = 0, interrompu = false;
+    for(const v of file){
+      if(s.stop) break;
+      s.current = [v.artiste, v.titre].filter(Boolean).join(" – ");
+      this.majProgress();
+      const k = this.keyOf(v);
+      let tentative = 0, fait = false;
+      while(!fait && tentative < 2 && !s.stop){
+        tentative++;
+        try {
+          const r = await discogsFetch(v, token, { suggest:false });
+          cache[k] = { t:Date.now(), have:r.have, want:r.want, forSale:r.forSale, lowest:r.statsLowest, label:r.label, url:r.url };
+          fait = true; erreursReseau = 0;
+        } catch(e){
+          const msg = String((e && e.message) || e);
+          if(/429/.test(msg)){
+            s.info = "Quota Discogs atteint — pause d'une minute…"; this.majProgress();
+            await this.pause(65000);
+            s.info = "";
+          } else if(/401/.test(msg)){
+            toast("Discogs", msg, true); s.stop = true; interrompu = true; fait = true;
+          } else if(/Aucune correspondance|Aucun résultat/.test(msg)){
+            cache[k] = { t:Date.now(), none:true }; fait = true; erreursReseau = 0;
+          } else {
+            erreursReseau++; fait = true;
+            if(erreursReseau >= 3){ toast("Éditions rares", "Connexion à Discogs impossible : analyse interrompue.", true); s.stop = true; interrompu = true; }
+          }
+        }
+      }
+      if(!fait && !s.stop){ toast("Discogs", "Quota toujours atteint : reprenez dans quelques minutes (le cache est conservé).", true); s.stop = true; interrompu = true; }
+      s.done++;
+      this.saveCache(cache);
+      if(s.done % 3 === 0) this.renderListe();
+      this.majProgress();
+      if(!s.stop) await this.pause(2200);
+    }
+    const stoppe = s.stop;
+    s.running = false; s.stop = false; s.info = "";
+    this.render();
+    if(!interrompu) toast("Éditions rares", stoppe ? `Analyse arrêtée (${s.done}/${s.total}) — le cache est conservé.` : `Analyse terminée : ${s.total} disque${s.total > 1 ? "s" : ""}.`);
+  }
+};
+
+/* ═══════════════════════════════════════════════════════════════════
+   FICHE « MUSÉE » — fanart, logo, bio, clip (TheAudioDB) + palette
+   ═══════════════════════════════════════════════════════════════════ */
+const Musee = {
+  KEY: "vinylArchiveJacques.cacheMusee",
+  TTL: 30 * 24 * 3600 * 1000,
+  token: 0, lastId: null, _bound: false, bio: null, pal: new Map(),
+
+  actif(){ return Settings.data.musee !== false; },
+  hash(str){ let h = 0; for(const c of String(str)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return h; },
+  cacheGet(k){ try { const c = JSON.parse(localStorage.getItem(this.KEY) || "{}"); const e = c[k]; return e && (Date.now() - e.t) < this.TTL ? e.d : null; } catch(e){ return null; } },
+  cacheSet(k, d){
+    try {
+      const c = JSON.parse(localStorage.getItem(this.KEY) || "{}");
+      c[k] = { t: Date.now(), d };
+      const cles = Object.keys(c);
+      if(cles.length > 600){ cles.sort((a, b) => c[a].t - c[b].t).slice(0, 100).forEach(x => delete c[x]); }
+      localStorage.setItem(this.KEY, JSON.stringify(c));
+    } catch(e){}
+  },
+  async api(chemin, params){
+    const key = (Settings.data.audiodbKey || "2").trim() || "2";
+    const res = await fetch(`https://www.theaudiodb.com/api/v1/json/${encodeURIComponent(key)}/${chemin}?` + new URLSearchParams(params));
+    if(!res.ok) throw new Error("TheAudioDB HTTP " + res.status);
+    return res.json();
+  },
+  async artiste(v){
+    const k = "a|" + normStr(v.artiste);
+    let d = this.cacheGet(k); if(d) return d;
+    const j = await this.api("search.php", { s: v.artiste });
+    const arr = (j && j.artists) || [];
+    if(!arr.length){ d = { none:true }; this.cacheSet(k, d); return d; }
+    const nA = normStr(v.artiste).trim();
+    const a = arr.find(x => normStr(x.strArtist).trim() === nA) || arr[0];
+    const bio = String(a.strBiographyFR || a.strBiographyEN || "").trim();
+    d = {
+      id: a.idArtist || null, nom: a.strArtist || v.artiste,
+      fanart: [a.strArtistFanart, a.strArtistFanart2, a.strArtistFanart3, a.strArtistFanart4].filter(Boolean),
+      logo: a.strArtistLogo || null, bio: bio.slice(0, 1800), bioLang: a.strBiographyFR ? "fr" : "en"
+    };
+    this.cacheSet(k, d); return d;
+  },
+  async clip(idAlbum, idArtist){
+    const yt = u => { const m = String(u || "").match(/(?:v=|youtu\.be\/|embed\/)([\w-]{11})/); return m ? m[1] : null; };
+    try {
+      const j = await this.api("track.php", { m: idAlbum });
+      const t = ((j && j.track) || []).find(x => yt(x.strMusicVid));
+      if(t) return { id: yt(t.strMusicVid), titre: t.strTrack || "", source: "album" };
+    } catch(e){}
+    try {
+      if(idArtist){
+        const j = await this.api("mvid.php", { i: idArtist });
+        const t = ((j && j.mvids) || []).find(x => yt(x.strMusicVid));
+        if(t) return { id: yt(t.strMusicVid), titre: t.strTrack || "", source: "artiste" };
+      }
+    } catch(e){}
+    return null;
+  },
+  async album(v, artisteId){
+    if(!v.titre) return null;
+    const k = "b|" + normStr(v.artiste) + "|" + normStr(v.titre);
+    let d = this.cacheGet(k); if(d) return d;
+    let r = null;
+    try { r = await audiodbFetchRaw(v); } catch(e){ if(!/Aucune correspondance/.test(e.message)) throw e; }
+    d = r ? { id: r.idAlbum, thumb: r.cover, annee: r.annee } : { none:true };
+    if(r && r.idAlbum) d.clip = await this.clip(r.idAlbum, artisteId || r.idArtist);
+    this.cacheSet(k, d); return d;
+  },
+  async donnees(v){
+    let art = null, alb = null;
+    try { art = await this.artiste(v); } catch(e){}
+    try { alb = await this.album(v, art && art.id); } catch(e){}
+    return { art, alb };
+  },
+  depuisCache(v){
+    const art = this.cacheGet("a|" + normStr(v.artiste));
+    const alb = v.titre ? this.cacheGet("b|" + normStr(v.artiste) + "|" + normStr(v.titre)) : null;
+    if(art && (alb || !v.titre)) return { art, alb };
+    return null;
+  },
+
+  reset(){
+    const m = $("#detailModal"); if(!m) return;
+    m.classList.remove("musee");
+    ["--or","--or-clair","--or-dim","--or-soft","--musee-tint","--musee-tint2"].forEach(p => m.style.removeProperty(p));
+    this.bio = null;
+  },
+  bind(){
+    if(this._bound) return; this._bound = true;
+    $("#detailModal").addEventListener("click", e => {
+      const t = e.target.closest("[data-musee-act]"); if(!t) return;
+      const a = t.dataset.museeAct;
+      if(a === "bio") this.basculerBio(t);
+      else if(a === "clip") this.lireClip(t.dataset.yt);
+      else if(a === "savecover") this.enregistrerPochette(t.dataset.url);
+      else if(a === "useyear") this.reprendreAnnee(t.dataset.year);
+    });
+  },
+
+  enrich(v){
+    this.bind();
+    if(v.id !== this.lastId){ this.reset(); this.lastId = v.id; }
+    if(!this.actif()){ this.reset(); return; }
+    const my = ++this.token;
+    const cache = v.artiste ? this.depuisCache(v) : { art:null, alb:null };
+    if(cache){ this.apply(v, cache); return; }
+    this.paletteDe(v, null);
+    this.donnees(v).then(d => { if(my === this.token && State.detailId === v.id) this.apply(v, d); });
+  },
+
+  couper(txt, n){
+    if(txt.length <= n) return txt;
+    const cut = txt.slice(0, n);
+    const idx = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("\n"));
+    return idx > n * 0.5 ? cut.slice(0, idx + 1) : cut.trim() + "…";
+  },
+  fmt(txt){ return esc(txt).replace(/\r?\n+/g, "<br><br>"); },
+
+  apply(v, d){
+    const art = d.art && !d.art.none ? d.art : null;
+    const alb = d.alb && !d.alb.none ? d.alb : null;
+    const bg = $("#museeBg");
+    if(bg && art && art.fanart.length){
+      const url = art.fanart[this.hash(v.id) % art.fanart.length];
+      const im = new Image();
+      im.onload = () => { const el = $("#museeBg"); if(el && this.lastId === v.id){ el.style.backgroundImage = `url("${url.replace(/"/g, "%22")}")`; el.classList.add("on"); } };
+      im.src = url;
+    }
+    const lg = $("#museeLogo");
+    if(lg && art && art.logo) lg.innerHTML = `<img src="${esc(art.logo)}" alt="${esc(art.nom)}" onerror="this.remove()">`;
+    const box = $("#museeBox");
+    if(box){
+      const parts = [];
+      if(art && art.bio){
+        this.bio = { court: this.couper(art.bio, 520), long: art.bio, ouvert: false };
+        parts.push(`<div class="musee-bio"><div class="musee-h">L'artiste${art.bioLang === "en" ? " · texte en anglais" : ""}</div>
+          <p id="museeBioTxt">${this.fmt(this.bio.court)}</p>
+          ${art.bio.length > this.bio.court.length ? `<button type="button" class="musee-link" data-musee-act="bio">Lire la suite</button>` : ""}</div>`);
+      }
+      if(alb && alb.clip && /^[\w-]{11}$/.test(alb.clip.id)){
+        const id = alb.clip.id;
+        parts.push(`<div class="musee-clip"><div class="musee-h">Clip ${alb.clip.source === "artiste" ? "de l'artiste" : "de l'album"}${alb.clip.titre ? " · " + esc(alb.clip.titre) : ""}</div>
+          <div class="musee-video" id="museeVideo" style="background-image:url('https://i.ytimg.com/vi/${id}/hqdefault.jpg')">
+            <button type="button" class="musee-play" data-musee-act="clip" data-yt="${id}" aria-label="Lire le clip">▶</button>
+          </div>
+          <div class="musee-meta"><a href="https://www.youtube.com/watch?v=${id}" target="_blank" rel="noopener">Ouvrir sur YouTube ↗</a></div></div>`);
+      }
+      if(alb && /^\d{4}$/.test(String(alb.annee || ""))){
+        parts.push(`<div class="musee-meta">Première sortie de l'album : <strong>${esc(alb.annee)}</strong> (TheAudioDB). Ce n'est pas toujours l'année d'enregistrement.
+          ${!v.annee_enregistrement ? `<button type="button" class="musee-link" data-musee-act="useyear" data-year="${esc(alb.annee)}">Reprendre dans « Année d'enregistrement »</button>` : ""}</div>`);
+      }
+      if(parts.length){ box.className = "musee-box"; box.innerHTML = parts.join(""); }
+    }
+    if(!v.image_pochette && alb && alb.thumb && /^https?:\/\//.test(alb.thumb)){
+      const fc = $(".fiche-cover");
+      if(fc){
+        fc.innerHTML = `<img src="${esc(alb.thumb)}" alt="Pochette (TheAudioDB)">`;
+        fc.insertAdjacentHTML("afterend", `<button type="button" class="btn sm ghost" data-musee-act="savecover" data-url="${esc(alb.thumb)}" style="width:100%;margin-top:8px">Enregistrer cette pochette dans la fiche</button>`);
+      }
+    }
+    this.paletteDe(v, alb && alb.thumb);
+  },
+
+  basculerBio(btn){
+    if(!this.bio) return;
+    this.bio.ouvert = !this.bio.ouvert;
+    const p = $("#museeBioTxt"); if(p) p.innerHTML = this.fmt(this.bio.ouvert ? this.bio.long : this.bio.court);
+    btn.textContent = this.bio.ouvert ? "Réduire" : "Lire la suite";
+  },
+  lireClip(id){
+    if(!/^[\w-]{11}$/.test(id || "")) return;
+    const box = $("#museeVideo"); if(!box) return;
+    box.style.backgroundImage = "none";
+    box.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0" title="Clip" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+  },
+  async enregistrerPochette(url){
+    const v = State.vinyles.find(x => x.id === State.detailId); if(!v || !/^https?:\/\//.test(url || "")) return;
+    v.image_pochette = url; v.date_modif = new Date().toISOString();
+    try { await Store.put(v); App.refresh(false); renderDetail(v); toast("Pochette enregistrée", v.titre); }
+    catch(e){ toast("Erreur", e.message, true); }
+  },
+  async reprendreAnnee(an){
+    const v = State.vinyles.find(x => x.id === State.detailId); if(!v || !/^\d{4}$/.test(an || "")) return;
+    v.annee_enregistrement = Number(an); v.date_modif = new Date().toISOString();
+    try { await Store.put(v); App.refresh(false); renderDetail(v); toast("Année d'enregistrement", `${v.titre} → ${an}`); }
+    catch(e){ toast("Erreur", e.message, true); }
+  },
+
+  hsl(r, g, b){
+    r /= 255; g /= 255; b /= 255;
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, dl = mx - mn;
+    if(dl === 0) return [0, 0, l];
+    const sat = dl / (1 - Math.abs(2 * l - 1));
+    let h = mx === r ? ((g - b) / dl) % 6 : mx === g ? (b - r) / dl + 2 : (r - g) / dl + 4;
+    h = Math.round(h * 60); if(h < 0) h += 360;
+    return [h, sat, l];
+  },
+  extraire(d){
+    const buckets = new Map();
+    for(let i = 0; i < d.length; i += 4){
+      if(d[i + 3] < 200) continue;
+      const r = d[i], g = d[i + 1], b = d[i + 2], hsl = this.hsl(r, g, b);
+      if(hsl[2] < 0.10 || hsl[2] > 0.92) continue;
+      const k = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+      const e = buckets.get(k) || { n:0, r:0, g:0, b:0, s:0 };
+      e.n++; e.r += r; e.g += g; e.b += b; e.s += hsl[1]; buckets.set(k, e);
+    }
+    const arr = [...buckets.values()].map(e => ({ r: e.r / e.n, g: e.g / e.n, b: e.b / e.n, n: e.n, s: e.s / e.n }));
+    arr.forEach(e => { e.score = e.n * (0.25 + e.s); });
+    arr.sort((a, b) => b.score - a.score);
+    if(!arr.length) return null;
+    const dist = (a, b) => Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b);
+    const p1 = arr[0], p2 = arr.find(e => dist(e, p1) > 90) || p1;
+    return { p1: [p1.r, p1.g, p1.b].map(Math.round), p2: [p2.r, p2.g, p2.b].map(Math.round) };
+  },
+  palette(src){
+    return new Promise(res => {
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.onload = () => {
+        try {
+          const W = 48, c = document.createElement("canvas"); c.width = c.height = W;
+          const x = c.getContext("2d", { willReadFrequently: true });
+          x.drawImage(img, 0, 0, W, W);
+          res(this.extraire(x.getImageData(0, 0, W, W).data));
+        } catch(e){ res(null); }
+      };
+      img.onerror = () => res(null);
+      img.src = src;
+    });
+  },
+  async paletteDe(v, secours){
+    const sources = [v.image_pochette, secours].filter((x, i, a) => x && a.indexOf(x) === i);
+    for(const src of sources){
+      let p = this.pal.get(src);
+      if(p === undefined){ p = await this.palette(src); this.pal.set(src, p); }
+      if(this.lastId !== v.id) return;
+      if(p){ this.appliquerPalette(p); return; }
+    }
+  },
+  appliquerPalette(p){
+    const m = $("#detailModal"); if(!m) return;
+    const h1 = this.hsl(...p.p1), h2 = this.hsl(...p.p2);
+    if(h1[1] < 0.15) return;
+    const s = Math.min(0.85, Math.max(0.35, h1[1])), H = h1[0];
+    const H2 = h2[1] < 0.15 ? H : h2[0];
+    m.classList.add("musee");
+    m.style.setProperty("--or", `hsl(${H}, ${Math.round(s * 100)}%, 64%)`);
+    m.style.setProperty("--or-clair", `hsl(${H}, ${Math.round(Math.min(s, 0.7) * 100)}%, 77%)`);
+    m.style.setProperty("--or-dim", `hsla(${H}, ${Math.round(s * 100)}%, 64%, .24)`);
+    m.style.setProperty("--or-soft", `hsla(${H}, ${Math.round(s * 100)}%, 64%, .10)`);
+    m.style.setProperty("--musee-tint", `hsl(${H}, ${Math.round(Math.min(s, 0.6) * 55)}%, 13%)`);
+    m.style.setProperty("--musee-tint2", `hsl(${H2}, ${Math.round(Math.min(s, 0.6) * 40)}%, 9%)`);
+  }
+};
+
+/* ─── Caches TheAudioDB + normalisation ─── */
+const AUDIODB_CACHE_KEY = "vinylArchiveJacques.cacheAudioDB";
+const AUDIODB_TTL = 30 * 24 * 3600 * 1000;
+function audiodbCacheGet(k){ try { const c = JSON.parse(localStorage.getItem(AUDIODB_CACHE_KEY) || "{}"); const e = c[k]; return e && (Date.now() - e.t) < AUDIODB_TTL ? e.r : null; } catch(e){ return null; } }
+function audiodbCacheSet(k, r){ try { const c = JSON.parse(localStorage.getItem(AUDIODB_CACHE_KEY) || "{}"); c[k] = { t: Date.now(), r }; localStorage.setItem(AUDIODB_CACHE_KEY, JSON.stringify(c)); } catch(e){} }
+async function audiodbFetch(v){
+  if(!v.artiste) throw new Error("Artiste requis pour TheAudioDB");
+  const cacheKey = normStr(v.artiste) + "|" + normStr(v.titre);
+  const cached = audiodbCacheGet(cacheKey);
+  if(cached) return cached;
+  const r = await audiodbFetchRaw(v);
+  audiodbCacheSet(cacheKey, r);
+  return r;
+}
+async function audiodbFetchRaw(v){
+  const key = (Settings.data.audiodbKey || "2").trim() || "2";
+  const params = new URLSearchParams({ s: v.artiste });
+  if(v.titre) params.set("a", v.titre);
+  const res = await fetch(`https://www.theaudiodb.com/api/v1/json/${encodeURIComponent(key)}/searchalbum.php?` + params.toString());
+  if(!res.ok){
+    if(res.status === 429) throw new Error("Quota TheAudioDB atteint (429)");
+    throw new Error("TheAudioDB HTTP " + res.status);
+  }
+  const json = await res.json();
+  const albums = (json && json.album) || [];
+  if(!albums.length) throw new Error("Aucune correspondance TheAudioDB");
+  const norm = s => String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\(.*?\)|\[.*?\]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim();
+  const tTitre = norm(v.titre);
+  let best = albums[0], bestScore = -1;
+  for(const a of albums){
+    const n = norm(a.strAlbum);
+    let score = 0;
+    if(tTitre && n === tTitre) score += 5;
+    else if(tTitre && (n.includes(tTitre) || tTitre.includes(n))) score += 3;
+    if(v.annee_impression && String(a.intYearReleased) === String(v.annee_impression)) score += 1;
+    if(a.strAlbumThumb) score += 0.5;
+    if(score > bestScore){ bestScore = score; best = a; }
+  }
+  const bits = [best.strArtist, best.strAlbum].filter(Boolean).join(" – ");
+  const extra = [best.intYearReleased, best.strGenre || best.strStyle, best.strLabel].filter(Boolean).join(" · ");
+  return {
+    label: bits + (extra ? " (" + extra + ")" : ""),
+    cover: best.strAlbumThumbHQ || best.strAlbumThumb || null,
+    url: best.idAlbum ? "https://www.theaudiodb.com/album/" + best.idAlbum : "https://www.theaudiodb.com/",
+    idAlbum: best.idAlbum || null, idArtist: best.idArtist || null, annee: best.intYearReleased || null
+  };
+}
+
+/* ─── Hook : brancher Rare au bouton + Musee à renderDetail ─── */
+(function(){
+  function brancher(){
+    if(typeof App === "undefined" || typeof State === "undefined"){ setTimeout(brancher, 200); return; }
+    if(window.__rareMuseeBranches) return;
+    window.__rareMuseeBranches = true;
+
+    /* Bouton ◆ Éditions rares */
+    const btnRare = document.getElementById("btnRare");
+    if(btnRare) btnRare.addEventListener("click", () => Rare.open());
+
+    /* Overlay : clic hors modale ferme */
+    const ov = document.getElementById("rareOverlay");
+    if(ov) ov.addEventListener("mousedown", e => { if(e.target === ov) Rare.close(); });
+
+    /* Échap ferme la modale Éditions rares */
+    document.addEventListener("keydown", e => {
+      if(e.key === "Escape" && ov && ov.classList.contains("open")) Rare.close();
+    });
+
+    /* Musee : s'enrichit après chaque renderDetail */
+    const origRenderDetail = window.renderDetail;
+    window.renderDetail = function(v){
+      origRenderDetail(v);
+      try { Musee.enrich(v); } catch(err){ console.warn("Musée :", err); }
+    };
+
+    console.log("%c◆ Éditions rares + Musée activés", "color:#C9A86A;font-weight:bold");
+  }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", brancher);
+  else brancher();
+})();
 </script>
 
 <!-- ═══════════════════════════════════════════════════════════
@@ -5069,8 +5730,10 @@ function premiereLettreTri(name){
       }
     });
 
-    document.addEventListener("keydown", e => {
+       document.addEventListener("keydown", e => {
       if(e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.tagName === "SELECT") return;
+      const welcome = document.getElementById("welcomePage");
+      if(welcome && !welcome.classList.contains("hide")) return;
       if(e.key === "h" || e.key === "H"){
         if(!overlay.classList.contains("open")){
           e.preventDefault();
